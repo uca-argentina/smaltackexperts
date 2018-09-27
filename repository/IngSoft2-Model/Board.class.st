@@ -53,10 +53,3 @@ Board >> initializeWithNumberOfLockers: anInteger [
 Board >> numberOfLockers [
 	^ lockers. 
 ]
-
-{ #category : #initialization }
-Board >> setLockers: aNumber [
-	aNumber > 0
-	ifTrue:[lockers := aNumber .]
-
-]
