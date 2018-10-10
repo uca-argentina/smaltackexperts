@@ -20,7 +20,7 @@ GameTest >> gameWith2PlayersAnd2Dices [
 	dices
 		add: dice1;
 		add: dice2.
-	game := Game on: board beeingPlayedBy: players throwing: dices.
+	game := Game on: board beeingPlayedBy: players throwing: dices withLaps: 4.
 	^ game
 ]
 
@@ -42,7 +42,7 @@ GameTest >> gameWith3PlayersAnd2Dices [
 	dices
 		add: dice1;
 		add: dice2.
-	game := Game on: board beeingPlayedBy: players throwing: dices.
+	game := Game on: board beeingPlayedBy: players throwing: dices withLaps: 3.
 	^ game
 ]
 
@@ -86,7 +86,8 @@ GameTest >> testGameCreation [
 	self
 		assert: game board numberOfSlots equals:20;
 		assert: game players size equals: 2;
-		assert: game dices size equals: 2
+		assert: game dices size equals: 2;
+		assert: game laps equals: 4.
 ]
 
 { #category : #tests }

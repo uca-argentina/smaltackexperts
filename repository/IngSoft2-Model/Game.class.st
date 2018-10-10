@@ -35,14 +35,15 @@ Class {
 		'players',
 		'dices',
 		'nextPlayerIndex',
-		'state'
+		'state',
+		'laps'
 	],
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #initialize }
-Game class >> on: aBoard beeingPlayedBy: aGroupOfPlayers throwing: aGroupOfDices [
-	^ self new initializeOn: aBoard beeingPlayedBy: aGroupOfPlayers  throwing: aGroupOfDices .
+{ #category : #initialization }
+Game class >> on: aBoard beeingPlayedBy: players throwing: dices withLaps: anAmountOfLaps [ 
+	^ self new initializeOn: aBoard beeingPlayedBy: players throwing: dices withLaps: anAmountOfLaps.
 ]
 
 { #category : #accessing }
@@ -78,18 +79,25 @@ Game >> ifTurnOf: aPlayer [
 	^ (self players at: self nextPlayer) == aPlayer
 ]
 
-{ #category : #initialize }
-Game >> initializeOn: aBoard beeingPlayedBy: aGroupOfPlayers throwing: aGroupOfDices [
+{ #category : #initialization }
+Game >> initializeOn: aBoard beeingPlayedBy: aGroupOfPlayers throwing: aGroupOfDices withLaps: anAmountOfLaps [ 
 	board := aBoard.
-	players := aGroupOfPlayers .
-	dices := aGroupOfDices .
+	players := aGroupOfPlayers.
+	dices := aGroupOfDices.
 	nextPlayerIndex := 1.
 	state := GamePlaying new.
+	laps := anAmountOfLaps.
+	
 ]
 
 { #category : #accessing }
 Game >> isOver [
 	^ state isOver.
+]
+
+{ #category : #accessing }
+Game >> laps [
+	^ laps
 ]
 
 { #category : #accessing }
