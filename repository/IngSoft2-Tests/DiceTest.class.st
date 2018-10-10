@@ -27,25 +27,30 @@ Class {
 }
 
 { #category : #tests }
-DiceTest >> testCreateADiceWithOneFace [
-	| dice type |
-	type := DeterministicDice new.
-	
-	self should: [ dice := Dice with: 1 facesAndType: type.] raise: AssertionFailure
+DiceTest >> testCreateADiceWithInvalidFaces [
+	| dice |
+	self should: [ dice := DeterministicDice withFaces: 1 ] raise: AssertionFailure
 ]
 
 { #category : #tests }
-DiceTest >> testCreateADicewith6Faces [
-	| dice type |
-	type := DeterministicDice new.
-	dice := Dice with: 6 facesAndType: type.
+DiceTest >> testCreateADicewithAValidNumberOfFaces [
+	| dice  |
+
+	dice := DeterministicDice withFaces: 6.
 	self assert: dice numberOfFaces = 6
 ]
 
 { #category : #tests }
-DiceTest >> testRollDice [
-	| dice type |
-	type := DeterministicDice new.
-	dice := Dice with: 8 facesAndType: type.
-	self assert: (dice rollDice) equals: 8
+DiceTest >> testRollDeterministicDice [
+	| dice |
+	dice := DeterministicDice withFaces: 8.
+	self assert: dice rollDice equals: 8
+]
+
+{ #category : #tests }
+DiceTest >> testRollRandomDice [
+| dice|
+dice:= RandomDice withFaces: 6.
+self assert: (dice rollDice between: 1 and: 6).
+
 ]
