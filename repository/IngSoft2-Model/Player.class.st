@@ -61,20 +61,14 @@ Player >> position [
 ]
 
 { #category : #update }
-Player >> rollDices: Dices [ 
-	| sum |
-	sum := 0. 
-	"anArrayOfDices sum: #rollDice.  
-	Dices do: [ :each | sum:= sum + each rollDice].
-	inject:into:
-	sum: #rollDice"
-	sum := Dices sumNumbers: [ :each | each rollDice ].
-	self moveForward: sum
+Player >> rollDices: dices [ 
+	
+	self moveForward: (dices sumNumbers: [ :each | each rollDice ])
 ]
 
 { #category : #update }
-Player >> rollDicesWith: aNumber [
+Player >> rollDicesExpectingToGet: aResult [
 "dados deterministico"
 
-	self moveForward: aNumber.
+	self moveForward: aResult .
 ]
