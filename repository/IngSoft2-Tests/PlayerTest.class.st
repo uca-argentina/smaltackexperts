@@ -6,50 +6,50 @@ Class {
 
 { #category : #tests }
 PlayerTest >> testAPlayerRollDicesAndMoveForwards [
-	| dice1 dice2 player dices type |
-	type := DeterministicDice new.
-	dice1 := Dice with: 6 facesAndType: type.
-	dice2 := Dice with: 8 facesAndType: type.
-	player := Player withName: 'Pedro'.
+	| dice1 dice2 pedro dices |
+	dice1 := DeterministicDice withFaces: 8.
+	dice2 := DeterministicDice withFaces: 6.
+	pedro := Player withName: 'Pedro'.
 	dices := OrderedCollection new.
 	dices
 		add: dice1;
 		add: dice2.
-	player rollDicesWith: 14.
-	self assert: player position equals: 14
+	pedro rollDicesExpectingToGet: 14.
+	self assert: pedro position equals: 14.
+	pedro rollDices: dices.
+	self assert: pedro position equals: 28.
 ]
 
 { #category : #tests }
-PlayerTest >> testCreatePlayerWithNamePepito [
-	| player |
-	player := Player withName: 'Pepito'.
-	self  assert: player name equals: 'Pepito';
-			assert: player position equals: 0.
+PlayerTest >> testCreatePlayer [
+	| pepito |
+	pepito := Player withName: 'Pepito'.
+	self  assert: pepito name equals: 'Pepito';
+			assert: pepito position equals: 0.
 ]
 
 { #category : #tests }
 PlayerTest >> testMovePositionOfPlayer [
-	| player |
-	player := Player withName: 'John'.
-	player moveForward: 10.
-	self assert: player position equals: 10.
-	player moveForward: 4.
-	self assert:  player  position  equals: 14.
+	| john |
+	john := Player withName: 'John'.
+	john moveForward: 10.
+	self assert: john position equals: 10.
+	john moveForward: 4.
+	self assert:  john  position  equals: 14.
 ]
 
 { #category : #tests }
 PlayerTest >> testRollDicesTwoTimes [
-	| dice1 dice2 player dices type |
-	type := DeterministicDice new.
-	dice1 := Dice with: 6 facesAndType: type.
-	dice2 := Dice with: 8 facesAndType: type.
-	player := Player withName: 'Pedro'.
+	| dice1 dice2 pedro dices |
+	dice1 := DeterministicDice withFaces: 6.
+	dice2 := DeterministicDice withFaces: 8.
+	pedro := Player withName: 'Pedro'.
 	dices := OrderedCollection new.
 	dices
 		add: dice1;
 		add: dice2.
-	player rollDices: dices.
-	self assert: player position equals: 14.
-	player rollDices: dices.
-	self assert: player position equals: 26.
+	pedro rollDices: dices.
+	self assert: pedro position equals: 14.
+	pedro rollDices: dices.
+	self assert: pedro position equals: 26
 ]
