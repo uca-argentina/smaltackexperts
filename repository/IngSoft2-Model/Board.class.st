@@ -27,29 +27,26 @@ Class {
 	#name : #Board,
 	#superclass : #Object,
 	#instVars : [
-		'lockers'
-	],
-	#classInstVars : [
-		'lockers'
+		'slots'
 	],
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
-Board class >> withNumberOfLockers: anInteger [
-	anInteger >1
+{ #category : #initialize }
+Board class >> withSlots: anAmountOfSlots [
+	anAmountOfSlots  >1
 	ifTrue:[
-	^ self new initializeWithNumberOfLockers: anInteger.]
+	^ self new initializeWithSlots: anAmountOfSlots .]
 ifFalse:[
-	AssertionFailure signal: 'Size must be more than 1']
+	AssertionFailure signal: 'Board size must be greater than 1']
 ]
 
-{ #category : #initialize }
-Board >> initializeWithNumberOfLockers: anInteger [ 
-	lockers := anInteger.
+{ #category : #initialization }
+Board >> initializeWithSlots: anAmountOfSlots [
+	slots := anAmountOfSlots .
 ]
 
 { #category : #accessing }
-Board >> numberOfLockers [
-	^ lockers. 
+Board >> numberOfSlots [
+	^ slots. 
 ]

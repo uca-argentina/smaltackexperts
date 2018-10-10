@@ -5,17 +5,17 @@ Class {
 }
 
 { #category : #tests }
-BoardTest >> testCreateABoardWith1Lock [
+BoardTest >> testCreateABoardWithInvalidAmountOfLockers [
 |board|
-self should: [board:= Board withNumberOfLockers: 1] raise: AssertionFailure. 
+self should: [board:= Board withSlots: 1] raise: AssertionFailure. 
 
 
 ]
 
 { #category : #tests }
-BoardTest >> testCreateBoardWith20lockers [
+BoardTest >> testCreateBoardWithValidAmountOfLockers [
 	| board |
-	board := Board withNumberOfLockers: 20.
-	self assert: board numberOfLockers equals: 20.
+	board := Board withSlots: 20.
+	self assert: board numberOfSlots equals: 20.
 	
 ]
