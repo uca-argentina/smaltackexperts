@@ -41,8 +41,8 @@ Class {
 }
 
 { #category : #initialize }
-Game class >> on: aBoard beeingPlayedBy: anArray throwing: anArray2 [ 
-	^ self new initializeOn: aBoard beeingPlayedBy: anArray throwing: anArray2.
+Game class >> on: aBoard beeingPlayedBy: aGroupOfPlayers throwing: aGroupOfDices [
+	^ self new initializeOn: aBoard beeingPlayedBy: aGroupOfPlayers  throwing: aGroupOfDices .
 ]
 
 { #category : #accessing }
@@ -79,10 +79,10 @@ Game >> ifTurnOf: aPlayer [
 ]
 
 { #category : #initialize }
-Game >> initializeOn: aBoard beeingPlayedBy: anArray throwing: anArray2 [
+Game >> initializeOn: aBoard beeingPlayedBy: aGroupOfPlayers throwing: aGroupOfDices [
 	board := aBoard.
-	players := anArray.
-	dices := anArray2.
+	players := aGroupOfPlayers .
+	dices := aGroupOfDices .
 	nextPlayerIndex := 1.
 	state := GamePlaying new.
 ]
@@ -100,24 +100,12 @@ Game >> nextPlayer [
 { #category : #accessing }
 Game >> placeOf: aPlayer [
 	^ state placeOf: aPlayer in: self.
-	"self isOver
-		ifTrue: [ 
-			players doWithIndex:  [:each :i | 
-			(each == aPlayer)
-				ifTrue: [ ^ i. ]
-		 		]
-			 ]
-		ifFalse: [ 
-			AssertionFailure signal: 'El juego no termino, no se puede dar la posicion.'.
-			 ]"
+
 ]
 
 { #category : #accessing }
 Game >> placeWhenGameIsEndedOf: aPlayer [
-	players doWithIndex:  [:each :i | 
-			(each == aPlayer)
-				ifTrue: [ ^ i. ]
-		 		]
+	^players detectIndex: [:each | each = aPlayer].  
 ]
 
 { #category : #accessing }
@@ -133,17 +121,7 @@ Game >> players [
 { #category : #update }
 Game >> plays: aPlayer [
 	state plays: aPlayer in: self.
-	"self isOver
-		ifTrue: [ AssertionFailure signal: 'Game is over.' ]
-		ifFalse: [ ""self ifTurnOf: aPlayer do:[ ] ifNot: []"
-			"(self ifTurnOf: aPlayer)
-				ifTrue: [ aPlayer rollDices: self dices.
-					aPlayer position >= self board numberOfLockers
-						ifTrue: [ state := GameEnded new.
-							players sort: [:player1 :player2 | player1 position >= player2 position].
-							 ]
-						ifFalse: [ self changeTurn ] ]
-				ifFalse: [ AssertionFailure signal: 'Not this players turn.' ] ]"
+
 ]
 
 { #category : #update }
@@ -155,7 +133,7 @@ Game >> playsWhenGameIsEnded: aPlayer [
 Game >> playsWhileGameIsBeingPlayed: aPlayer [
 	(self ifTurnOf: aPlayer)
 		ifTrue: [ aPlayer rollDices: self dices.
-			aPlayer position >= self board numberOfLockers
+			aPlayer position >= self board numberOfSlots
 				ifTrue:
 					[ self endGame ]
 				ifFalse: [ self changeTurn ] ]
@@ -165,13 +143,7 @@ Game >> playsWhileGameIsBeingPlayed: aPlayer [
 { #category : #accessing }
 Game >> winner [
 	^ state winnerOf: self.
-	"self isOver
-		ifTrue: [ 
-			^ players at: 1.
-			 ]
-		ifFalse: [ 
-			AssertionFailure signal: 'The game is not over.'
-			 ]"
+	
 ]
 
 { #category : #accessing }
