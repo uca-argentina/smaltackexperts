@@ -56,9 +56,10 @@ Player >> lap [
 Player >> moveForward: aNumberOfSlots on: aBoard [
 	position := position + aNumberOfSlots.
 	position > aBoard numberOfSlots
-		ifFalse: [ ^ self ].
-	lap := lap + 1.
-	position := position % aNumberOfSlots
+		ifTrue: [ 
+			lap := lap + 1.
+			position := position rem: (aBoard numberOfSlots).
+			 ]
 ]
 
 { #category : #accessing }

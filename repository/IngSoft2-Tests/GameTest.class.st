@@ -209,6 +209,12 @@ GameTest >> testWhenGameEndsPlayersAreInRankingOrder [
 	self assert: game isOver equals: false.
 	game plays: playerAt1.
 	self assert: playerAt1 position equals: 20.
+	self assert: game isOver equals: false.
+	game plays: playerAt2.
+	self assert: playerAt2 position equals: 16.
+	self assert: game isOver equals: false.
+	game plays: playerAt1.
+	self assert: playerAt1 position equals: 4.
 	self assert: game isOver equals: true.
 	self assert: (game placeOf: playerAt1) equals: 1.
 	self assert: (game placeOf: playerAt2) equals: 2.
