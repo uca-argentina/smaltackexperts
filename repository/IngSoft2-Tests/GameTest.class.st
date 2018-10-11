@@ -38,7 +38,7 @@ GameTest >> gameWith2PlayersAnd2Dices [
 	dices
 		add: dice1;
 		add: dice2.
-	game := Game on: board beeingPlayedBy: players throwing: dices withLaps: 4.
+	game := Game on: board beeingPlayedBy: players throwing: dices withLaps: 1.
 	^ game
 ]
 
@@ -60,7 +60,7 @@ GameTest >> gameWith3PlayersAnd2Dices [
 	dices
 		add: dice1;
 		add: dice2.
-	game := Game on: board beeingPlayedBy: players throwing: dices withLaps: 3.
+	game := Game on: board beeingPlayedBy: players throwing: dices withLaps: 1.
 	^ game
 ]
 
@@ -89,7 +89,7 @@ GameTest >> testGameCanBePlayedAndHaveAWinner [
 	self assert: playerAt3 position equals: 15.
 	self assert: game isOver equals: false.
 	game plays: playerAt1.
-	self assert: playerAt1 position equals: 23.
+	self assert: playerAt1 position equals: 3.
 	self assert: game isOver equals: true.
 	self assert: (game placeOf: playerAt1 ) equals: 1.
 	self assert: (game placeOf: playerAt3 ) equals: 2.
@@ -105,7 +105,7 @@ GameTest >> testGameCreation [
 		assert: game board numberOfSlots equals:20;
 		assert: game players size equals: 2;
 		assert: game dices size equals: 2;
-		assert: game laps equals: 4.
+		assert: game laps equals: 1.
 ]
 
 { #category : #tests }
@@ -132,6 +132,12 @@ GameTest >> testGameIsOver [
 	self assert: game isOver equals: false.
 	game plays: playerAt1.
 	self assert: playerAt1 position equals: 20.
+	self assert: game isOver equals: false.
+	game plays: playerAt2.
+	self assert: playerAt2 position equals: 16.
+	self assert: game isOver equals: false.
+	game plays: playerAt1.
+	self assert: playerAt1 position equals: 4.
 	self assert: game isOver equals: true
 ]
 
@@ -149,9 +155,15 @@ GameTest >> testPlayerCanNotPlayWhenGameIsOver [
 	self assert: game isOver equals: false.
 	game plays: playerAt1.
 	self assert: playerAt1 position equals: 20.
+	self assert: game isOver equals: false.
+	game plays: playerAt2.
+	self assert: playerAt2 position equals: 16.
+	self assert: game isOver equals: false.
+	game plays: playerAt1.
+	self assert: playerAt1 position equals: 4.
 	self assert: game isOver equals: true.
 	self should: [ game plays: playerAt2 ] raise: AssertionFailure.
-	self assert: playerAt2 position equals: 10
+	self assert: playerAt2 position equals: 16
 ]
 
 { #category : #tests }
