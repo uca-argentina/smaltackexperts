@@ -16,8 +16,8 @@ PlayerTest >> testAPlayerRollDicesAndMoveForwards [
 		add: dice2.
 	pedro rollDicesExpectingToGet: 14.
 	self assert: pedro position equals: 14.
-	pedro rollDices: dices.
-	self assert: pedro position equals: 28.
+	pedro rollDices: dices on: board.
+	self assert: pedro position equals: 28
 ]
 
 { #category : #tests }
@@ -25,17 +25,18 @@ PlayerTest >> testCreatePlayer [
 	| pepito |
 	pepito := Player withName: 'Pepito'.
 	self  assert: pepito name equals: 'Pepito';
-			assert: pepito position equals: 0.
+			assert: pepito position equals: 0;
+			assert: pepito lap equals: 1.
 ]
 
 { #category : #tests }
 PlayerTest >> testMovePositionOfPlayer [
 	| john |
 	john := Player withName: 'John'.
-	john moveForward: 10.
+	john moveForward: 10 on: board.
 	self assert: john position equals: 10.
-	john moveForward: 4.
-	self assert:  john  position  equals: 14.
+	john moveForward: 4 on: board.
+	self assert: john position equals: 14
 ]
 
 { #category : #tests }
@@ -48,8 +49,8 @@ PlayerTest >> testRollDicesTwoTimes [
 	dices
 		add: dice1;
 		add: dice2.
-	pedro rollDices: dices.
+	pedro rollDices: dices on: board.
 	self assert: pedro position equals: 14.
-	pedro rollDices: dices.
+	pedro rollDices: dices on: board.
 	self assert: pedro position equals: 26
 ]

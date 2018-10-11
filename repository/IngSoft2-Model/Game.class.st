@@ -140,10 +140,9 @@ Game >> playsWhenGameIsEnded: aPlayer [
 { #category : #update }
 Game >> playsWhileGameIsBeingPlayed: aPlayer [
 	(self ifTurnOf: aPlayer)
-		ifTrue: [ aPlayer rollDices: self dices.
+		ifTrue: [ aPlayer rollDices: self dices on: board.
 			aPlayer position >= self board numberOfSlots
-				ifTrue:
-					[ self endGame ]
+				ifTrue: [ self endGame ]
 				ifFalse: [ self changeTurn ] ]
 		ifFalse: [ AssertionFailure signal: 'Not this player"s turn.' ]
 ]

@@ -4,6 +4,24 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
+{ #category : #action }
+GameTest >> gameWith1PlayerAnd2Dices [
+	| game board juan dice1 dice2 players dices |
+	board := Board withSlots: 20.
+	juan := Player withName: 'Juan'.
+	dice1 := DeterministicDice withFaces: 5.
+	dice2 := DeterministicDice withFaces: 7.
+	players := OrderedCollection new.
+	players
+		add: juan.
+	dices := OrderedCollection new.
+	dices
+		add: dice1;
+		add: dice2.
+	game := Game on: board beeingPlayedBy: players throwing: dices withLaps: 4.
+	^ game
+]
+
 { #category : #creation }
 GameTest >> gameWith2PlayersAnd2Dices [
 	| game board juan hernan dice1 dice2 players dices |
@@ -150,6 +168,19 @@ GameTest >> testPlayerCanNotPlayWhenItIsNotHisTurn [
 	game plays: playerAt2.
 	self assert: playerAt2 position equals: 10.
 	self assert: game isOver equals: false
+]
+
+{ #category : #tests }
+GameTest >> testPlayerPlaysAndLapChanges [
+	| game player |
+	game := self gameWith1PlayerAnd2Dices.
+	player := game players at: 1.
+	game plays: player.
+	self assert: player position equals: 12;
+			assert: player lap equals: 1.
+	game plays: player.
+	self assert: player position equals: 2;
+			assert: player lap equals: 2.
 ]
 
 { #category : #tests }
