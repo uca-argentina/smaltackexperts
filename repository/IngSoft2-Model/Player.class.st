@@ -78,10 +78,3 @@ Player >> rollDices: dices on: aBoard [
 		moveForward: (dices sumNumbers: [ :each | each rollDice ])
 		on: aBoard
 ]
-
-{ #category : #update }
-Player >> rollDicesExpectingToGet: aResult [
-	"dados deterministico"
-
-	self moveForward: aResult on: board
-]
