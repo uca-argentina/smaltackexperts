@@ -30,7 +30,7 @@ Class {
 	#instVars : [
 		'name',
 		'position',
-		'lap'
+		'lapsCompleted'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -44,20 +44,20 @@ Player class >> withName: aName [
 Player >> initializeWithName: aName [
 	name:= aName.
 	position := 0.
-	lap := 1.
+	lapsCompleted := 0.
 ]
 
 { #category : #accessing }
-Player >> lap [
-	^ lap.
+Player >> lapsCompleted [
+	^ lapsCompleted.
 ]
 
 { #category : #update }
 Player >> moveForward: aNumberOfSlots on: aBoard [
 	position := position + aNumberOfSlots.
-	position > aBoard numberOfSlots
+	position >= aBoard numberOfSlots
 		ifTrue: [ 
-			lap := lap + 1.
+			lapsCompleted := lapsCompleted + position // (aBoard numberOfSlots).
 			position := position rem: (aBoard numberOfSlots).
 			 ]
 ]

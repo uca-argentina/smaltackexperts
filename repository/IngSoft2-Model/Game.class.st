@@ -72,8 +72,8 @@ Game >> endGame [
 	state := GameEnded new.
 	players
 		sort: [ :player1 :player2 | 
-			player1 lap > player2 lap
-				or: [ player1 lap = player2 lap and: [ player1 position >= player2 position ] ] ]
+			player1 lapsCompleted > player2 lapsCompleted
+				or: [ player1 lapsCompleted = player2 lapsCompleted and: [ player1 position >= player2 position ] ] ]
 ]
 
 { #category : #update }
@@ -136,14 +136,14 @@ Game >> plays: aPlayer [
 
 { #category : #update }
 Game >> playsWhenGameIsEnded: aPlayer [
-	AssertionFailure signal: 'The game is not over.'
+	AssertionFailure signal: 'The game is over.'
 ]
 
 { #category : #update }
 Game >> playsWhileGameIsBeingPlayed: aPlayer [
 	(self ifTurnOf: aPlayer)
 		ifTrue: [ aPlayer rollDices: self dices on: board.
-			aPlayer lap > self laps
+			aPlayer lapsCompleted >= self laps
 				ifTrue: [ self endGame ]
 				ifFalse: [ self changeTurn ] ]
 		ifFalse: [ AssertionFailure signal: 'Not this player"s turn.' ]

@@ -27,7 +27,7 @@ PlayerTest >> testCreatePlayer [
 	pepito := Player withName: 'Pepito'.
 	self  assert: pepito name equals: 'Pepito';
 			assert: pepito position equals: 0;
-			assert: pepito lap equals: 1.
+			assert: pepito lapsCompleted equals: 0.
 ]
 
 { #category : #tests }

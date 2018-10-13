@@ -4,7 +4,7 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
-{ #category : #action }
+{ #category : #creation }
 GameTest >> gameWith1PlayerAnd2Dices [
 	| game board juan dice1 dice2 players dices |
 	board := Board withSlots: 20.
@@ -18,6 +18,26 @@ GameTest >> gameWith1PlayerAnd2Dices [
 	dices
 		add: dice1;
 		add: dice2.
+	game := Game on: board beeingPlayedBy: players throwing: dices withLaps: 4.
+	^ game
+]
+
+{ #category : #creation }
+GameTest >> gameWith1PlayerAnd3Dices [
+	| game board juan dice1 dice2 dice3 players dices |
+	board := Board withSlots: 10.
+	juan := Player withName: 'Juan'.
+	dice1 := DeterministicDice withFaces: 5.
+	dice2 := DeterministicDice withFaces: 7.
+	dice3 := DeterministicDice withFaces: 8.
+	players := OrderedCollection new.
+	players
+		add: juan.
+	dices := OrderedCollection new.
+	dices
+		add: dice1;
+		add: dice2;
+		add: dice3.
 	game := Game on: board beeingPlayedBy: players throwing: dices withLaps: 4.
 	^ game
 ]
@@ -131,14 +151,8 @@ GameTest >> testGameIsOver [
 	self assert: playerAt2 position equals: 10.
 	self assert: game isOver equals: false.
 	game plays: playerAt1.
-	self assert: playerAt1 position equals: 20.
-	self assert: game isOver equals: false.
-	game plays: playerAt2.
-	self assert: playerAt2 position equals: 16.
-	self assert: game isOver equals: false.
-	game plays: playerAt1.
-	self assert: playerAt1 position equals: 4.
-	self assert: game isOver equals: true
+	self assert: playerAt1 position equals: 0.
+	self assert: game isOver equals: true.
 ]
 
 { #category : #tests }
@@ -154,16 +168,10 @@ GameTest >> testPlayerCanNotPlayWhenGameIsOver [
 	self assert: playerAt2 position equals: 10.
 	self assert: game isOver equals: false.
 	game plays: playerAt1.
-	self assert: playerAt1 position equals: 20.
-	self assert: game isOver equals: false.
-	game plays: playerAt2.
-	self assert: playerAt2 position equals: 16.
-	self assert: game isOver equals: false.
-	game plays: playerAt1.
-	self assert: playerAt1 position equals: 4.
+	self assert: playerAt1 position equals: 0.
 	self assert: game isOver equals: true.
 	self should: [ game plays: playerAt2 ] raise: AssertionFailure.
-	self assert: playerAt2 position equals: 16
+	self assert: playerAt2 position equals: 10
 ]
 
 { #category : #tests }
@@ -183,16 +191,27 @@ GameTest >> testPlayerCanNotPlayWhenItIsNotHisTurn [
 ]
 
 { #category : #tests }
-GameTest >> testPlayerPlaysAndLapChanges [
+GameTest >> testPlayerPlaysAndCompleteALap [
 	| game player |
 	game := self gameWith1PlayerAnd2Dices.
 	player := game players at: 1.
 	game plays: player.
 	self assert: player position equals: 12;
-			assert: player lap equals: 1.
+			assert: player lapsCompleted equals: 0.
 	game plays: player.
 	self assert: player position equals: 2;
-			assert: player lap equals: 2.
+			assert: player lapsCompleted equals: 1.
+]
+
+{ #category : #tests }
+GameTest >> testPlayerPlaysAndCompleteTwoLaps [
+	| game player |
+	game := self gameWith1PlayerAnd3Dices.
+	player := game players at: 1.
+	game plays: player.
+	self
+		assert: player position equals: 0;
+		assert: player lapsCompleted equals: 2
 ]
 
 { #category : #tests }
@@ -208,13 +227,7 @@ GameTest >> testWhenGameEndsPlayersAreInRankingOrder [
 	self assert: playerAt2 position equals: 10.
 	self assert: game isOver equals: false.
 	game plays: playerAt1.
-	self assert: playerAt1 position equals: 20.
-	self assert: game isOver equals: false.
-	game plays: playerAt2.
-	self assert: playerAt2 position equals: 16.
-	self assert: game isOver equals: false.
-	game plays: playerAt1.
-	self assert: playerAt1 position equals: 4.
+	self assert: playerAt1 position equals: 0.
 	self assert: game isOver equals: true.
 	self assert: (game placeOf: playerAt1) equals: 1.
 	self assert: (game placeOf: playerAt2) equals: 2.
