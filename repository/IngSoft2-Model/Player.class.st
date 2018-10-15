@@ -29,7 +29,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'name',
-		'position'
+		'position',
+		'lapsCompleted'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -43,11 +44,22 @@ Player class >> withName: aName [
 Player >> initializeWithName: aName [
 	name:= aName.
 	position := 0.
+	lapsCompleted := 0.
+]
+
+{ #category : #accessing }
+Player >> lapsCompleted [
+	^ lapsCompleted.
 ]
 
 { #category : #update }
-Player >> moveForward: aNumberOfLockers [ 
-	position := position + aNumberOfLockers.
+Player >> moveForward: aNumberOfSlots on: aBoard [
+	position := position + aNumberOfSlots.
+	position >= aBoard numberOfSlots
+		ifTrue: [ 
+			lapsCompleted := lapsCompleted + position // (aBoard numberOfSlots).
+			position := position rem: (aBoard numberOfSlots).
+			 ]
 ]
 
 { #category : #accessing }
@@ -61,14 +73,8 @@ Player >> position [
 ]
 
 { #category : #update }
-Player >> rollDices: dices [ 
-	
-	self moveForward: (dices sumNumbers: [ :each | each rollDice ])
-]
-
-{ #category : #update }
-Player >> rollDicesExpectingToGet: aResult [
-"dados deterministico"
-
-	self moveForward: aResult .
+Player >> rollDices: dices on: aBoard [
+	self
+		moveForward: (dices sumNumbers: [ :each | each rollDice ])
+		on: aBoard
 ]
