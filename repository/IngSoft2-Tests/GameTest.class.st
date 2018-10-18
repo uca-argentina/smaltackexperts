@@ -63,6 +63,31 @@ GameTest >> gameWith2PlayersAnd2Dices [
 ]
 
 { #category : #creation }
+GameTest >> gameWith3PlayersAnd1DiceWith2laps [
+	| game board juan hernan osvaldo dice1 players dices |
+	board := Board withSlots: 10.
+	juan := Player withName: 'Juan'.
+	hernan := Player withName: 'Hernan'.
+	osvaldo := Player withName: 'osvaldo'.
+	dice1 := DeterministicDice withFaces: 10.
+	dice1 changeValuesTo: #(5 6 7 5 6 7 8 1 1 10).
+	players := OrderedCollection new.
+	players
+		add: juan;
+		add: hernan;
+		add: osvaldo.
+	dices := OrderedCollection new.
+	dices
+		add: dice1.
+	game := Game
+		on: board
+		beeingPlayedBy: players
+		throwing: dices
+		withLaps: 2.
+	^ game
+]
+
+{ #category : #creation }
 GameTest >> gameWith3PlayersAnd2Dices [
 	| game board juan hernan osvaldo dice1 dice2 players dices |
 	board := Board withSlots: 20.
@@ -212,6 +237,35 @@ GameTest >> testPlayerPlaysAndCompleteTwoLaps [
 	self
 		assert: player position equals: 0;
 		assert: player lapsCompleted equals: 2
+]
+
+{ #category : #tests }
+GameTest >> testPlayerPositionWhileGameIsNotOver [
+| game playerAt1 playerAt2 playerAt3 |
+	game := self gameWith3PlayersAnd1DiceWith2laps.
+	playerAt1 := game players at: 1.
+	playerAt2 := game players at: 2.
+	playerAt3 := game players at: 3.
+	"game plays: playerAt1."
+	game plays: (game players at:1).
+	self assert: playerAt1 position equals: 5.
+	"game plays: playerAt2."
+	game plays: (game players at:2). 
+	self assert: (game players at:2) position equals: 6.
+	self assert:  (game placeOf: (game players at:2)) equals:1.
+	game plays: (game players at:3) .
+	self assert: (game players at:3) position equals: 7.
+	self assert:  (game placeOf: (game players at:3)) equals:1.
+	self assert: (game players at:1) name equals: 'Juan'.
+	self assert:  (game placeOf: (game players at:2)) equals:2.
+	self assert:  (game placeOf: (game players at:1)) equals:3.
+	game plays: (game players at:1).
+	self assert:  (game placeOf: (game players at:1)) equals:1.
+	self assert:  (game placeOf: (game players at:2)) equals:3.
+	self assert:  (game placeOf: (game players at:3)) equals:2.
+	
+	
+
 ]
 
 { #category : #tests }

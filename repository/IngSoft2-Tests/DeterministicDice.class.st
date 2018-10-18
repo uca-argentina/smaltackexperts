@@ -39,6 +39,13 @@ DeterministicDice class >> withFaces: anAmountOfFaces [
 				signal: 'you can''t create a dice with less than 2 faces' ]
 ]
 
+{ #category : #accesing }
+DeterministicDice >> changeValuesTo: aCollection [
+	aCollection size = self numberOfFaces
+		ifTrue: [ deterministicValues := aCollection .]
+		ifFalse: [ AssertionFailure signal: 'The collection size must be equals to numberOfFaces'. ]
+]
+
 { #category : #initialization }
 DeterministicDice >> initialize [
 	deterministicValues := OrderedCollection new.

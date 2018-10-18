@@ -27,6 +27,17 @@ Class {
 }
 
 { #category : #tests }
+DiceTest >> testAddDeterministicValuesAndRollDice [
+	| dice|
+	dice := DeterministicDice withFaces: 4.
+	dice changeValuesTo: #(1 4 3 3).
+	self assert: dice rollDice equals: 1. 
+	self assert: dice rollDice equals: 4.
+	self assert: dice rollDice equals: 3. 
+	self assert: dice rollDice equals: 3.  
+]
+
+{ #category : #tests }
 DiceTest >> testCreateADiceWithInvalidFaces [
 	| dice |
 	self should: [ dice := DeterministicDice withFaces: 1 ] raise: AssertionFailure

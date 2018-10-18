@@ -35,6 +35,7 @@ Class {
 		'players',
 		'dices',
 		'nextPlayerIndex',
+		'actualPlayerIndex',
 		'state',
 		'laps'
 	],
@@ -47,13 +48,38 @@ Game class >> on: aBoard beeingPlayedBy: players throwing: dices withLaps: anAmo
 ]
 
 { #category : #accessing }
+Game >> actualPlayerIndex [
+	nextPlayerIndex < 1
+		ifTrue: [ actualPlayerIndex := players size ]
+		ifFalse: [ actualPlayerIndex := nextPlayerIndex - 1 ].
+	^ actualPlayerIndex
+]
+
+{ #category : #update }
+Game >> assertIsTurnOf: aPlayer [
+	(self ifTurnOf: aPlayer)
+		ifFalse: [ AssertionFailure signal: 'Not this player"s turn.' ]
+]
+
+{ #category : #effects }
+Game >> atomicBombEffect. [
+]
+
+{ #category : #accessing }
 Game >> board [
 	^ board
 ]
 
 { #category : #update }
+Game >> changeStateAfterTurnOf: aPlayer [
+	aPlayer lapsCompleted >= self laps
+		ifTrue: [ self endGame ]
+		ifFalse: [ self changeTurn ]
+]
+
+{ #category : #update }
 Game >> changeTurn [
-	self nextPlayer == self players size
+	self nextPlayerIndex == self players size
 		ifTrue: [
 			nextPlayerIndex := 1. 
 			 ]
@@ -70,15 +96,13 @@ Game >> dices [
 { #category : #update }
 Game >> endGame [
 	state := GameEnded new.
-	players
-		sort: [ :player1 :player2 | 
-			player1 lapsCompleted > player2 lapsCompleted
-				or: [ player1 lapsCompleted = player2 lapsCompleted and: [ player1 position >= player2 position ] ] ]
+	players sort: #lapsCompleted descending, #position descending.
+	
 ]
 
 { #category : #update }
 Game >> ifTurnOf: aPlayer [
-	^ (self players at: self nextPlayer) == aPlayer
+	^ (self players at: self nextPlayerIndex) == aPlayer
 ]
 
 { #category : #initialization }
@@ -87,6 +111,7 @@ Game >> initializeOn: aBoard beeingPlayedBy: aGroupOfPlayers throwing: aGroupOfD
 	players := aGroupOfPlayers.
 	dices := aGroupOfDices.
 	nextPlayerIndex := 1.
+	actualPlayerIndex :=0.
 	state := GamePlaying new.
 	laps := anAmountOfLaps.
 	
@@ -102,8 +127,12 @@ Game >> laps [
 	^ laps
 ]
 
+{ #category : #effects }
+Game >> moonWalkEffect [
+]
+
 { #category : #accessing }
-Game >> nextPlayer [
+Game >> nextPlayerIndex [
 	^ nextPlayerIndex
 ]
 
@@ -120,7 +149,10 @@ Game >> placeWhenGameIsEndedOf: aPlayer [
 
 { #category : #accessing }
 Game >> placeWhileGameIsBeingPlayedOf: aPlayer [
-	AssertionFailure signal: 'Game is not ended.'.
+	| posicion |
+	posicion := (1 to: self players size) collect: [ :each | self players at: each ].
+	posicion sort: #lapsCompleted descending , #position descending.
+	^ posicion detectIndex: [ :each | each = aPlayer ]
 ]
 
 { #category : #accessing }
@@ -141,12 +173,14 @@ Game >> playsWhenGameIsEnded: aPlayer [
 
 { #category : #update }
 Game >> playsWhileGameIsBeingPlayed: aPlayer [
-	(self ifTurnOf: aPlayer)
-		ifTrue: [ aPlayer rollDices: self dices on: board.
-			aPlayer lapsCompleted >= self laps
-				ifTrue: [ self endGame ]
-				ifFalse: [ self changeTurn ] ]
-		ifFalse: [ AssertionFailure signal: 'Not this player"s turn.' ]
+	self assertIsTurnOf: aPlayer.
+	aPlayer rollDices: self dices on: board.
+	"(board slots at: aPlayer position) activateEffect."
+	self changeStateAfterTurnOf: aPlayer
+]
+
+{ #category : #effects }
+Game >> speedUpEffect [
 ]
 
 { #category : #accessing }
@@ -163,4 +197,8 @@ Game >> winnerWhenGameIsEnded [
 { #category : #accessing }
 Game >> winnerWhileGameIsBeingPlayed [
 	AssertionFailure signal: 'The game is not over.'
+]
+
+{ #category : #effects }
+Game >> wormHoleEffect [
 ]

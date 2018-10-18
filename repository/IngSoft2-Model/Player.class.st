@@ -53,6 +53,14 @@ Player >> lapsCompleted [
 ]
 
 { #category : #update }
+Player >> moveBackward: aNumberOfSlots on: aBoard [
+	position := position - aNumberOfSlots.
+	position > 0
+		ifTrue: [ lapsCompleted := lapsCompleted - 1.
+			position := position + aBoard numberOfSlots ].
+]
+
+{ #category : #update }
 Player >> moveForward: aNumberOfSlots on: aBoard [
 	position := position + aNumberOfSlots.
 	position >= aBoard numberOfSlots
