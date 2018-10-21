@@ -32,9 +32,9 @@ Class {
 }
 
 { #category : #initialization }
-DeterministicDice class >> withFaces: anAmountOfFaces [
+DeterministicDice class >> withFaces: anAmountOfFaces andValues: aSetOfValues [
 	anAmountOfFaces > 1
-	ifTrue: [ ^ self new initializeWithFaces: anAmountOfFaces ]
+	ifTrue: [ ^ self new initializeWithFaces: anAmountOfFaces andValues: aSetOfValues ]
 		ifFalse: [ AssertionFailure
 				signal: 'you can''t create a dice with less than 2 faces' ]
 ]
@@ -45,10 +45,9 @@ DeterministicDice >> initialize [
 ]
 
 { #category : #initialization }
-DeterministicDice >> initializeWithFaces: anAmountOfFaces [
+DeterministicDice >> initializeWithFaces: anAmountOfFaces andValues: aSetOfValues [
 	numberOfFaces := anAmountOfFaces.
-	deterministicValues := OrderedCollection new.
-	deterministicValues := numberOfFaces to: 1 by: -1.
+	deterministicValues := aSetOfValues.
 	nextIndexOfDeterministicValue := numberOfFaces
 ]
 

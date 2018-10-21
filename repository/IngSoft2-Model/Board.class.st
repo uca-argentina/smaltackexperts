@@ -43,10 +43,18 @@ ifFalse:[
 
 { #category : #initialization }
 Board >> initializeWithSlots: anAmountOfSlots [
-	slots := anAmountOfSlots .
+	slots := OrderedCollection new: anAmountOfSlots.
+	slots add: (EmptySlot new) withOccurrences: anAmountOfSlots.
+	slots := slots asArray.
+	
 ]
 
 { #category : #accessing }
 Board >> numberOfSlots [
-	^ slots. 
+	^ slots size . 
+]
+
+{ #category : #accesing }
+Board >> slots [
+	^ slots
 ]

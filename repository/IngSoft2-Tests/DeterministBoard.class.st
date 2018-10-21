@@ -17,42 +17,45 @@ Public API and Key Messages
  
 Internal Representation and Key Implementation Points.
 
-    Instance Variables
-	numberOfFaces:		<Object>
-
 
     Implementation Points
 "
 Class {
-	#name : #RandomDice,
+	#name : #DeterministBoard,
 	#superclass : #Object,
 	#instVars : [
-		'numberOfFaces'
+		'slots'
 	],
-	#category : #'IngSoft2-Model'
+	#category : #'IngSoft2-Tests'
 }
 
-{ #category : #initialization }
-RandomDice class >> withFaces: anAmountOfFaces [
-anAmountOfFaces>1
-	ifTrue: [ ^ self new initializeWithFaces: anAmountOfFaces ]
-		ifFalse: [ AssertionFailure
-				signal: 'you can''t create a dice with less than 2 faces' ]
+{ #category : #initialize }
+DeterministBoard class >> withSlots: anAmountOfSlots [
+	anAmountOfSlots  >1
+	ifTrue:[
+	^ self new initializeWithSlots: anAmountOfSlots .]
+ifFalse:[
+	AssertionFailure signal: 'Board size must be greater than 1']
+]
+
+{ #category : #adding }
+DeterministBoard >> addSpecial: effect at: anIndex [
+	self slots at: anIndex put: effect.
 ]
 
 { #category : #initialization }
-RandomDice >> initializeWithFaces: anAmountOfFaces [
-numberOfFaces:= anAmountOfFaces.
+DeterministBoard >> initializeWithSlots: anAmountOfSlots [
+	slots := OrderedCollection new: anAmountOfSlots.
+	slots add: (EmptySlot new) withOccurrences: anAmountOfSlots.
+	slots := slots asArray.
 ]
 
 { #category : #accessing }
-RandomDice >> numberOfFaces [
-^numberOfFaces.
+DeterministBoard >> numberOfSlots [
+	^ slots size .
 ]
 
-{ #category : #actions }
-RandomDice >> rollDice [
-
-	^((1 to: numberOfFaces) atRandom).
-
+{ #category : #accessing }
+DeterministBoard >> slots [
+	^ slots
 ]
