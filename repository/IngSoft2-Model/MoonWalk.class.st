@@ -4,7 +4,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
-MoonWalk >> activateEffect: aGame [
-^aGame moonWalkEffect.
+{ #category : #action }
+MoonWalk >> activateEffectOn: aGame [
+	^ aGame moonWalkEffect
 ]

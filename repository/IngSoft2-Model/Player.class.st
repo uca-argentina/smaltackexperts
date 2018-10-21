@@ -43,7 +43,7 @@ Player class >> withName: aName [
 { #category : #initialization }
 Player >> initializeWithName: aName [
 	name:= aName.
-	position := 0.
+	position := 1.
 	lapsCompleted := 0.
 ]
 
@@ -56,7 +56,7 @@ Player >> lapsCompleted [
 Player >> moveBackward: aNumberOfSlots on: aBoard [
 	position := position - aNumberOfSlots.
 	position > 0
-		ifTrue: [ lapsCompleted := lapsCompleted - 1.
+		ifFalse: [ lapsCompleted := lapsCompleted - 1.
 			position := position + aBoard numberOfSlots ].
 ]
 
@@ -66,8 +66,16 @@ Player >> moveForward: aNumberOfSlots on: aBoard [
 	position >= aBoard numberOfSlots
 		ifTrue: [ 
 			lapsCompleted := lapsCompleted + position // (aBoard numberOfSlots).
-			position := position rem: (aBoard numberOfSlots).
+			position > aBoard numberOfSlots
+				ifTrue: [ 
+					position := position rem: (aBoard numberOfSlots).
+					 ]
 			 ]
+]
+
+{ #category : #update }
+Player >> moveToFirstPosition [
+	position := 1.
 ]
 
 { #category : #accessing }

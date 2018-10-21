@@ -4,7 +4,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
-AtomicBomb >> activateEffect: aGame [
-	^ aGame atomicBombEffect.
+{ #category : #action }
+AtomicBomb >> activateEffectOn: aGame [
+	^ aGame atomicBombEffect
 ]

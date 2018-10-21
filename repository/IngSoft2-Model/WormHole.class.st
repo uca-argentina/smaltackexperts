@@ -4,7 +4,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
-WormHole >> activateEffect: aGame [
-^aGame  wormHoleEffect.
+{ #category : #action }
+WormHole >> activateEffectOn: aGame [
+	^ aGame wormHoleEffect
 ]

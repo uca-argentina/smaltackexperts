@@ -29,8 +29,7 @@ Class {
 { #category : #tests }
 DiceTest >> testAddDeterministicValuesAndRollDice [
 	| dice|
-	dice := DeterministicDice withFaces: 4.
-	dice changeValuesTo: #(1 4 3 3).
+	dice := DeterministicDice withFaces: 4 andValues: #(1 4 3 3).
 	self assert: dice rollDice equals: 1. 
 	self assert: dice rollDice equals: 4.
 	self assert: dice rollDice equals: 3. 
@@ -40,21 +39,21 @@ DiceTest >> testAddDeterministicValuesAndRollDice [
 { #category : #tests }
 DiceTest >> testCreateADiceWithInvalidFaces [
 	| dice |
-	self should: [ dice := DeterministicDice withFaces: 1 ] raise: AssertionFailure
+	self should: [ dice := DeterministicDice withFaces: 1 andValues: #(1)] raise: AssertionFailure
 ]
 
 { #category : #tests }
 DiceTest >> testCreateADicewithAValidNumberOfFaces [
 	| dice  |
 
-	dice := DeterministicDice withFaces: 6.
-	self assert: dice numberOfFaces = 6
+	dice := DeterministicDice withFaces: 6 andValues: #(6 5 4 3 2 1).
+	self assert: dice numberOfFaces equals: 6
 ]
 
 { #category : #tests }
 DiceTest >> testRollDeterministicDice [
 	| dice |
-	dice := DeterministicDice withFaces: 8.
+	dice := DeterministicDice withFaces: 8 andValues: #(8 7 6 5 4 3 2 1).
 	self assert: dice rollDice equals: 8
 ]
 

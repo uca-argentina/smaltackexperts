@@ -1,10 +1,10 @@
 Class {
-	#name : #SpeedUp,
+	#name : #EmptySlot,
 	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #action }
-SpeedUp >> activateEffectOn: aGame [
-	^ aGame speedUpEffect
+EmptySlot >> activateEffectOn: aGame [
+	^ aGame voidEffect
 ]

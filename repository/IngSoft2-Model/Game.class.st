@@ -49,7 +49,7 @@ Game class >> on: aBoard beeingPlayedBy: players throwing: dices withLaps: anAmo
 
 { #category : #accessing }
 Game >> actualPlayerIndex [
-	nextPlayerIndex < 1
+	nextPlayerIndex <= 1
 		ifTrue: [ actualPlayerIndex := players size ]
 		ifFalse: [ actualPlayerIndex := nextPlayerIndex - 1 ].
 	^ actualPlayerIndex
@@ -63,6 +63,7 @@ Game >> assertIsTurnOf: aPlayer [
 
 { #category : #effects }
 Game >> atomicBombEffect. [
+	players do: [ :each | each moveToFirstPosition ]
 ]
 
 { #category : #accessing }
@@ -129,6 +130,11 @@ Game >> laps [
 
 { #category : #effects }
 Game >> moonWalkEffect [
+	| slotsToMoveBackWards playersToBeMoved |
+	slotsToMoveBackWards := ((players at:nextPlayerIndex ) position) // 2.
+	playersToBeMoved:= players  select: [ :i | i ~=(players at:nextPlayerIndex) ].
+	1 to: playersToBeMoved size do:[:i| (playersToBeMoved  at: i) moveBackward: slotsToMoveBackWards on: self board ] .
+	
 ]
 
 { #category : #accessing }
@@ -175,12 +181,20 @@ Game >> playsWhenGameIsEnded: aPlayer [
 Game >> playsWhileGameIsBeingPlayed: aPlayer [
 	self assertIsTurnOf: aPlayer.
 	aPlayer rollDices: self dices on: board.
-	"(board slots at: aPlayer position) activateEffect."
+	(board slots at: aPlayer position) activateEffectOn: self.
 	self changeStateAfterTurnOf: aPlayer
 ]
 
 { #category : #effects }
 Game >> speedUpEffect [
+	| slotsToMove |
+	slotsToMove :=4.
+	(players at: nextPlayerIndex) moveForward: slotsToMove  on: self board
+]
+
+{ #category : #effects }
+Game >> voidEffect [
+
 ]
 
 { #category : #accessing }
@@ -201,4 +215,7 @@ Game >> winnerWhileGameIsBeingPlayed [
 
 { #category : #effects }
 Game >> wormHoleEffect [
+	| slotsToMove |
+	slotsToMove :=4.
+	(players at: nextPlayerIndex) moveBackward: slotsToMove  on: self board
 ]
