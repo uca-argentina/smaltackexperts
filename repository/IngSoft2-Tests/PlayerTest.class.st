@@ -10,7 +10,7 @@ PlayerTest >> testAPlayerRollDicesAndMoveForwards [
 	dice1 := DeterministicDice withFaces: 8 andValues: #(8 7 6 5 4 3 2 1).
 	dice2 := DeterministicDice withFaces: 6 andValues: #(6 5 4 3 2 1).
 	pedro := Player withName: 'Pedro'.
-	board := Board withSlots: 30.
+	board := RandomBoard withSlots: 30.
 	dices := OrderedCollection new.
 	dices
 		add: dice1;
@@ -34,7 +34,7 @@ PlayerTest >> testCreatePlayer [
 PlayerTest >> testMovePositionOfPlayer [
 	| john board |
 	john := Player withName: 'John'.
-	board := Board withSlots: 20.
+	board := RandomBoard withSlots: 20.
 	john moveForward: 10 on: board.
 	self assert: john position equals: 11.
 	john moveForward: 4 on: board.
@@ -47,7 +47,7 @@ PlayerTest >> testRollDicesTwoTimes [
 	dice1 := DeterministicDice withFaces: 6 andValues: #(6 5 4 3 2 1).
 	dice2 := DeterministicDice withFaces: 8 andValues: #(8 7 6 5 4 3 2 1).
 	pedro := Player withName: 'Pedro'.
-	board := Board withSlots: 30.
+	board := RandomBoard withSlots: 30.
 	dices := OrderedCollection new.
 	dices
 		add: dice1;

@@ -61,11 +61,6 @@ Game >> assertIsTurnOf: aPlayer [
 		ifFalse: [ AssertionFailure signal: 'Not this player"s turn.' ]
 ]
 
-{ #category : #effects }
-Game >> atomicBombEffect. [
-	players do: [ :each | each moveToFirstPosition ]
-]
-
 { #category : #accessing }
 Game >> board [
 	^ board
@@ -133,7 +128,7 @@ Game >> moonWalkEffect [
 	| slotsToMoveBackWards playersToBeMoved |
 	slotsToMoveBackWards := ((players at:nextPlayerIndex ) position) // 2.
 	playersToBeMoved:= players  select: [ :i | i ~=(players at:nextPlayerIndex) ].
-	1 to: playersToBeMoved size do:[:i| (playersToBeMoved  at: i) moveBackward: slotsToMoveBackWards on: self board ] .
+	playersToBeMoved do:[ :each | each moveBackward: slotsToMoveBackWards on: self board ] .
 	
 ]
 

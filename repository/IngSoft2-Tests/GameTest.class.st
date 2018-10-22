@@ -7,7 +7,7 @@ Class {
 { #category : #creation }
 GameTest >> boardWith10SlotsAnd1AtomicBomb [
 	| board atomicBomb |
-	board := DeterministBoard withSlots: 10.
+	board := DeterministicBoard withSlots: 10.
 	atomicBomb := AtomicBomb new.
 	board addSpecial: atomicBomb at: 5.
 	^ board
@@ -16,7 +16,7 @@ GameTest >> boardWith10SlotsAnd1AtomicBomb [
 { #category : #creation }
 GameTest >> boardWith10SlotsAnd3MoonWalk [
 	| board moonWalk|
-	board := DeterministBoard withSlots: 10.
+	board := DeterministicBoard withSlots: 10.
 	moonWalk  := MoonWalk   new.
 	board addSpecial: moonWalk  at: 2.
 	board addSpecial: moonWalk  at: 5.
@@ -27,7 +27,7 @@ GameTest >> boardWith10SlotsAnd3MoonWalk [
 { #category : #creation }
 GameTest >> boardWith10SlotsAnd3SpeedUp [
 	| board speedUp |
-	board := DeterministBoard withSlots: 10.
+	board := DeterministicBoard withSlots: 10.
 	speedUp := SpeedUp new.
 	board addSpecial: speedUp at: 2.
 	board addSpecial: speedUp at: 3.
@@ -38,7 +38,7 @@ GameTest >> boardWith10SlotsAnd3SpeedUp [
 { #category : #creation }
 GameTest >> boardWith10SlotsAnd4WormHole [
 	| board wormHole |
-	board := DeterministBoard withSlots: 10.
+	board := DeterministicBoard withSlots: 10.
 	wormHole := WormHole new.
 	board addSpecial: wormHole at: 2.
 	board addSpecial: wormHole at: 4.
@@ -50,7 +50,7 @@ GameTest >> boardWith10SlotsAnd4WormHole [
 { #category : #creation }
 GameTest >> gameWith1PlayerAnd2Dices [
 	| game board juan dice1 dice2 players dices |
-	board := DeterministBoard  withSlots: 20.
+	board := DeterministicBoard  withSlots: 20.
 	juan := Player withName: 'Juan'.
 	dice1 := DeterministicDice withFaces: 5 andValues: #(5 4 3 2 1).
 	dice2 := DeterministicDice withFaces: 7 andValues: #(7 6 5 4 3 2 1).
@@ -68,7 +68,7 @@ GameTest >> gameWith1PlayerAnd2Dices [
 { #category : #creation }
 GameTest >> gameWith1PlayerAnd3Dices [
 	| game board juan dice1 dice2 dice3 players dices |
-	board := DeterministBoard withSlots: 10.
+	board := DeterministicBoard withSlots: 10.
 	juan := Player withName: 'Juan'.
 	dice1 := DeterministicDice withFaces: 5 andValues: #(5 4 3 2 1).
 	dice2 := DeterministicDice withFaces: 7 andValues: #(7 6 5 4 3 2 1).
@@ -154,7 +154,7 @@ GameTest >> gameWith2PlayersAnd1DiceOnWormHoleBoard [
 { #category : #creation }
 GameTest >> gameWith2PlayersAnd2Dices [
 	| game board juan hernan dice1 dice2 players dices |
-	board := DeterministBoard  withSlots: 20.
+	board := DeterministicBoard  withSlots: 20.
 	juan := Player withName: 'Juan'.
 	hernan := Player withName: 'Hernan'.
 	dice1 := DeterministicDice withFaces: 5 andValues: #(5 4 3 2 1).
@@ -197,7 +197,7 @@ GameTest >> gameWith3PlayersAnd1DiceOnAtomicBombBoard [
 { #category : #creation }
 GameTest >> gameWith3PlayersAnd1DiceWith2laps [
 	| game board juan hernan osvaldo dice1 players dices |
-	board := DeterministBoard  withSlots: 10.
+	board := DeterministicBoard  withSlots: 10.
 	juan := Player withName: 'Juan'.
 	hernan := Player withName: 'Hernan'.
 	osvaldo := Player withName: 'osvaldo'.
@@ -221,7 +221,7 @@ GameTest >> gameWith3PlayersAnd1DiceWith2laps [
 { #category : #creation }
 GameTest >> gameWith3PlayersAnd2Dices [
 	| game board juan hernan osvaldo dice1 dice2 players dices |
-	board := DeterministBoard  withSlots: 20.
+	board := DeterministicBoard  withSlots: 20.
 	juan := Player withName: 'Juan'.
 	hernan := Player withName: 'Hernan'.
 	osvaldo:= Player withName: 'osvaldo'.
