@@ -85,7 +85,7 @@ RandomBoard >> numberOfSlots [
 	^ slots size . 
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 RandomBoard >> slots [
 	^ slots
 ]

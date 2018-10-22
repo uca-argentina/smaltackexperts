@@ -28,5 +28,5 @@ Class {
 
 { #category : #action }
 SpeedUp >> activateEffectOn: aGame [
-	^ aGame speedUpEffect
+	^ aGame speedUpEffect.
 ]
