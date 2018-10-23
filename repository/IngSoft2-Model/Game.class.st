@@ -35,7 +35,6 @@ Class {
 		'players',
 		'dices',
 		'nextPlayerIndex',
-		'actualPlayerIndex',
 		'state',
 		'laps'
 	],
@@ -45,14 +44,6 @@ Class {
 { #category : #initialization }
 Game class >> on: aBoard beeingPlayedBy: players throwing: dices withLaps: anAmountOfLaps [ 
 	^ self new initializeOn: aBoard beeingPlayedBy: players throwing: dices withLaps: anAmountOfLaps.
-]
-
-{ #category : #accessing }
-Game >> actualPlayerIndex [
-	nextPlayerIndex <= 1
-		ifTrue: [ actualPlayerIndex := players size ]
-		ifFalse: [ actualPlayerIndex := nextPlayerIndex - 1 ].
-	^ actualPlayerIndex
 ]
 
 { #category : #update }
@@ -112,7 +103,6 @@ Game >> initializeOn: aBoard beeingPlayedBy: aGroupOfPlayers throwing: aGroupOfD
 	players := aGroupOfPlayers.
 	dices := aGroupOfDices.
 	nextPlayerIndex := 1.
-	actualPlayerIndex :=0.
 	state := GamePlaying new.
 	laps := anAmountOfLaps.
 	
@@ -133,7 +123,7 @@ Game >> moonWalkEffect [
 	| slotsToMoveBackWards playersToBeMoved |
 	slotsToMoveBackWards := ((players at:nextPlayerIndex ) position) // 2.
 	playersToBeMoved:= players  select: [ :i | i ~=(players at:nextPlayerIndex) ].
-	1 to: playersToBeMoved size do:[:i| (playersToBeMoved  at: i) moveBackward: slotsToMoveBackWards on: self board ] .
+	playersToBeMoved do:[ :each | each moveBackward: slotsToMoveBackWards on: self board ] .
 	
 ]
 

@@ -17,23 +17,20 @@ Public API and Key Messages
  
 Internal Representation and Key Implementation Points.
 
-    Instance Variables
-	lockers:		<Object>
-
 
     Implementation Points
 "
 Class {
-	#name : #Board,
+	#name : #DeterministicBoard,
 	#superclass : #Object,
 	#instVars : [
 		'slots'
 	],
-	#category : #'IngSoft2-Model'
+	#category : #'IngSoft2-Tests'
 }
 
 { #category : #initialize }
-Board class >> withSlots: anAmountOfSlots [
+DeterministicBoard class >> withSlots: anAmountOfSlots [
 	anAmountOfSlots  >1
 	ifTrue:[
 	^ self new initializeWithSlots: anAmountOfSlots .]
@@ -41,20 +38,24 @@ ifFalse:[
 	AssertionFailure signal: 'Board size must be greater than 1']
 ]
 
+{ #category : #adding }
+DeterministicBoard >> addSpecial: effect at: anIndex [
+	self slots at: anIndex put: effect.
+]
+
 { #category : #initialization }
-Board >> initializeWithSlots: anAmountOfSlots [
+DeterministicBoard >> initializeWithSlots: anAmountOfSlots [
 	slots := OrderedCollection new: anAmountOfSlots.
 	slots add: (EmptySlot new) withOccurrences: anAmountOfSlots.
 	slots := slots asArray.
-	
 ]
 
 { #category : #accessing }
-Board >> numberOfSlots [
-	^ slots size . 
+DeterministicBoard >> numberOfSlots [
+	^ slots size .
 ]
 
-{ #category : #accesing }
-Board >> slots [
+{ #category : #accessing }
+DeterministicBoard >> slots [
 	^ slots
 ]

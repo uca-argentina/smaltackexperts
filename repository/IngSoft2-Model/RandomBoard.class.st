@@ -17,20 +17,23 @@ Public API and Key Messages
  
 Internal Representation and Key Implementation Points.
 
+    Instance Variables
+	lockers:		<Object>
+
 
     Implementation Points
 "
 Class {
-	#name : #DeterministBoard,
+	#name : #RandomBoard,
 	#superclass : #Object,
 	#instVars : [
 		'slots'
 	],
-	#category : #'IngSoft2-Tests'
+	#category : #'IngSoft2-Model'
 }
 
 { #category : #initialize }
-DeterministBoard class >> withSlots: anAmountOfSlots [
+RandomBoard class >> withSlots: anAmountOfSlots [
 	anAmountOfSlots  >1
 	ifTrue:[
 	^ self new initializeWithSlots: anAmountOfSlots .]
@@ -39,23 +42,50 @@ ifFalse:[
 ]
 
 { #category : #adding }
-DeterministBoard >> addSpecial: effect at: anIndex [
-	self slots at: anIndex put: effect.
+RandomBoard >> addNewSlot [
+	| value |
+	value := (1 to: 100) atRandom.
+	value <= 48
+		ifTrue: [ 
+			slots add: EmptySlot new.
+			 ]
+		ifFalse: [ 
+			value <= 68
+				ifTrue: [ 
+					slots add: WormHole new.
+					 ]
+				ifFalse: [ 
+					value <= 88
+						ifTrue: [ 
+							slots add: SpeedUp new.
+							 ]
+						ifFalse: [ 
+							value <= 98
+								ifTrue: [ 
+									slots add: MoonWalk new.
+									 ]
+								ifFalse: [ 
+									slots add: AtomicBomb new.
+									 ]
+							 ]
+					 ]
+			 ]
 ]
 
 { #category : #initialization }
-DeterministBoard >> initializeWithSlots: anAmountOfSlots [
+RandomBoard >> initializeWithSlots: anAmountOfSlots [
 	slots := OrderedCollection new: anAmountOfSlots.
-	slots add: (EmptySlot new) withOccurrences: anAmountOfSlots.
+	anAmountOfSlots timesRepeat: [ self addNewSlot ].
 	slots := slots asArray.
+	
 ]
 
 { #category : #accessing }
-DeterministBoard >> numberOfSlots [
-	^ slots size .
+RandomBoard >> numberOfSlots [
+	^ slots size . 
 ]
 
 { #category : #accessing }
-DeterministBoard >> slots [
+RandomBoard >> slots [
 	^ slots
 ]
