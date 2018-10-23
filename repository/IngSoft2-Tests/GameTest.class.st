@@ -48,6 +48,21 @@ GameTest >> boardWith10SlotsAnd4WormHole [
 ]
 
 { #category : #creation }
+GameTest >> boardWith10SlotsAndAllEffects [
+	| board atomicBomb moonWalk speedUp wormHole |
+	board := DeterministicBoard withSlots: 10.
+	atomicBomb := AtomicBomb new.
+	moonWalk := MoonWalk new.
+	speedUp := SpeedUp new.
+	wormHole := WormHole new.
+	board addSpecial: wormHole at: 3.
+	board addSpecial: speedUp at: 5.
+	board addSpecial: moonWalk at: 6. 
+	board addSpecial: atomicBomb at: 9.
+	^ board
+]
+
+{ #category : #creation }
 GameTest >> gameWith1PlayerAnd2Dices [
 	| game board juan dice1 dice2 players dices |
 	board := DeterministicBoard  withSlots: 20.
@@ -85,6 +100,27 @@ GameTest >> gameWith1PlayerAnd3Dices [
 		beeingPlayedBy: players
 		throwing: dices
 		withLaps: 4.
+	^ game
+]
+
+{ #category : #creation }
+GameTest >> gameWith2PlayersAnd1DiceOnBoardWithAllEffects [
+	| game board juan hernan dice players dices |
+	board :=  self boardWith10SlotsAndAllEffects.
+	juan := Player withName: 'Juan'.
+	hernan := Player withName: 'Hernan'.
+	dice := DeterministicDice withFaces: 5 andValues: #(4 5 3 2 1).
+	players := OrderedCollection new.
+	players
+		add: juan;
+		add: hernan.
+	dices := OrderedCollection new.
+	dices add: dice.
+	game := Game
+		on: board
+		beeingPlayedBy: players
+		throwing: dices
+		withLaps: 2.
 	^ game
 ]
 
@@ -331,6 +367,38 @@ GameTest >> testGameIsOver [
 	game plays: playerAt1.
 	self assert: playerAt1 position equals: 1.
 	self assert: game isOver equals: true.
+]
+
+{ #category : #tests }
+GameTest >> testGameWithAllEffects [
+	| game playerAt1 playerAt2 |
+	game := self gameWith2PlayersAnd1DiceOnBoardWithAllEffects.
+	playerAt1 := game players at: 1.
+	playerAt2 := game players at: 2.
+	game plays: playerAt1.
+	self
+		assert: playerAt1 position equals: 9;
+		assert: playerAt1 lapsCompleted equals: 0;
+		assert: playerAt2 position equals: 1;
+		assert: playerAt2 lapsCompleted equals: 0.
+	game plays: playerAt2.
+	self
+		assert: playerAt1 position equals: 6;
+		assert: playerAt1 lapsCompleted equals: 0;
+		assert: playerAt2 position equals: 6;
+		assert: playerAt2 lapsCompleted equals: 0.
+	game plays: playerAt1.
+	self
+		assert: playerAt1 position equals: 1;
+		assert: playerAt1 lapsCompleted equals: 0;
+		assert: playerAt2 position equals: 1;
+		assert: playerAt2 lapsCompleted equals: 0.
+	game plays: playerAt2.
+	self
+		assert: playerAt1 position equals: 1;
+		assert: playerAt1 lapsCompleted equals: 0;
+		assert: playerAt2 position equals: 9;
+		assert: playerAt2 lapsCompleted equals: -1
 ]
 
 { #category : #tests }
