@@ -35,7 +35,6 @@ Class {
 		'players',
 		'dices',
 		'nextPlayerIndex',
-		'actualPlayerIndex',
 		'state',
 		'laps'
 	],
@@ -45,14 +44,6 @@ Class {
 { #category : #initialization }
 Game class >> on: aBoard beeingPlayedBy: players throwing: dices withLaps: anAmountOfLaps [ 
 	^ self new initializeOn: aBoard beeingPlayedBy: players throwing: dices withLaps: anAmountOfLaps.
-]
-
-{ #category : #accessing }
-Game >> actualPlayerIndex [
-	nextPlayerIndex <= 1
-		ifTrue: [ actualPlayerIndex := players size ]
-		ifFalse: [ actualPlayerIndex := nextPlayerIndex - 1 ].
-	^ actualPlayerIndex
 ]
 
 { #category : #update }
