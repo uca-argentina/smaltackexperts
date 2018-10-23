@@ -224,7 +224,7 @@ GameTest >> gameWith3PlayersAnd2Dices [
 	board := DeterministicBoard  withSlots: 20.
 	juan := Player withName: 'Juan'.
 	hernan := Player withName: 'Hernan'.
-	osvaldo:= Player withName: 'osvaldo'.
+	osvaldo:= Player withName: 'Osvaldo'.
 	dice1 := DeterministicDice withFaces: 5 andValues: #(5 4 3 2 1).
 	dice2 := DeterministicDice withFaces: 7 andValues: #(7 6 5 4 3 2 1).
 	players := OrderedCollection new.

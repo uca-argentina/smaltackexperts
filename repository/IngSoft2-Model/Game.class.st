@@ -52,11 +52,6 @@ Game >> assertIsTurnOf: aPlayer [
 		ifFalse: [ AssertionFailure signal: 'Not this player"s turn.' ]
 ]
 
-{ #category : #effects }
-Game >> atomicBombEffect. [
-	players do: [ :each | each moveToFirstPosition ]
-]
-
 { #category : #accessing }
 Game >> board [
 	^ board
