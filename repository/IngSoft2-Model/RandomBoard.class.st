@@ -24,7 +24,7 @@ Internal Representation and Key Implementation Points.
     Implementation Points
 "
 Class {
-	#name : #Board,
+	#name : #RandomBoard,
 	#superclass : #Object,
 	#instVars : [
 		'slots'
@@ -33,7 +33,7 @@ Class {
 }
 
 { #category : #initialize }
-Board class >> withSlots: anAmountOfSlots [
+RandomBoard class >> withSlots: anAmountOfSlots [
 	anAmountOfSlots  >1
 	ifTrue:[
 	^ self new initializeWithSlots: anAmountOfSlots .]
@@ -41,20 +41,51 @@ ifFalse:[
 	AssertionFailure signal: 'Board size must be greater than 1']
 ]
 
+{ #category : #adding }
+RandomBoard >> addNewSlot [
+	| value |
+	value := (1 to: 100) atRandom.
+	value <= 48
+		ifTrue: [ 
+			slots add: EmptySlot new.
+			 ]
+		ifFalse: [ 
+			value <= 68
+				ifTrue: [ 
+					slots add: WormHole new.
+					 ]
+				ifFalse: [ 
+					value <= 88
+						ifTrue: [ 
+							slots add: SpeedUp new.
+							 ]
+						ifFalse: [ 
+							value <= 98
+								ifTrue: [ 
+									slots add: MoonWalk new.
+									 ]
+								ifFalse: [ 
+									slots add: AtomicBomb new.
+									 ]
+							 ]
+					 ]
+			 ]
+]
+
 { #category : #initialization }
-Board >> initializeWithSlots: anAmountOfSlots [
+RandomBoard >> initializeWithSlots: anAmountOfSlots [
 	slots := OrderedCollection new: anAmountOfSlots.
-	slots add: (EmptySlot new) withOccurrences: anAmountOfSlots.
+	anAmountOfSlots timesRepeat: [ self addNewSlot ].
 	slots := slots asArray.
 	
 ]
 
 { #category : #accessing }
-Board >> numberOfSlots [
+RandomBoard >> numberOfSlots [
 	^ slots size . 
 ]
 
-{ #category : #accesing }
-Board >> slots [
+{ #category : #accessing }
+RandomBoard >> slots [
 	^ slots
 ]
