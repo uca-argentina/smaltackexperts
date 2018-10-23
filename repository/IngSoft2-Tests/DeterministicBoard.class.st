@@ -21,7 +21,7 @@ Internal Representation and Key Implementation Points.
     Implementation Points
 "
 Class {
-	#name : #DeterministBoard,
+	#name : #DeterministicBoard,
 	#superclass : #Object,
 	#instVars : [
 		'slots'
@@ -30,7 +30,7 @@ Class {
 }
 
 { #category : #initialize }
-DeterministBoard class >> withSlots: anAmountOfSlots [
+DeterministicBoard class >> withSlots: anAmountOfSlots [
 	anAmountOfSlots  >1
 	ifTrue:[
 	^ self new initializeWithSlots: anAmountOfSlots .]
@@ -39,23 +39,23 @@ ifFalse:[
 ]
 
 { #category : #adding }
-DeterministBoard >> addSpecial: effect at: anIndex [
+DeterministicBoard >> addSpecial: effect at: anIndex [
 	self slots at: anIndex put: effect.
 ]
 
 { #category : #initialization }
-DeterministBoard >> initializeWithSlots: anAmountOfSlots [
+DeterministicBoard >> initializeWithSlots: anAmountOfSlots [
 	slots := OrderedCollection new: anAmountOfSlots.
 	slots add: (EmptySlot new) withOccurrences: anAmountOfSlots.
 	slots := slots asArray.
 ]
 
 { #category : #accessing }
-DeterministBoard >> numberOfSlots [
+DeterministicBoard >> numberOfSlots [
 	^ slots size .
 ]
 
 { #category : #accessing }
-DeterministBoard >> slots [
+DeterministicBoard >> slots [
 	^ slots
 ]

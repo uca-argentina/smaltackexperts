@@ -52,6 +52,11 @@ Game >> assertIsTurnOf: aPlayer [
 		ifFalse: [ AssertionFailure signal: 'Not this player"s turn.' ]
 ]
 
+{ #category : #effects }
+Game >> atomicBombEffect. [
+	players do: [ :each | each moveToFirstPosition ]
+]
+
 { #category : #accessing }
 Game >> board [
 	^ board
@@ -98,7 +103,6 @@ Game >> initializeOn: aBoard beeingPlayedBy: aGroupOfPlayers throwing: aGroupOfD
 	players := aGroupOfPlayers.
 	dices := aGroupOfDices.
 	nextPlayerIndex := 1.
-	actualPlayerIndex :=0.
 	state := GamePlaying new.
 	laps := anAmountOfLaps.
 	
