@@ -31,11 +31,6 @@ GamePlaying >> isOver [
 	^ false.
 ]
 
-{ #category : #accessing }
-GamePlaying >> placeOf: aPlayer in: aGame [
-	^ aGame placeWhileGameIsBeingPlayedOf: aPlayer.
-]
-
 { #category : #update }
 GamePlaying >> plays: aPlayer in: aGame [
 	aGame playsWhileGameIsBeingPlayed: aPlayer.

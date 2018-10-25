@@ -21,22 +21,52 @@ Internal Representation and Key Implementation Points.
     Implementation Points
 "
 Class {
-	#name : #GameEnded,
+	#name : #Position,
 	#superclass : #Object,
+	#instVars : [
+		'slot',
+		'lapsCompleted'
+	],
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #update }
+Position >> increaseLapsCompletedBy: aNumberOfLaps [
+	lapsCompleted := lapsCompleted + aNumberOfLaps.
+]
+
+{ #category : #initialization }
+Position >> initialize [
+	slot := 1.
+	lapsCompleted := 0.
+]
+
 { #category : #accessing }
-GameEnded >> isOver [
-	^ true.
+Position >> lapsCompleted [
+	^ lapsCompleted.
 ]
 
 { #category : #update }
-GameEnded >> plays: aPlayer in: aGame [
-	aGame playsWhenGameIsEnded: aPlayer.
+Position >> reduceLapsCompletedBy: aNumberOfLaps [
+	lapsCompleted := lapsCompleted - aNumberOfLaps.
 ]
 
 { #category : #accessing }
-GameEnded >> winnerOf: aGame [
-	^ aGame winnerWhenGameIsEnded.
+Position >> slot [
+	^ slot.
+]
+
+{ #category : #update }
+Position >> slotChangesBackwardBy: aNumberOfSlots [
+	slot := slot - aNumberOfSlots
+]
+
+{ #category : #update }
+Position >> slotChangesForwardBy: aNumberOfSlots [
+	slot := slot + aNumberOfSlots
+]
+
+{ #category : #update }
+Position >> slotChangesTo: aSlot [
+	slot := aSlot.
 ]
