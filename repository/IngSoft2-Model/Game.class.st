@@ -32,7 +32,6 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'board',
-		'players',
 		'positions',
 		'dices',
 		'nextPlayerIndex',
@@ -51,11 +50,6 @@ Game class >> on: aBoard beeingPlayedBy: players throwing: dices withLaps: anAmo
 Game >> assertIsTurnOf: aPlayer [
 	(self ifTurnOf: aPlayer)
 		ifFalse: [ AssertionFailure signal: 'Not this player"s turn.' ]
-]
-
-{ #category : #effects }
-Game >> atomicBombEffect [
-	positions do: [ :each | each value slotChangesTo: 1 ]
 ]
 
 { #category : #accessing }
@@ -124,45 +118,47 @@ Game >> lapsCompletedOf: aPlayer [
 	^ (positions at: aPlayer) lapsCompleted.
 ]
 
-{ #category : #effects }
-Game >> moonWalkEffect [
-	| actualPlayer slotsToMoveBackWards playersToBeMoved |
-	actualPlayer := self players at: nextPlayerIndex.
-	slotsToMoveBackWards := ((positions at: actualPlayer) slot) // 2.
-	playersToBeMoved:= self players  select: [ :i | i ~= actualPlayer ].
-	playersToBeMoved do:[ :each | self move: each backward: slotsToMoveBackWards ] .
-	
-]
-
 { #category : #update }
 Game >> move: aPlayer backward: aNumberOfSlots [
-	| position |
+	| position actualSlot actualLap |
 	position := positions at: aPlayer.
-	position slotChangesBackwardBy: aNumberOfSlots.
-	position slot > 0
-		ifFalse: [ position reduceLapsCompletedBy: 1.
-			position slotChangesForwardBy: board numberOfSlots.
+	actualSlot := position slot.
+	actualLap := position lapsCompleted.
+	actualSlot := actualSlot - aNumberOfSlots.
+	actualSlot > 0
+		ifFalse: [ 
+			actualLap := actualLap - 1.
+			actualSlot := actualSlot + board numberOfSlots.
 			 ].
+	positions at: aPlayer put: (Position on: actualSlot andWith: actualLap).
 ]
 
 { #category : #update }
 Game >> move: aPlayer forward: aNumberOfSlots [
-	| position |
+	| position actualSlot actualLap |
 	position := positions at: aPlayer.
-	position slotChangesForwardBy: aNumberOfSlots.
-	position slot >= board numberOfSlots
+	actualSlot := position slot.
+	actualLap := position lapsCompleted.
+	actualSlot := actualSlot + aNumberOfSlots.
+	actualSlot >= board numberOfSlots
 		ifTrue: [ 
-			position increaseLapsCompletedBy: position slot // board numberOfSlots.
-			position slot > board numberOfSlots
+			actualLap := actualLap + actualSlot // board numberOfSlots.
+			actualSlot > board numberOfSlots
 				ifTrue: [
-					position slotChangesTo: (position slot rem: board numberOfSlots).  
+					actualSlot := actualSlot rem: board numberOfSlots.  
 					 ]
-			 ]
+			 ].
+	positions at: aPlayer put: (Position on: actualSlot andWith: actualLap). 
 ]
 
 { #category : #accessing }
 Game >> nextPlayerIndex [
 	^ nextPlayerIndex
+]
+
+{ #category : #accessing }
+Game >> nextPlayerIndex: anObject [
+	nextPlayerIndex := anObject
 ]
 
 { #category : #accessing }
@@ -198,6 +194,11 @@ Game >> playsWhileGameIsBeingPlayed: aPlayer [
 	self changeStateAfterTurnOf: aPlayer
 ]
 
+{ #category : #accessing }
+Game >> positions [
+	^ positions
+]
+
 { #category : #update }
 Game >> rollDicesFor: aPlayer [
 	self move: aPlayer forward: (dices sumNumbers: [ :each | each rollDice ]).
@@ -216,19 +217,6 @@ Game >> sortPlayersByPosition [
 				, [ :player | self slotOf: player ] descending
 ]
 
-{ #category : #effects }
-Game >> speedUpEffect [
-	| slotsToMove actualPlayer |
-	slotsToMove :=4.
-	actualPlayer := self players at: nextPlayerIndex.
-	self move: actualPlayer forward: slotsToMove.
-]
-
-{ #category : #effects }
-Game >> voidEffect [
-
-]
-
 { #category : #accessing }
 Game >> winner [
 	^ state winnerOf: self.
@@ -245,12 +233,4 @@ Game >> winnerWhenGameIsEnded [
 { #category : #accessing }
 Game >> winnerWhileGameIsBeingPlayed [
 	AssertionFailure signal: 'The game is not over.'
-]
-
-{ #category : #effects }
-Game >> wormHoleEffect [
-	| slotsToMove actualPlayer |
-	slotsToMove :=4.
-	actualPlayer := self players at: nextPlayerIndex.
-	self move: actualPlayer backward: slotsToMove.
 ]

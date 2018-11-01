@@ -28,5 +28,9 @@ Class {
 
 { #category : #action }
 WormHole >> activateEffectOn: aGame [
-	^ aGame wormHoleEffect
+	| slotsToMove actualPlayer |
+	slotsToMove := 4.
+	actualPlayer := aGame players at: aGame nextPlayerIndex.
+	aGame move: actualPlayer backward: slotsToMove.
+	^ aGame
 ]

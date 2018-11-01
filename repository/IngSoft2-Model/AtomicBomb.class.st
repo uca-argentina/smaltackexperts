@@ -28,5 +28,12 @@ Class {
 
 { #category : #action }
 AtomicBomb >> activateEffectOn: aGame [
-	^ aGame atomicBombEffect
+	| players |
+	players := aGame positions keys.
+	players
+		do: [ :each | 
+			aGame positions
+				at: each
+				put: (Position on: 1 andWith: (aGame positions at: each) lapsCompleted) ].
+	^ aGame
 ]

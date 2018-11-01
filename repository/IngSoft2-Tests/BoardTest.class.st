@@ -59,8 +59,5 @@ BoardTest >> testCreateRandomBoardWithValidSlots [
 	slotsClasses add: AtomicBomb.
 	slotsClasses add: SpeedUp.
 	slotsClasses add: WormHole.
-	board slots
-		do: [ :each | 
-			self shouldnt: [ slotsClasses detect: [ :i | i = each class ]] raise: NotFound.
-			]
+	self assert: (board slots allSatisfy: [ :slot | slotsClasses includes: slot class]).
 ]

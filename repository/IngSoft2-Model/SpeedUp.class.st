@@ -28,5 +28,9 @@ Class {
 
 { #category : #action }
 SpeedUp >> activateEffectOn: aGame [
-	^ aGame speedUpEffect.
+	| slotsToMove actualPlayer |
+	slotsToMove := 4.
+	actualPlayer := aGame players at: aGame nextPlayerIndex.
+	aGame move: actualPlayer forward: slotsToMove.
+	^ aGame
 ]
