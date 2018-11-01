@@ -43,33 +43,7 @@ ifFalse:[
 
 { #category : #adding }
 RandomBoard >> addNewSlot [
-	| value |
-	value := (1 to: 100) atRandom.
-	value <= 48
-		ifTrue: [ 
-			slots add: EmptySlot new.
-			 ]
-		ifFalse: [ 
-			value <= 68
-				ifTrue: [ 
-					slots add: WormHole new.
-					 ]
-				ifFalse: [ 
-					value <= 88
-						ifTrue: [ 
-							slots add: SpeedUp new.
-							 ]
-						ifFalse: [ 
-							value <= 98
-								ifTrue: [ 
-									slots add: MoonWalk new.
-									 ]
-								ifFalse: [ 
-									slots add: AtomicBomb new.
-									 ]
-							 ]
-					 ]
-			 ]
+	slots add: (self slotFromNumber: 100 atRandom).
 ]
 
 { #category : #initialization }
@@ -83,6 +57,15 @@ RandomBoard >> initializeWithSlots: anAmountOfSlots [
 { #category : #accessing }
 RandomBoard >> numberOfSlots [
 	^ slots size . 
+]
+
+{ #category : #'as yet unclassified' }
+RandomBoard >> slotFromNumber: aNumber [
+	aNumber <= 48 ifTrue: [ ^ EmptySlot new ].
+	aNumber <= 68 ifTrue: [ ^ WormHole new ].
+	aNumber <= 88 ifTrue: [ ^ SpeedUp new ].
+	aNumber <= 98 ifTrue: [ ^ MoonWalk new ].
+	^ AtomicBomb new.
 ]
 
 { #category : #accessing }

@@ -30,9 +30,10 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #update }
-Position >> increaseLapsCompletedBy: aNumberOfLaps [
-	lapsCompleted := lapsCompleted + aNumberOfLaps.
+{ #category : #initialization }
+Position class >> on: aSlot andWith: aNumberOfLapsCompleted [ 
+	^ self new initializeOn: aSlot  andWith: aNumberOfLapsCompleted. 
+	 
 ]
 
 { #category : #initialization }
@@ -41,32 +42,18 @@ Position >> initialize [
 	lapsCompleted := 0.
 ]
 
+{ #category : #initialize }
+Position >> initializeOn: aSlot andWith: anAmountOfLapsCompleted [
+	slot := aSlot.
+	lapsCompleted := anAmountOfLapsCompleted
+]
+
 { #category : #accessing }
 Position >> lapsCompleted [
 	^ lapsCompleted.
 ]
 
-{ #category : #update }
-Position >> reduceLapsCompletedBy: aNumberOfLaps [
-	lapsCompleted := lapsCompleted - aNumberOfLaps.
-]
-
 { #category : #accessing }
 Position >> slot [
 	^ slot.
-]
-
-{ #category : #update }
-Position >> slotChangesBackwardBy: aNumberOfSlots [
-	slot := slot - aNumberOfSlots
-]
-
-{ #category : #update }
-Position >> slotChangesForwardBy: aNumberOfSlots [
-	slot := slot + aNumberOfSlots
-]
-
-{ #category : #update }
-Position >> slotChangesTo: aSlot [
-	slot := aSlot.
 ]

@@ -28,5 +28,5 @@ Class {
 
 { #category : #action }
 EmptySlot >> activateEffectOn: aGame [
-	^ aGame voidEffect
+	^ aGame
 ]
