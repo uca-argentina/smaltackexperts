@@ -64,25 +64,30 @@ GameTest >> boardWith10SlotsAndAllEffects [
 
 { #category : #creation }
 GameTest >> gameWith1PlayerAnd2Dices [
-	| game board juan dice1 dice2 players dices |
-	board := DeterministicBoard  withSlots: 20.
+	| game board juan dice1 dice2 players dices deckOfCards |
+	board := DeterministicBoard withSlots: 20.
 	juan := 'Juan'.
 	dice1 := DeterministicDice withFaces: 5 andValues: #(5 4 3 2 1).
 	dice2 := DeterministicDice withFaces: 7 andValues: #(7 6 5 4 3 2 1).
 	players := OrderedCollection new.
-	players
-		add: juan.
+	players add: juan.
 	dices := OrderedCollection new.
 	dices
 		add: dice1;
 		add: dice2.
-	game := Game on: board beeingPlayedBy: players throwing: dices withLaps: 4.
+	deckOfCards := RandomDeck new.
+	game := Game
+		on: board
+		beeingPlayedBy: players
+		throwing: dices
+		withLaps: 4
+		and: deckOfCards.
 	^ game
 ]
 
 { #category : #creation }
 GameTest >> gameWith1PlayerAnd3Dices [
-	| game board juan dice1 dice2 dice3 players dices |
+	| game board juan dice1 dice2 dice3 players dices deckOfCards |
 	board := DeterministicBoard withSlots: 10.
 	juan := 'Juan'.
 	dice1 := DeterministicDice withFaces: 5 andValues: #(5 4 3 2 1).
@@ -95,102 +100,20 @@ GameTest >> gameWith1PlayerAnd3Dices [
 		add: dice1;
 		add: dice2;
 		add: dice3.
+	deckOfCards := RandomDeck new.
 	game := Game
 		on: board
 		beeingPlayedBy: players
 		throwing: dices
-		withLaps: 4.
+		withLaps: 4
+		and: deckOfCards.
 	^ game
 ]
 
 { #category : #creation }
-GameTest >> gameWith2PlayersAnd1DiceOnBoardWithAllEffects [
-	| game board juan hernan dice players dices |
-	board :=  self boardWith10SlotsAndAllEffects.
-	juan := 'Juan'.
-	hernan := 'Hernan'.
-	dice := DeterministicDice withFaces: 5 andValues: #(4 5 3 2 1).
-	players := OrderedCollection new.
-	players
-		add: juan;
-		add: hernan.
-	dices := OrderedCollection new.
-	dices add: dice.
-	game := Game
-		on: board
-		beeingPlayedBy: players
-		throwing: dices
-		withLaps: 2.
-	^ game
-]
-
-{ #category : #creation }
-GameTest >> gameWith2PlayersAnd1DiceOnMoonWalk [
-	| game board juan hernan dice1 players dices |
-	board :=  self boardWith10SlotsAnd3MoonWalk .
-	juan := 'Juan'.
-	hernan := 'Hernan'.
-	dice1 := DeterministicDice withFaces: 6 andValues: #(1 4 3 5 5 5).
-	players := OrderedCollection new.
-	players
-		add: juan;
-		add: hernan.
-	dices := OrderedCollection new.
-	dices add: dice1.
-	game := Game
-		on: board
-		beeingPlayedBy: players
-		throwing: dices
-		withLaps: 2.
-	^ game
-]
-
-{ #category : #creation }
-GameTest >> gameWith2PlayersAnd1DiceOnSpeedUpBoard [
-	| game board juan hernan dice1 players dices |
-	board :=  self boardWith10SlotsAnd3SpeedUp.
-	juan := 'Juan'.
-	hernan := 'Hernan'.
-	dice1 := DeterministicDice withFaces: 4 andValues: #(1 2 1 3).
-	players := OrderedCollection new.
-	players
-		add: juan;
-		add: hernan.
-	dices := OrderedCollection new.
-	dices add: dice1.
-	game := Game
-		on: board
-		beeingPlayedBy: players
-		throwing: dices
-		withLaps: 2.
-	^ game
-]
-
-{ #category : #creation }
-GameTest >> gameWith2PlayersAnd1DiceOnWormHoleBoard [
-	| game board juan hernan dice1 players dices |
-	board :=  self boardWith10SlotsAnd4WormHole.
-	juan := 'Juan'.
-	hernan := 'Hernan'.
-	dice1 := DeterministicDice withFaces: 5 andValues: #(5 3 4 1 2).
-	players := OrderedCollection new.
-	players
-		add: juan;
-		add: hernan.
-	dices := OrderedCollection new.
-	dices add: dice1.
-	game := Game
-		on: board
-		beeingPlayedBy: players
-		throwing: dices
-		withLaps: 2.
-	^ game
-]
-
-{ #category : #creation }
-GameTest >> gameWith2PlayersAnd2Dices [
-	| game board juan hernan dice1 dice2 players dices |
-	board := DeterministicBoard  withSlots: 20.
+GameTest >> gameWith2Players2DicesAndRandomDeck [
+	| game board juan hernan dice1 dice2 players dices deckOfCards |
+	board := DeterministicBoard withSlots: 20.
 	juan := 'Juan'.
 	hernan := 'Hernan'.
 	dice1 := DeterministicDice withFaces: 5 andValues: #(5 4 3 2 1).
@@ -203,14 +126,112 @@ GameTest >> gameWith2PlayersAnd2Dices [
 	dices
 		add: dice1;
 		add: dice2.
-	game := Game on: board beeingPlayedBy: players throwing: dices withLaps: 1.
+	deckOfCards := RandomDeck new.
+	game := Game
+		on: board
+		beeingPlayedBy: players
+		throwing: dices
+		withLaps: 1
+		and: deckOfCards.
+	^ game
+]
+
+{ #category : #creation }
+GameTest >> gameWith2PlayersAnd1DiceOnBoardWithAllEffects [
+	| game board juan hernan dice players dices deckOfCards |
+	board := self boardWith10SlotsAndAllEffects.
+	juan := 'Juan'.
+	hernan := 'Hernan'.
+	dice := DeterministicDice withFaces: 5 andValues: #(4 5 3 2 1).
+	players := OrderedCollection new.
+	players
+		add: juan;
+		add: hernan.
+	dices := OrderedCollection new.
+	dices add: dice.
+	deckOfCards := RandomDeck new.
+	game := Game
+		on: board
+		beeingPlayedBy: players
+		throwing: dices
+		withLaps: 2
+		and: deckOfCards.
+	^ game
+]
+
+{ #category : #creation }
+GameTest >> gameWith2PlayersAnd1DiceOnMoonWalk [
+	| game board juan hernan dice1 players dices deckOfCards |
+	board := self boardWith10SlotsAnd3MoonWalk.
+	juan := 'Juan'.
+	hernan := 'Hernan'.
+	dice1 := DeterministicDice withFaces: 6 andValues: #(1 4 3 5 5 5).
+	players := OrderedCollection new.
+	players
+		add: juan;
+		add: hernan.
+	dices := OrderedCollection new.
+	dices add: dice1.
+	deckOfCards := RandomDeck new.
+	game := Game
+		on: board
+		beeingPlayedBy: players
+		throwing: dices
+		withLaps: 2
+		and: deckOfCards.
+	^ game
+]
+
+{ #category : #creation }
+GameTest >> gameWith2PlayersAnd1DiceOnSpeedUpBoard [
+	| game board juan hernan dice1 players dices deckOfCards |
+	board := self boardWith10SlotsAnd3SpeedUp.
+	juan := 'Juan'.
+	hernan := 'Hernan'.
+	dice1 := DeterministicDice withFaces: 4 andValues: #(1 2 1 3).
+	players := OrderedCollection new.
+	players
+		add: juan;
+		add: hernan.
+	dices := OrderedCollection new.
+	dices add: dice1.
+	deckOfCards := RandomDeck new.
+	game := Game
+		on: board
+		beeingPlayedBy: players
+		throwing: dices
+		withLaps: 2
+		and: deckOfCards.
+	^ game
+]
+
+{ #category : #creation }
+GameTest >> gameWith2PlayersAnd1DiceOnWormHoleBoard [
+	| game board juan hernan dice1 players dices deckOfCards |
+	board := self boardWith10SlotsAnd4WormHole.
+	juan := 'Juan'.
+	hernan := 'Hernan'.
+	dice1 := DeterministicDice withFaces: 5 andValues: #(5 3 4 1 2).
+	players := OrderedCollection new.
+	players
+		add: juan;
+		add: hernan.
+	dices := OrderedCollection new.
+	dices add: dice1.
+	deckOfCards := RandomDeck new.
+	game := Game
+		on: board
+		beeingPlayedBy: players
+		throwing: dices
+		withLaps: 2
+		and: deckOfCards.
 	^ game
 ]
 
 { #category : #creation }
 GameTest >> gameWith3PlayersAnd1DiceOnAtomicBombBoard [
-	| game board juan hernan marcelo dice1 players dices |
-	board :=  self boardWith10SlotsAnd1AtomicBomb.
+	| game board juan hernan marcelo dice1 players dices deckOfCards |
+	board := self boardWith10SlotsAnd1AtomicBomb.
 	juan := 'Juan'.
 	hernan := 'Hernan'.
 	marcelo := 'Marcelo'.
@@ -222,45 +243,50 @@ GameTest >> gameWith3PlayersAnd1DiceOnAtomicBombBoard [
 		add: marcelo.
 	dices := OrderedCollection new.
 	dices add: dice1.
+	deckOfCards := RandomDeck new.
 	game := Game
 		on: board
 		beeingPlayedBy: players
 		throwing: dices
-		withLaps: 2.
+		withLaps: 2
+		and: deckOfCards.
 	^ game
 ]
 
 { #category : #creation }
 GameTest >> gameWith3PlayersAnd1DiceWith2laps [
-	| game board juan hernan osvaldo dice1 players dices |
-	board := DeterministicBoard  withSlots: 10.
+	| game board juan hernan osvaldo dice1 players dices deckOfCards |
+	board := DeterministicBoard withSlots: 10.
 	juan := 'Juan'.
 	hernan := 'Hernan'.
 	osvaldo := 'Osvaldo'.
-	dice1 := DeterministicDice withFaces: 10 andValues: #(5 6 7 5 6 7 8 1 1 10).
+	dice1 := DeterministicDice
+		withFaces: 10
+		andValues: #(5 6 7 5 6 7 8 1 1 10).
 	players := OrderedCollection new.
 	players
 		add: juan;
 		add: hernan;
 		add: osvaldo.
 	dices := OrderedCollection new.
-	dices
-		add: dice1.
+	dices add: dice1.
+	deckOfCards := RandomDeck new.
 	game := Game
 		on: board
 		beeingPlayedBy: players
 		throwing: dices
-		withLaps: 2.
+		withLaps: 2
+		and: deckOfCards.
 	^ game
 ]
 
 { #category : #creation }
 GameTest >> gameWith3PlayersAnd2Dices [
-	| game board juan hernan osvaldo dice1 dice2 players dices |
-	board := DeterministicBoard  withSlots: 20.
+	| game board juan hernan osvaldo dice1 dice2 players dices deckOfCards |
+	board := DeterministicBoard withSlots: 20.
 	juan := 'Juan'.
 	hernan := 'Hernan'.
-	osvaldo:= 'Osvaldo'.
+	osvaldo := 'Osvaldo'.
 	dice1 := DeterministicDice withFaces: 5 andValues: #(5 4 3 2 1).
 	dice2 := DeterministicDice withFaces: 7 andValues: #(7 6 5 4 3 2 1).
 	players := OrderedCollection new.
@@ -272,7 +298,13 @@ GameTest >> gameWith3PlayersAnd2Dices [
 	dices
 		add: dice1;
 		add: dice2.
-	game := Game on: board beeingPlayedBy: players throwing: dices withLaps: 1.
+	deckOfCards := RandomDeck new.
+	game := Game
+		on: board
+		beeingPlayedBy: players
+		throwing: dices
+		withLaps: 1
+		and: deckOfCards.
 	^ game
 ]
 
@@ -296,6 +328,19 @@ GameTest >> testAtomicBombEffect [
 	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
 	self assert: (game slotOf: playerAt3) equals: 1.
 	self assert: (game lapsCompletedOf: playerAt3) equals: 0.
+]
+
+{ #category : #tests }
+GameTest >> testEachPlayerReceivesTwoCardsFromRandomDeck [
+	| game playerAt1 playerAt2 cardsClasses |
+	game := self gameWith2Players2DicesAndRandomDeck.
+	playerAt1 := game players at: 1.
+	playerAt2 := game players at: 2.
+	cardsClasses := Card subclasses.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
+	self assert: ((game cardsOf: playerAt1) allSatisfy: [ :card | cardsClasses includes: card]).
+	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
+	self assert: ((game cardsOf: playerAt1) allSatisfy: [ :card | cardsClasses includes: card]).
 ]
 
 { #category : #tests }
@@ -334,7 +379,7 @@ GameTest >> testGameCanBePlayedAndHaveAWinner [
 { #category : #tests }
 GameTest >> testGameCreation [
 	| game |
-	game := self gameWith2PlayersAnd2Dices.
+	game := self gameWith2Players2DicesAndRandomDeck.
 	self
 		assert: game board numberOfSlots equals:20;
 		assert: game players size equals: 2;
@@ -345,7 +390,7 @@ GameTest >> testGameCreation [
 { #category : #tests }
 GameTest >> testGameCreationAndPlays [
 	| game players |
-	game := self gameWith2PlayersAnd2Dices.
+	game := self gameWith2Players2DicesAndRandomDeck.
 	players := game players.
 	game plays: (players at:1).
 	self assert: (game slotOf: (players at: 1)) equals:13.
@@ -356,7 +401,7 @@ GameTest >> testGameCreationAndPlays [
 { #category : #tests }
 GameTest >> testGameIsOver [
 	| game playerAt1 playerAt2 |
-	game := self gameWith2PlayersAnd2Dices.
+	game := self gameWith2Players2DicesAndRandomDeck.
 	playerAt1 := game players at: 1.
 	playerAt2 := game players at: 2.
 	game plays: playerAt1.
@@ -424,7 +469,7 @@ GameTest >> testMoonWalkEffect [
 { #category : #tests }
 GameTest >> testPlayerCanNotPlayWhenGameIsOver [
 	| game playerAt1  playerAt2|
-	game := self gameWith2PlayersAnd2Dices.
+	game := self gameWith2Players2DicesAndRandomDeck.
 	playerAt1:= (game players at: 1).
 	playerAt2:= (game players at: 2).
 	game plays: playerAt1.
@@ -522,7 +567,7 @@ GameTest >> testSpeedUpEffect [
 { #category : #tests }
 GameTest >> testWhenGameEndsPlayersAreInRankingOrder [
 	| game playerAt1 playerAt2 |
-	game := self gameWith2PlayersAnd2Dices.
+	game := self gameWith2Players2DicesAndRandomDeck.
 	playerAt1 := game players at: 1.
 	playerAt2 := game players at: 2.
 	game plays: playerAt1.
