@@ -26,7 +26,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #update }
 RandomDeck >> dealFor: aGame [
 	| players cardsDictionary cardsClasses cards |
 	players := aGame players.
