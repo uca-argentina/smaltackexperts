@@ -7,7 +7,7 @@ Class {
 { #category : #tests }
 PositionTest >> testPositionCreation [
 	| position |
-	position := Position new.
+	position := Position on:1  andWith: 0. 
 	self assert: position slot equals: 1;
 			assert: position lapsCompleted equals: 0.
 ]

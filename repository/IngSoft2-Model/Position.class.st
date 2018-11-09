@@ -36,12 +36,6 @@ Position class >> on: aSlot andWith: aNumberOfLapsCompleted [
 	 
 ]
 
-{ #category : #initialization }
-Position >> initialize [
-	slot := 1.
-	lapsCompleted := 0.
-]
-
 { #category : #initialize }
 Position >> initializeOn: aSlot andWith: anAmountOfLapsCompleted [
 	slot := aSlot.

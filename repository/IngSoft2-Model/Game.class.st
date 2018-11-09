@@ -107,7 +107,7 @@ Game >> ifTurnOf: aPlayer [
 Game >> initializeOn: aBoard beeingPlayedBy: aGroupOfPlayers throwing: aGroupOfDices withLaps: anAmountOfLaps and: aDeckOfCards [ 
 	positions := Dictionary new.
 	board := aBoard.
-	aGroupOfPlayers do: [ :each | positions add: (each -> Position new) ].
+	aGroupOfPlayers do: [ :each | positions add: (each -> (Position on: 1 andWith:0) ) ].
 	dices := aGroupOfDices.
 	nextPlayerIndex := 1.
 	state := GamePlaying new.

@@ -25,3 +25,7 @@ Class {
 	#superclass : #Card,
 	#category : #'IngSoft2-Model'
 }
+
+{ #category : #action }
+SpeedCard >> activateEffectOn: aGame [
+]
