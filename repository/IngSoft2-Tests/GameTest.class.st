@@ -337,10 +337,10 @@ GameTest >> testEachPlayerReceivesTwoCardsFromRandomDeck [
 	playerAt1 := game players at: 1.
 	playerAt2 := game players at: 2.
 	cardsClasses := Card subclasses.
-	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
-	self assert: ((game cardsOf: playerAt1) allSatisfy: [ :card | cardsClasses includes: card]).
-	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
-	self assert: ((game cardsOf: playerAt1) allSatisfy: [ :card | cardsClasses includes: card]).
+	self assert: playerAt1 numberOfCards equals: 2.
+	self assert: (playerAt1 cards allSatisfy: [ :card | cardsClasses includes: card]).
+	self assert: playerAt2 numberOfCards equals: 2.
+	self assert: (playerAt2 cards allSatisfy: [ :card | cardsClasses includes: card]).
 ]
 
 { #category : #tests }
