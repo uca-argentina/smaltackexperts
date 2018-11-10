@@ -127,10 +127,10 @@ GameTest >> gameWith2Players2DicesAndDeterministicDeck [
 		add: dice1;
 		add: dice2.
 	cardsClasses := OrderedCollection new.
-	cardsClasses add: AccelerationCard.
-	cardsClasses add: OverloadCard.
 	cardsClasses add: RedoCard.
 	cardsClasses add: RepeatCard.
+	cardsClasses add: AccelerationCard.
+	cardsClasses add: OverloadCard.
 	deckOfCards := DeterministicDeck withCards: cardsClasses.
 	game := Game
 		on: board
@@ -362,37 +362,49 @@ GameTest >> testAtomicBombEffect [
 ]
 
 { #category : #tests }
+GameTest >> testCreateAGameAndCheckLastSlotEffectActivated [
+	| game playerAt1 playerAt2 emptySlot speedUp |
+	game := self gameWith2PlayersAnd1DiceOnSpeedUpBoard.
+	emptySlot := EmptySlot new.
+	speedUp := SpeedUp new.
+	playerAt1 := game players at: 1.
+	playerAt2 := game players at: 2.
+	self assert: (game lastSlotEffectActivated) class equals: emptySlot   class.
+	game plays: playerAt1.
+	self assert: (game slotOf: playerAt1) equals: 6.
+	self assert: (game lastSlotEffectActivated ) class equals: speedUp class .
+	game plays: playerAt2.
+	self assert: (game slotOf: playerAt2) equals: 7
+]
+
+{ #category : #tests }
 GameTest >> testEachPlayerReceivesTwoCardsFromDeterministicDeck [
 	| game playerAt1 playerAt2 cardsClasses |
 	game := self gameWith2Players2DicesAndDeterministicDeck.
 	playerAt1 := game players at: 1.
 	playerAt2 := game players at: 2.
 	cardsClasses := Card subclasses.
-	self assert: playerAt1 name equals: 'Juan'.
-	self assert: playerAt1 numberOfCards equals: 2.
-	self assert: (playerAt1 cards allSatisfy: [ :card | cardsClasses includes: card class]).
-	self assert: (playerAt1 cards at: 1) class equals: AccelerationCard.
-	self assert: (playerAt1 cards at: 2) class equals: OverloadCard.
-	self assert: playerAt2 name equals: 'Hernan'.
-	self assert: playerAt2 numberOfCards equals: 2.
-	self assert: (playerAt2 cards allSatisfy: [ :card | cardsClasses includes: card class]).
-	self assert: (playerAt2 cards at: 1) class equals: RedoCard.
-	self assert: (playerAt2 cards at: 2) class equals: RepeatCard.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
+	self assert: ((game cardsOf: playerAt1) allSatisfy: [ :card | cardsClasses includes: card class ]).
+	self assert: ((game cardsOf: playerAt1) at: 1) class equals: AccelerationCard.
+	self assert: ((game cardsOf: playerAt1) at: 2) class equals: OverloadCard.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
+	self assert: ((game cardsOf: playerAt2) allSatisfy: [ :card | cardsClasses includes: card class ]).
+	self assert: ((game cardsOf: playerAt2) at: 1) class equals: RedoCard.
+	self assert: ((game cardsOf: playerAt2) at: 2) class equals: RepeatCard
 ]
 
 { #category : #tests }
 GameTest >> testEachPlayerReceivesTwoCardsFromRandomDeck [
 	| game playerAt1 playerAt2 cardsClasses |
 	game := self gameWith2Players2DicesAndRandomDeck.
+	cardsClasses := Card subclasses.
 	playerAt1 := game players at: 1.
 	playerAt2 := game players at: 2.
-	cardsClasses := Card subclasses.
-	self assert: playerAt1 name equals: 'Juan'.
-	self assert: playerAt1 numberOfCards equals: 2.
-	self assert: (playerAt1 cards allSatisfy: [ :card | cardsClasses includes: card class]).
-	self assert: playerAt2 name equals: 'Hernan'.
-	self assert: playerAt2 numberOfCards equals: 2.
-	self assert: (playerAt2 cards allSatisfy: [ :card | cardsClasses includes: card class]).
+	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
+	self assert: ((game cardsOf: playerAt1)  allSatisfy: [ :card | cardsClasses includes: card class .]).
+	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
+	self assert: ((game cardsOf: playerAt2)  allSatisfy: [ :card | cardsClasses includes: card class .]).
 ]
 
 { #category : #tests }

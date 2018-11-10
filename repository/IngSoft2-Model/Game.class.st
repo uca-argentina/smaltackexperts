@@ -38,7 +38,9 @@ Class {
 		'state',
 		'laps',
 		'deckOfCards',
-		'players'
+		'cards',
+		'lastCardPlayed',
+		'lastSlotEffectActivated'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -62,6 +64,16 @@ Game >> assertIsTurnOf: aPlayer [
 { #category : #accessing }
 Game >> board [
 	^ board
+]
+
+{ #category : #accesing }
+Game >> cards [
+	^ cards
+]
+
+{ #category : #accesing }
+Game >> cardsOf: aPlayer [
+	^(cards at: aPlayer) .
 ]
 
 { #category : #update }
@@ -100,20 +112,21 @@ Game >> ifTurnOf: aPlayer [
 
 { #category : #initialization }
 Game >> initializeOn: aBoard beeingPlayedBy: aGroupOfPlayers throwing: aGroupOfDices withLaps: anAmountOfLaps and: aDeckOfCards [
-	| player |
+
 	positions := Dictionary new.
-	players := OrderedCollection new.
+	cards := Dictionary new.
 	board := aBoard.
 	deckOfCards := aDeckOfCards.
 	aGroupOfPlayers
 		do: [ :each | 
-			player := Player withName: each andCards: deckOfCards dealCards.
-			players add: player.
-			positions add: player -> (Position on: 1 andWith: 0) ].
+			cards add: each ->aDeckOfCards dealCards .
+			positions add: each -> (Position on: 1 andWith: 0) ].
 	dices := aGroupOfDices.
 	nextPlayerIndex := 1.
 	state := GamePlaying new.
-	laps := anAmountOfLaps
+	laps := anAmountOfLaps.
+	lastSlotEffectActivated := EmptySlot new.
+	lastCardPlayed := Card new.
 ]
 
 { #category : #accessing }
@@ -129,6 +142,11 @@ Game >> laps [
 { #category : #update }
 Game >> lapsCompletedOf: aPlayer [
 	^ (positions at: aPlayer) lapsCompleted.
+]
+
+{ #category : #Accessing }
+Game >> lastSlotEffectActivated [
+	^ lastSlotEffectActivated.
 ]
 
 { #category : #update }
@@ -174,6 +192,11 @@ Game >> nextPlayerIndex: anObject [
 	nextPlayerIndex := anObject
 ]
 
+{ #category : #accesing }
+Game >> numberOfCardsOf: aPlayer [
+	^(self cards at: aPlayer )size.
+]
+
 { #category : #accessing }
 Game >> placeOf: aPlayer [
 	| actualPositions |
@@ -183,7 +206,7 @@ Game >> placeOf: aPlayer [
 
 { #category : #accessing }
 Game >> players [
-	^ players.
+	^ positions  keysSortedSafely.
 ]
 
 { #category : #update }
@@ -204,6 +227,7 @@ Game >> playsWhileGameIsBeingPlayed: aPlayer [
 	self rollDicesFor: aPlayer.
 	slot := (positions at: aPlayer) slot.
 	(board slots at: slot) activateEffectOn: self.
+	lastSlotEffectActivated:= (board slots at: slot).
 	self changeStateAfterTurnOf: aPlayer
 ]
 
