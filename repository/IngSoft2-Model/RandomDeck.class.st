@@ -31,7 +31,7 @@ RandomDeck >> dealCards [
 	| cardsClasses cards |
 	cardsClasses := (Card subclasses) asArray.
 		cards := OrderedCollection new.
-		cards add: (cardsClasses at: (Random new nextInt: 6)).
-		cards add: (cardsClasses at: (Random new nextInt: 6)).
+		cards add: (cardsClasses at: (Random new nextInt: 6)) new.
+		cards add: (cardsClasses at: (Random new nextInt: 6)) new.
 	^ cards.
 ]

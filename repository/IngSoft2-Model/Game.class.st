@@ -102,11 +102,13 @@ Game >> ifTurnOf: aPlayer [
 Game >> initializeOn: aBoard beeingPlayedBy: aGroupOfPlayers throwing: aGroupOfDices withLaps: anAmountOfLaps and: aDeckOfCards [
 	| player |
 	positions := Dictionary new.
+	players := OrderedCollection new.
 	board := aBoard.
 	deckOfCards := aDeckOfCards.
 	aGroupOfPlayers
 		do: [ :each | 
 			player := Player withName: each andCards: deckOfCards dealCards.
+			players add: player.
 			positions add: player -> (Position on: 1 andWith: 0) ].
 	dices := aGroupOfDices.
 	nextPlayerIndex := 1.
@@ -181,7 +183,7 @@ Game >> placeOf: aPlayer [
 
 { #category : #accessing }
 Game >> players [
-	^ positions keysSortedSafely.
+	^ players.
 ]
 
 { #category : #update }
