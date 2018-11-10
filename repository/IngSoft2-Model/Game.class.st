@@ -37,8 +37,8 @@ Class {
 		'nextPlayerIndex',
 		'state',
 		'laps',
-		'cards',
-		'deckOfCards'
+		'deckOfCards',
+		'players'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -62,11 +62,6 @@ Game >> assertIsTurnOf: aPlayer [
 { #category : #accessing }
 Game >> board [
 	^ board
-]
-
-{ #category : #accessing }
-Game >> cardsOf: aPlayer [ 
-	^ cards at: aPlayer.
 ]
 
 { #category : #update }
@@ -104,17 +99,21 @@ Game >> ifTurnOf: aPlayer [
 ]
 
 { #category : #initialization }
-Game >> initializeOn: aBoard beeingPlayedBy: aGroupOfPlayers throwing: aGroupOfDices withLaps: anAmountOfLaps and: aDeckOfCards [ 
+Game >> initializeOn: aBoard beeingPlayedBy: aGroupOfPlayers throwing: aGroupOfDices withLaps: anAmountOfLaps and: aDeckOfCards [
+	| player |
 	positions := Dictionary new.
+	players := OrderedCollection new.
 	board := aBoard.
-	aGroupOfPlayers do: [ :each | positions add: (each -> (Position on: 1 andWith:0) ) ].
+	deckOfCards := aDeckOfCards.
+	aGroupOfPlayers
+		do: [ :each | 
+			player := Player withName: each andCards: deckOfCards dealCards.
+			players add: player.
+			positions add: player -> (Position on: 1 andWith: 0) ].
 	dices := aGroupOfDices.
 	nextPlayerIndex := 1.
 	state := GamePlaying new.
-	laps := anAmountOfLaps.
-	deckOfCards := aDeckOfCards.
-	cards := deckOfCards dealFor: self.
-	
+	laps := anAmountOfLaps
 ]
 
 { #category : #accessing }
@@ -176,11 +175,6 @@ Game >> nextPlayerIndex: anObject [
 ]
 
 { #category : #accessing }
-Game >> numberOfCardsOf: aPlayer [ 
-	^ (self cardsOf: aPlayer) size.
-]
-
-{ #category : #accessing }
 Game >> placeOf: aPlayer [
 	| actualPositions |
 	actualPositions := self sortPlayersByPosition.
@@ -189,7 +183,7 @@ Game >> placeOf: aPlayer [
 
 { #category : #accessing }
 Game >> players [
-	^ positions keysSortedSafely.
+	^ players.
 ]
 
 { #category : #update }

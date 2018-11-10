@@ -111,6 +111,37 @@ GameTest >> gameWith1PlayerAnd3Dices [
 ]
 
 { #category : #creation }
+GameTest >> gameWith2Players2DicesAndDeterministicDeck [
+	| game board juan hernan dice1 dice2 players dices cardsClasses deckOfCards |
+	board := DeterministicBoard withSlots: 20.
+	juan := 'Juan'.
+	hernan := 'Hernan'.
+	dice1 := DeterministicDice withFaces: 5 andValues: #(5 4 3 2 1).
+	dice2 := DeterministicDice withFaces: 7 andValues: #(7 6 5 4 3 2 1).
+	players := OrderedCollection new.
+	players
+		add: juan;
+		add: hernan.
+	dices := OrderedCollection new.
+	dices
+		add: dice1;
+		add: dice2.
+	cardsClasses := OrderedCollection new.
+	cardsClasses add: AccelerationCard.
+	cardsClasses add: OverloadCard.
+	cardsClasses add: RedoCard.
+	cardsClasses add: RepeatCard.
+	deckOfCards := DeterministicDeck withCards: cardsClasses.
+	game := Game
+		on: board
+		beeingPlayedBy: players
+		throwing: dices
+		withLaps: 1
+		and: deckOfCards.
+	^ game
+]
+
+{ #category : #creation }
 GameTest >> gameWith2Players2DicesAndRandomDeck [
 	| game board juan hernan dice1 dice2 players dices deckOfCards |
 	board := DeterministicBoard withSlots: 20.
@@ -331,16 +362,37 @@ GameTest >> testAtomicBombEffect [
 ]
 
 { #category : #tests }
+GameTest >> testEachPlayerReceivesTwoCardsFromDeterministicDeck [
+	| game playerAt1 playerAt2 cardsClasses |
+	game := self gameWith2Players2DicesAndDeterministicDeck.
+	playerAt1 := game players at: 1.
+	playerAt2 := game players at: 2.
+	cardsClasses := Card subclasses.
+	self assert: playerAt1 name equals: 'Juan'.
+	self assert: playerAt1 numberOfCards equals: 2.
+	self assert: (playerAt1 cards allSatisfy: [ :card | cardsClasses includes: card class]).
+	self assert: (playerAt1 cards at: 1) class equals: AccelerationCard.
+	self assert: (playerAt1 cards at: 2) class equals: OverloadCard.
+	self assert: playerAt2 name equals: 'Hernan'.
+	self assert: playerAt2 numberOfCards equals: 2.
+	self assert: (playerAt2 cards allSatisfy: [ :card | cardsClasses includes: card class]).
+	self assert: (playerAt2 cards at: 1) class equals: RedoCard.
+	self assert: (playerAt2 cards at: 2) class equals: RepeatCard.
+]
+
+{ #category : #tests }
 GameTest >> testEachPlayerReceivesTwoCardsFromRandomDeck [
 	| game playerAt1 playerAt2 cardsClasses |
 	game := self gameWith2Players2DicesAndRandomDeck.
 	playerAt1 := game players at: 1.
 	playerAt2 := game players at: 2.
 	cardsClasses := Card subclasses.
-	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
-	self assert: ((game cardsOf: playerAt1) allSatisfy: [ :card | cardsClasses includes: card]).
-	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
-	self assert: ((game cardsOf: playerAt1) allSatisfy: [ :card | cardsClasses includes: card]).
+	self assert: playerAt1 name equals: 'Juan'.
+	self assert: playerAt1 numberOfCards equals: 2.
+	self assert: (playerAt1 cards allSatisfy: [ :card | cardsClasses includes: card class]).
+	self assert: playerAt2 name equals: 'Hernan'.
+	self assert: playerAt2 numberOfCards equals: 2.
+	self assert: (playerAt2 cards allSatisfy: [ :card | cardsClasses includes: card class]).
 ]
 
 { #category : #tests }
