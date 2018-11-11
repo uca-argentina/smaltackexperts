@@ -73,7 +73,7 @@ Game >> cards [
 
 { #category : #accesing }
 Game >> cardsOf: aPlayer [
-	^(cards at: aPlayer) .
+	^(self cards at: aPlayer) .
 ]
 
 { #category : #update }
@@ -92,6 +92,11 @@ Game >> changeTurn [
 		ifFalse: [
 			nextPlayerIndex := nextPlayerIndex + 1. 
 			 ]
+]
+
+{ #category : #accessing }
+Game >> deckOfCards [
+	^ deckOfCards
 ]
 
 { #category : #accessing }
@@ -194,7 +199,7 @@ Game >> nextPlayerIndex: anObject [
 
 { #category : #accesing }
 Game >> numberOfCardsOf: aPlayer [
-	^(self cards at: aPlayer )size.
+	^(self cardsOf: aPlayer)size.
 ]
 
 { #category : #accessing }

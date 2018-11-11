@@ -14,6 +14,17 @@ GameTest >> boardWith10SlotsAnd1AtomicBomb [
 ]
 
 { #category : #creation }
+GameTest >> boardWith10SlotsAnd3CardSlots [
+	| board cardSlot |
+	board := DeterministicBoard withSlots: 10.
+	cardSlot := CardSlot new.
+	board addSpecial: cardSlot at: 3.
+	board addSpecial: cardSlot at: 6.
+	board addSpecial: cardSlot at: 8.
+	^ board
+]
+
+{ #category : #creation }
 GameTest >> boardWith10SlotsAnd3MoonWalk [
 	| board moonWalk|
 	board := DeterministicBoard withSlots: 10.
@@ -181,6 +192,62 @@ GameTest >> gameWith2PlayersAnd1DiceOnBoardWithAllEffects [
 	dices := OrderedCollection new.
 	dices add: dice.
 	deckOfCards := RandomDeck new.
+	game := Game
+		on: board
+		beeingPlayedBy: players
+		throwing: dices
+		withLaps: 2
+		and: deckOfCards.
+	^ game
+]
+
+{ #category : #creation }
+GameTest >> gameWith2PlayersAnd1DiceOnCardSlotsAndDeterministicDeck [
+	| game board juan hernan dice1 players dices deckOfCards cards |
+	board := self boardWith10SlotsAnd3CardSlots.
+	juan := 'Juan'.
+	hernan := 'Hernan'.
+	dice1 := DeterministicDice withFaces: 6 andValues: #(2 5 5 6 1 3).
+	players := OrderedCollection new.
+	players
+		add: juan;
+		add: hernan.
+	dices := OrderedCollection new.
+	dices add: dice1.
+	cards := OrderedCollection new.
+	cards add: CancellationCard.
+	cards add: RedoCard.
+	cards add: RepeatCard.
+	cards add: SpeedCard.
+	deckOfCards := DeterministicDeck withCards: cards.
+	game := Game
+		on: board
+		beeingPlayedBy: players
+		throwing: dices
+		withLaps: 2
+		and: deckOfCards.
+	^ game
+]
+
+{ #category : #creation }
+GameTest >> gameWith2PlayersAnd1DiceOnCardSlotsAndRandomDeck [
+	| game board juan hernan dice1 players dices deckOfCards cards |
+	board := self boardWith10SlotsAnd3CardSlots.
+	juan := 'Juan'.
+	hernan := 'Hernan'.
+	dice1 := DeterministicDice withFaces: 6 andValues: #(2 5 6 5 1 3).
+	players := OrderedCollection new.
+	players
+		add: juan;
+		add: hernan.
+	dices := OrderedCollection new.
+	dices add: dice1.
+	cards := OrderedCollection new.
+	cards add: CancellationCard.
+	cards add: RedoCard.
+	cards add: RepeatCard.
+	cards add: SpeedCard.
+	deckOfCards := RandomDeck.
 	game := Game
 		on: board
 		beeingPlayedBy: players
@@ -359,6 +426,63 @@ GameTest >> testAtomicBombEffect [
 	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
 	self assert: (game slotOf: playerAt3) equals: 1.
 	self assert: (game lapsCompletedOf: playerAt3) equals: 0.
+]
+
+{ #category : #tests }
+GameTest >> testCardSlotEffectOnDeterministicDeck [
+	| game playerAt1 playerAt2 |
+	game := self gameWith2PlayersAnd1DiceOnCardSlotsAndDeterministicDeck.
+	playerAt1 := game players at: 1.
+	playerAt2 := game players at: 2.
+	game plays: playerAt1.
+	self assert: (game slotOf: playerAt1) equals: 3.
+	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
+	self assert: (game slotOf: playerAt2) equals: 1.
+	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 3.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
+	self assert: ((game cardsOf: playerAt1) at: 3) class equals: CancellationCard.
+	game plays: playerAt2.
+	self assert: (game slotOf: playerAt1) equals: 3.
+	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
+	self assert: (game slotOf: playerAt2) equals: 6.
+	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 3.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 3.
+	self assert: ((game cardsOf: playerAt2) at: 3) class equals: RedoCard.
+	game plays: playerAt1.
+	self assert: (game slotOf: playerAt1) equals: 8.
+	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
+	self assert: (game slotOf: playerAt2) equals: 6.
+	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 4.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 3.
+	self assert: ((game cardsOf: playerAt1) at: 4) class equals: RepeatCard.
+]
+
+{ #category : #tests }
+GameTest >> testCardSlotEffectOnRandomDeck [
+	| game playerAt1 playerAt2 cardsClasses |
+	game := self gameWith2PlayersAnd1DiceOnCardSlotsAndDeterministicDeck.
+	playerAt1 := game players at: 1.
+	playerAt2 := game players at: 2.
+	cardsClasses := Card subclasses.
+	game plays: playerAt1.
+	self assert: (game slotOf: playerAt1) equals: 3.
+	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
+	self assert: (game slotOf: playerAt2) equals: 1.
+	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 3.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
+	self assert: ((game cardsOf: playerAt1)  allSatisfy: [ :card | cardsClasses includes: card class .]).
+	game plays: playerAt2.
+	self assert: (game slotOf: playerAt1) equals: 3.
+	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
+	self assert: (game slotOf: playerAt2) equals: 6.
+	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 3.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 3.
+	self assert: ((game cardsOf: playerAt1)  allSatisfy: [ :card | cardsClasses includes: card class .]).
 ]
 
 { #category : #tests }
