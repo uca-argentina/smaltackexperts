@@ -38,9 +38,11 @@ Class {
 		'state',
 		'laps',
 		'deckOfCards',
-		'cards',
 		'lastCardPlayed',
-		'lastSlotEffectActivated'
+		'lastSlotEffectActivated',
+		'cardsInHand',
+		'permanentCards',
+		'instantCards'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -67,13 +69,13 @@ Game >> board [
 ]
 
 { #category : #accesing }
-Game >> cards [
-	^ cards
+Game >> cardsInHand [
+	^ cardsInHand
 ]
 
 { #category : #accesing }
 Game >> cardsOf: aPlayer [
-	^(self cards at: aPlayer) .
+	^(self cardsInHand at: aPlayer) .
 ]
 
 { #category : #update }
@@ -119,12 +121,16 @@ Game >> ifTurnOf: aPlayer [
 Game >> initializeOn: aBoard beeingPlayedBy: aGroupOfPlayers throwing: aGroupOfDices withLaps: anAmountOfLaps and: aDeckOfCards [
 
 	positions := Dictionary new.
-	cards := Dictionary new.
+	cardsInHand := Dictionary new.
+	permanentCards:= Dictionary  new.
+	instantCards := Dictionary new.
 	board := aBoard.
 	deckOfCards := aDeckOfCards.
 	aGroupOfPlayers
-		do: [ :each | 
-			cards add: each ->aDeckOfCards dealCards .
+		do: [ :each |
+			instantCards .
+			permanentCards.  
+			cardsInHand add: each ->aDeckOfCards dealCards .
 			positions add: each -> (Position on: 1 andWith: 0) ].
 	dices := aGroupOfDices.
 	nextPlayerIndex := 1.
@@ -239,6 +245,11 @@ Game >> playsWhileGameIsBeingPlayed: aPlayer [
 { #category : #accessing }
 Game >> positions [
 	^ positions
+]
+
+{ #category : #update }
+Game >> remove: aCard from: aPLayer [
+	(cardsInHand at: aPLayer) remove: aCard. 
 ]
 
 { #category : #update }

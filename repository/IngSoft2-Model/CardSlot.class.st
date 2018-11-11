@@ -32,5 +32,5 @@ CardSlot >> activateEffectOn: aGame [
 	players := aGame players.
 	nextPlayerIndex := aGame nextPlayerIndex.
 	deckOfCards := aGame deckOfCards.
-	(aGame cards at: (players at: nextPlayerIndex)) add: deckOfCards dealOneCard.
+	(aGame cardsInHand at: (players at: nextPlayerIndex)) add: deckOfCards dealOneCard.
 ]

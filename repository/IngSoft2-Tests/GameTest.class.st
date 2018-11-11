@@ -519,6 +519,26 @@ GameTest >> testEachPlayerReceivesTwoCardsFromDeterministicDeck [
 ]
 
 { #category : #tests }
+GameTest >> testEachPlayerReceivesTwoCardsFromDeterministicDeckAndThenRemoveOne [
+	| game playerAt1 playerAt2 cardsClasses  oneCard|
+	game := self gameWith2Players2DicesAndDeterministicDeck.
+	playerAt1 := game players at: 1.
+	playerAt2 := game players at: 2.
+	cardsClasses := Card subclasses.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
+	self assert: ((game cardsOf: playerAt1) allSatisfy: [ :card | cardsClasses includes: card class ]).
+	self assert: ((game cardsOf: playerAt1) at: 1) class equals: AccelerationCard.
+	self assert: ((game cardsOf: playerAt1) at: 2) class equals: OverloadCard.
+	oneCard:= ((game cardsOf: playerAt1) at: 1). 
+	game remove:oneCard  from: playerAt1 . 
+	self assert: (game numberOfCardsOf: playerAt1) equals: 1.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
+	self assert: ((game cardsOf: playerAt2) allSatisfy: [ :card | cardsClasses includes: card class ]).
+	self assert: ((game cardsOf: playerAt2) at: 1) class equals: RedoCard.
+	self assert: ((game cardsOf: playerAt2) at: 2) class equals: RepeatCard
+]
+
+{ #category : #tests }
 GameTest >> testEachPlayerReceivesTwoCardsFromRandomDeck [
 	| game playerAt1 playerAt2 cardsClasses |
 	game := self gameWith2Players2DicesAndRandomDeck.
