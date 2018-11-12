@@ -201,7 +201,7 @@ Game >> move: aPlayer forward: aNumberOfSlots [
 	actualSlot := actualSlot + aNumberOfSlots.
 	actualSlot >= board numberOfSlots
 		ifTrue: [ 
-			actualLap := actualLap + actualSlot // board numberOfSlots.
+			actualLap := actualLap + (actualSlot // board numberOfSlots).
 			actualSlot > board numberOfSlots
 				ifTrue: [
 					actualSlot := actualSlot rem: board numberOfSlots.  

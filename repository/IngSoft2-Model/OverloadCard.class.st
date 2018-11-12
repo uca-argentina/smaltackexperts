@@ -42,7 +42,8 @@ OverloadCard >> thrownOn: aGame by: aPlayer for: anotherCard [
 ]
 
 { #category : #action }
-OverloadCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [ 
+OverloadCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [
+	aGame assertIsTurnOf: aPlayer.
 	aGame remove: self from: aPlayer.
 	aGame addToPermanentCards: self for: anotherPlayer.
 ]
