@@ -27,5 +27,5 @@ Class {
 }
 
 { #category : #action }
-RedoCard >> activateEffectOn: aGame [
+RedoCard >> activateEffectOnXXX: aGame [
 ]

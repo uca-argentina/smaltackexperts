@@ -27,5 +27,5 @@ Class {
 }
 
 { #category : #action }
-SpeedCard >> activateEffectOn: aGame [
+SpeedCard >> activateEffectOnXXX: aGame [
 ]

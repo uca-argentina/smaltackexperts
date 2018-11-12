@@ -27,5 +27,5 @@ Class {
 }
 
 { #category : #action }
-RepeatCard >> activateEffectOn: aGame [
+RepeatCard >> activateEffectOnXXX: aGame [
 ]

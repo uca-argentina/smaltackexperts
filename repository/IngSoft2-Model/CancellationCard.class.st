@@ -27,5 +27,5 @@ Class {
 }
 
 { #category : #action }
-CancellationCard >> activateEffectOn: aGame [
+CancellationCard >> activateEffectOnXXX: aGame [
 ]
