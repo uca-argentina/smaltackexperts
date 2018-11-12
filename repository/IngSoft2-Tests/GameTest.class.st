@@ -462,6 +462,37 @@ GameTest >> gameWith3PlayersAnd2DicesOnDeterministicDeckWithAllCards [
 ]
 
 { #category : #tests }
+GameTest >> testAPlayerCantPlayAPermanetCardWhileIsNotHisTurn [
+	| game playerAt1 playerAt2 playerAt3 card1 card2 card3 |
+	game := self gameWith3PlayersAnd2DicesOnDeterministicDeckWithAllCards.
+	playerAt1 := game players at: 1.
+	playerAt2 := game players at: 2.
+	playerAt3 := game players at: 3.
+	card1 := (game cardsOf: playerAt1) at: 1.
+	self assert: card1 class equals: OverloadCard.
+	card2 := (game cardsOf: playerAt1) at: 2.
+	self assert: card2 class equals: SpeedCard.
+	card3 := (game cardsOf: playerAt2) at: 1.
+	self assert: card3 class equals: AccelerationCard.
+	self should: [ game plays: playerAt2 throwing: card3 to: playerAt1 ] raise: AssertionFailure.
+	game plays: playerAt1.
+	self assert: (game slotOf: playerAt1) equals: 5.
+	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
+	self assert: (game slotOf: playerAt2) equals: 1.
+	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
+	self assert: (game slotOf: playerAt3) equals: 1.
+	self assert: (game lapsCompletedOf: playerAt3) equals: 0.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 3.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt3) equals: 2.
+	self should: [ game plays: playerAt1 throwing: card1 ] raise: AssertionFailure.
+	self should: [ game plays: playerAt1 throwing: card1 for: ((game cardsOf: playerAt3) at: 1) ] raise: AssertionFailure.
+	self should: [ game plays: playerAt1 throwing: card1 to: playerAt2 ] raise: AssertionFailure.
+	self should: [ game plays: playerAt1 throwing: card2 to: playerAt2 ] raise: AssertionFailure.
+	game plays: playerAt2
+]
+
+{ #category : #tests }
 GameTest >> testAccelerationCard [
 	| game playerAt1 playerAt2 playerAt3 card |
 	game := self gameWith3PlayersAnd2DicesOnDeterministicDeckWithAllCards.
