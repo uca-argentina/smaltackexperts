@@ -75,9 +75,22 @@ Game >> assert: aCard belongsTo: aPlayer [
 ]
 
 { #category : #assertions }
+Game >> assertIsActive: aPermanentCard [
+	(self permanentCardsAffectingEachPlayer values
+		anySatisfy: [ :each | each includes: aPermanentCard ])
+		ifFalse: [ AssertionFailure signal: 'Permanent card not found.' ]
+]
+
+{ #category : #assertions }
 Game >> assertIsTurnOf: aPlayer [
 	(self ifTurnOf: aPlayer)
 		ifFalse: [ AssertionFailure signal: 'Not this player"s turn.' ]
+]
+
+{ #category : #assertions }
+Game >> assertThereAreActivePermanentCards [
+	(self permanentCardsAffectingEachPlayer values allSatisfy: [ :each | each isEmpty ])
+		ifTrue: [ AssertionFailure signal: 'There are not active permanent cards.' ]
 ]
 
 { #category : #accessing }
@@ -111,6 +124,14 @@ Game >> changeTurn [
 		ifFalse: [
 			nextPlayerIndex := nextPlayerIndex + 1. 
 			 ]
+]
+
+{ #category : #action }
+Game >> deactivate: aPermanentCard [
+	self permanentCardsAffectingEachPlayer
+		valuesDo: [ :each | 
+			(each includes: aPermanentCard)
+				ifTrue: [ each remove: aPermanentCard ] ]
 ]
 
 { #category : #accessing }
@@ -236,11 +257,6 @@ Game >> permanentCardsAffectingEachPlayer [
 ]
 
 { #category : #accessing }
-Game >> permanentCardsAffectingEachPlayer: anObject [
-	permanentCardsAffectingEachPlayer := anObject
-]
-
-{ #category : #accessing }
 Game >> placeOf: aPlayer [
 	| actualPositions |
 	actualPositions := self sortPlayersByPosition.
@@ -301,6 +317,26 @@ Game >> positions [
 { #category : #update }
 Game >> remove: aCard from: aPlayer [
 	(self cardsOf: aPlayer) remove: aCard. 
+]
+
+{ #category : #action }
+Game >> repeatLastSlotEffect [
+	| lastPlayer |
+	self returnToPreviousTurn.
+	lastPlayer := self players at: nextPlayerIndex.
+	lastSlotEffectActivated activateEffectOn: self.
+	self changeStateAfterTurnOf: lastPlayer
+]
+
+{ #category : #'as yet unclassified' }
+Game >> returnToPreviousTurn [
+	self nextPlayerIndex == 1
+		ifTrue: [
+			nextPlayerIndex := self players size. 
+			 ]
+		ifFalse: [
+			nextPlayerIndex := nextPlayerIndex - 1. 
+			 ]
 ]
 
 { #category : #update }

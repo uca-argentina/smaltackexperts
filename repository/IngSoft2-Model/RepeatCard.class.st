@@ -29,3 +29,19 @@ Class {
 { #category : #action }
 RepeatCard >> activateEffectOnXXX: aGame [
 ]
+
+{ #category : #action }
+RepeatCard >> thrownOn: aGame by: aPlayer [ 
+	aGame remove: self from: aPlayer. 
+	aGame repeatLastSlotEffect. 
+]
+
+{ #category : #action }
+RepeatCard >> thrownOn: aGame by: aPlayer for: anotherCard [ 
+	AssertionFailure signal: 'You don"t have to choose any card.'
+]
+
+{ #category : #action }
+RepeatCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [ 
+	AssertionFailure signal: 'You don"t have to choose any player.'
+]

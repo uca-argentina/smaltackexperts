@@ -27,5 +27,19 @@ Class {
 }
 
 { #category : #action }
-CancellationCard >> activateEffectOnXXX: aGame [
+CancellationCard >> thrownOn: aGame by: aPlayer [ 
+	AssertionFailure signal: 'Must choose another card to throw the card.'
+]
+
+{ #category : #action }
+CancellationCard >> thrownOn: aGame by: aPlayer for: anotherCard [
+	aGame assertThereAreActivePermanentCards.
+	aGame assertIsActive: anotherCard.
+	aGame remove: self from: aPlayer.
+	aGame deactivate: anotherCard
+]
+
+{ #category : #action }
+CancellationCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [ 
+	AssertionFailure signal: 'You don"t have to choose any player.'
 ]
