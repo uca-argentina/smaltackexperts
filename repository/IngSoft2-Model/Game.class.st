@@ -180,7 +180,7 @@ Game >> initializeOn: aBoard beeingPlayedBy: aGroupOfPlayers throwing: aGroupOfD
 	state := GamePlaying new.
 	laps := anAmountOfLaps.
 	lastSlotEffectActivated := EmptySlot new.
-	lastCardPlayed := Card new.
+	lastCardPlayed := NoCard new.
 ]
 
 { #category : #accessing }
@@ -365,6 +365,15 @@ Game >> sortPlayersByPosition [
 		asSortedCollection:
 			[ :player | self lapsCompletedOf: player ] descending
 				, [ :player | self slotOf: player ] descending
+]
+
+{ #category : #action }
+Game >> thrownOn: aGame by: aPlayer [
+		| lastCard |
+	lastCard := aGame lastCardPlayed.
+	lastCard class = AccelerationCard 
+	ifFalse: [ AssertionFailure  signal: ' You can only use this message if the last card played was a acceleration card' ].
+	lastCard thrownOn: aGame by: aPlayer.
 ]
 
 { #category : #accessing }

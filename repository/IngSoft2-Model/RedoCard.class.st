@@ -27,11 +27,6 @@ Class {
 }
 
 { #category : #action }
-RedoCard >> thrownOn: aGame by: aString [ 
-	self shouldBeImplemented.
-]
-
-{ #category : #action }
 RedoCard >> thrownOn: aGame by: aPlayer for: anotherCard [
 	| lastCard |
 	lastCard := aGame lastCardPlayed.

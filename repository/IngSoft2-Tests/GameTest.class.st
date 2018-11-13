@@ -694,7 +694,7 @@ GameTest >> testChangeLastCardPlayed [
 	| game card |
 	game := self gameWith3PlayersAnd2DicesOnDeterministicDeckWithAllCards.
 	card := AccelerationCard new.
-	self assert: game lastCardPlayed class equals: Card.
+	self assert: game lastCardPlayed class equals: NoCard.
 	game changeLastCardPlayed: card.
 	self assert: game lastCardPlayed class equals: AccelerationCard
 ]
@@ -1033,7 +1033,7 @@ GameTest >> testPlayerPositionWhileGameIsNotOver [
 
 { #category : #tests }
 GameTest >> testRedoCard [
-	| game playerAt1 playerAt2 playerAt3 card |
+	| game playerAt1 playerAt2 playerAt3 card card2|
 	game := self gameWith3PlayersAnd2DicesOnDeterministicDeckWithAllCards.
 	playerAt1 := game players at: 1.
 	playerAt2 := game players at: 2.
