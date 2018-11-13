@@ -32,7 +32,8 @@ RedoCard >> thrownOn: aGame by: aPlayer [
 	lastCard := aGame lastCardPlayed.
 	lastCard class = AccelerationCard  
 	ifFalse: [ AssertionFailure  signal: ' You can only use this message if the last card played was an acceleration card' ].
-	lastCard thrownOn: aGame by: aPlayer
+	lastCard thrownOn: aGame by: aPlayer.
+	aGame remove: self from: aPlayer.
 ]
 
 { #category : #action }
@@ -41,17 +42,20 @@ RedoCard >> thrownOn: aGame by: aPlayer for: anotherCard [
 	lastCard := aGame lastCardPlayed.
 	lastCard class = CancellationCard 
 	ifFalse: [ AssertionFailure  signal: ' You can only use this message if the last card played was a cancelation card' ].
-	lastCard thrownOn: aGame by: aPlayer for: anotherCard.
+	lastCard activateEffectOn: aGame by: anotherCard .
+	aGame remove: self from: aPlayer.
 ]
 
 { #category : #action }
-RedoCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [ 
+RedoCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [
 	| lastCard cardClasses |
 	lastCard := aGame lastCardPlayed.
 	cardClasses := OrderedCollection new.
 	cardClasses add: SpeedCard.
 	cardClasses add: OverloadCard.
-	(cardClasses includes: lastCard class) 
-	ifFalse: [ AssertionFailure  signal: ' You can only use this message if the last card played affected another player.' ].
-	lastCard thrownOn: aGame by: aPlayer to: anotherPlayer.
+	(cardClasses includes: lastCard class)
+		ifFalse: [ AssertionFailure
+				signal: ' You can only use this message if the last card played affected another player.' ].
+	lastCard activateEffectOn: aGame to: anotherPlayer.
+	aGame remove: self from: aPlayer
 ]

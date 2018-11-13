@@ -29,7 +29,7 @@ Class {
 { #category : #action }
 OverloadCard >> activateEffectOn: aGame to: aPlayer [ 
 	aGame move: aPlayer backward: 2. 
-	aGame  changeLastCardPlayed: self.
+	
 ]
 
 { #category : #action }
@@ -47,4 +47,5 @@ OverloadCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [
 	aGame assertIsTurnOf: aPlayer.
 	aGame remove: self from: aPlayer.
 	aGame addToPermanentCards: self for: anotherPlayer.
+	aGame  changeLastCardPlayed: self.
 ]
