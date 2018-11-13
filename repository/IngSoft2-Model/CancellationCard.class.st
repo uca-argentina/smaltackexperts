@@ -36,7 +36,8 @@ CancellationCard >> thrownOn: aGame by: aPlayer for: anotherCard [
 	aGame assertThereAreActivePermanentCards.
 	aGame assertIsActive: anotherCard.
 	aGame remove: self from: aPlayer.
-	aGame deactivate: anotherCard
+	aGame deactivate: anotherCard.
+	aGame  changeLastCardPlayed: self.
 ]
 
 { #category : #action }

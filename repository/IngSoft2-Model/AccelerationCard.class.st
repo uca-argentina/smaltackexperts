@@ -35,7 +35,8 @@ AccelerationCard >> activateEffectOn: aGame to: aPlayer [
 AccelerationCard >> thrownOn: aGame by: aPlayer [
 	aGame assertIsTurnOf: aPlayer.
 	aGame remove: self from: aPlayer.
-	aGame players do: [ :each | aGame addToPermanentCards: self for: each ]
+	aGame players do: [ :each | aGame addToPermanentCards: self for: each ].
+	aGame  changeLastCardPlayed: self.
 ]
 
 { #category : #action }

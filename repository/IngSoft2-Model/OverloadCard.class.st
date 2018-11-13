@@ -29,6 +29,7 @@ Class {
 { #category : #action }
 OverloadCard >> activateEffectOn: aGame to: aPlayer [ 
 	aGame move: aPlayer backward: 2. 
+	aGame  changeLastCardPlayed: self.
 ]
 
 { #category : #action }

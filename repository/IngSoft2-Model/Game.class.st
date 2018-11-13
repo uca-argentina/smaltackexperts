@@ -108,6 +108,11 @@ Game >> cardsOf: aPlayer [
 	^(self cardsInHand at: aPlayer) .
 ]
 
+{ #category : #action }
+Game >> changeLastCardPlayed: aCard [
+	lastCardPlayed := aCard .
+]
+
 { #category : #update }
 Game >> changeStateAfterTurnOf: aPlayer [
 	(self lapsCompletedOf: aPlayer) >= self laps
@@ -191,6 +196,11 @@ Game >> laps [
 { #category : #update }
 Game >> lapsCompletedOf: aPlayer [
 	^ (positions at: aPlayer) lapsCompleted.
+]
+
+{ #category : #accesing }
+Game >> lastCardPlayed [
+	^ lastCardPlayed.
 ]
 
 { #category : #Accessing }

@@ -690,6 +690,16 @@ GameTest >> testCardSlotEffectOnRandomDeck [
 ]
 
 { #category : #tests }
+GameTest >> testChangeLastCardPlayed [
+	| game card |
+	game := self gameWith3PlayersAnd2DicesOnDeterministicDeckWithAllCards.
+	card := AccelerationCard new.
+	self assert: game lastCardPlayed class equals: Card.
+	game changeLastCardPlayed: card.
+	self assert: game lastCardPlayed class equals: AccelerationCard
+]
+
+{ #category : #tests }
 GameTest >> testCreateAGameAndCheckLastSlotEffectActivated [
 	| game playerAt1 playerAt2 emptySlot speedUp |
 	game := self gameWith2PlayersAnd1DiceOnSpeedUpBoard.

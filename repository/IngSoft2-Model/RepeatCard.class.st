@@ -27,13 +27,10 @@ Class {
 }
 
 { #category : #action }
-RepeatCard >> activateEffectOnXXX: aGame [
-]
-
-{ #category : #action }
 RepeatCard >> thrownOn: aGame by: aPlayer [ 
 	aGame remove: self from: aPlayer. 
 	aGame repeatLastSlotEffect. 
+	aGame  changeLastCardPlayed: self.
 ]
 
 { #category : #action }

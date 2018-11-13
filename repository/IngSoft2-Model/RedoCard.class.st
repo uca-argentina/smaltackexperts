@@ -27,5 +27,27 @@ Class {
 }
 
 { #category : #action }
-RedoCard >> activateEffectOnXXX: aGame [
+RedoCard >> thrownOn: aGame by: aString [ 
+	self shouldBeImplemented.
+]
+
+{ #category : #action }
+RedoCard >> thrownOn: aGame by: aPlayer for: anotherCard [
+	| lastCard |
+	lastCard := aGame lastCardPlayed.
+	lastCard class = CancellationCard 
+	ifFalse: [ AssertionFailure  signal: ' You can only use this message if the last card played was a cancelation card' ].
+	lastCard thrownOn: aGame by: aPlayer for: anotherCard.
+]
+
+{ #category : #action }
+RedoCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [ 
+	| lastCard cardClasses |
+	lastCard := aGame lastCardPlayed.
+	cardClasses := OrderedCollection new.
+	cardClasses add: SpeedCard.
+	cardClasses add: OverloadCard.
+	(cardClasses includes: lastCard class) 
+	ifFalse: [ AssertionFailure  signal: ' You can only use this message if the last card played affected another player.' ].
+	lastCard thrownOn: aGame by: aPlayer to: anotherPlayer.
 ]
