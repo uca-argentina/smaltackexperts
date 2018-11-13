@@ -1050,9 +1050,11 @@ GameTest >> testRedoCard [
 	self assert: (game numberOfCardsOf: playerAt1) equals: 3.
 	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
 	self assert: (game numberOfCardsOf: playerAt3) equals: 2.
-	self assert: ((game cardsOf: playerAt1) at: 3) class equals: AccelerationCard.
+	self assert: ((game cardsOf: playerAt2) at: 1) class equals: AccelerationCard.
+	card2 :=(game cardsOf: playerAt2) at: 1.
 	self should: [ game plays: playerAt3 throwing: card for: ((game cardsOf: playerAt1) at: 1)  ] raise: AssertionFailure.
 	self should: [ game plays: playerAt3 throwing: card to: playerAt1 ] raise: AssertionFailure.
+	game plays: playerAt2 throwing: card2.
 	game plays: playerAt3 throwing: card.
 	game plays: playerAt2.
 	self assert: (game slotOf: playerAt1) equals: 5.
@@ -1061,9 +1063,10 @@ GameTest >> testRedoCard [
 	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
 	self assert: (game slotOf: playerAt3) equals: 1.
 	self assert: (game lapsCompletedOf: playerAt3) equals: 0.
-	self assert: (game numberOfCardsOf: playerAt1) equals: 4.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 3.
 	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
-	self assert: (game numberOfCardsOf: playerAt3) equals: 1
+	self assert: (game numberOfCardsOf: playerAt3) equals: 2.
+	
 ]
 
 { #category : #tests }

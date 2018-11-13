@@ -27,6 +27,15 @@ Class {
 }
 
 { #category : #action }
+RedoCard >> thrownOn: aGame by: aPlayer [ 
+	| lastCard |
+	lastCard := aGame lastCardPlayed.
+	lastCard class = AccelerationCard  
+	ifFalse: [ AssertionFailure  signal: ' You can only use this message if the last card played was an acceleration card' ].
+	lastCard thrownOn: aGame by: aPlayer
+]
+
+{ #category : #action }
 RedoCard >> thrownOn: aGame by: aPlayer for: anotherCard [
 	| lastCard |
 	lastCard := aGame lastCardPlayed.
