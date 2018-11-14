@@ -26,20 +26,34 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #asserting }
+Card >> assert: aCard belongsTo: aCardClassesSubset [
+	(aCardClassesSubset includes: aCard class)
+		ifFalse: [ AssertionFailure signal: 'You should use the same message as with the last card played.' ].
+]
+
+{ #category : #accessing }
+Card >> cardClassesAffectingAnotherCard [
+	| cardClasses |
+	cardClasses := OrderedCollection new.
+	cardClasses add: CancellationCard.
+	^ cardClasses 
+]
+
+{ #category : #accessing }
+Card >> cardClassesAffectingPlayers [
+	| cardClasses |
+	cardClasses := OrderedCollection new.
+	cardClasses add: SpeedCard.
+	cardClasses add: OverloadCard.
+	^ cardClasses
+]
+
+{ #category : #accessing }
 Card >> cardClassesWithNoTarget [
 	| cardClasses |
 	cardClasses := OrderedCollection new.
 	cardClasses add: AccelerationCard.
 	cardClasses add: RepeatCard.
 	^ cardClasses 
-]
-
-{ #category : #'as yet unclassified' }
-Card >> cardsAffectingPlayers [
-	| cardClasses |
-	cardClasses := OrderedCollection new.
-	cardClasses add: SpeedCard.
-	cardClasses add: OverloadCard.
-	^ cardClasses
 ]

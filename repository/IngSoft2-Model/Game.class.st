@@ -81,8 +81,8 @@ Game >> assertIsActive: aPermanentCard [
 		ifFalse: [ AssertionFailure signal: 'Permanent card not found.' ]
 ]
 
-{ #category : #action }
-Game >> assertIsNotTheFirstCardPLayed [
+{ #category : #assertions }
+Game >> assertIsNotTheFirstCardPlayed [
 	(Card subclasses includes: self lastCardPlayed class)
 		ifFalse: [ AssertionFailure signal: 'No card was thrown before.' ]
 ]
@@ -116,7 +116,8 @@ Game >> cardsOf: aPlayer [
 
 { #category : #action }
 Game >> changeLastCardPlayed: aCard [
-	lastCardPlayed := aCard .
+	aCard class = RedoCard
+		ifFalse: [ lastCardPlayed := aCard ]
 ]
 
 { #category : #update }
@@ -331,6 +332,19 @@ Game >> positions [
 ]
 
 { #category : #action }
+Game >> put: aCard intoGameAsInstantBy: aPlayer [
+	self remove: aCard from: aPlayer.
+	self changeLastCardPlayed: aCard
+]
+
+{ #category : #action }
+Game >> put: aCard intoGameAsPermanentBy: aPlayer [
+	self assertIsTurnOf: aPlayer.
+	self remove: aCard from: aPlayer.
+	self changeLastCardPlayed: aCard
+]
+
+{ #category : #action }
 Game >> put: aCard intoGameBy: aPlayer [
 	self assertIsTurnOf: aPlayer.
 	self remove: aCard from: aPlayer.
@@ -351,7 +365,7 @@ Game >> repeatLastSlotEffect [
 	self changeStateAfterTurnOf: lastPlayer
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #action }
 Game >> returnToPreviousTurn [
 	self nextPlayerIndex == 1
 		ifTrue: [
