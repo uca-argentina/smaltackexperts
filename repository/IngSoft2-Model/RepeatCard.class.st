@@ -31,6 +31,22 @@ RepeatCard >> activateEffectOn: aGame to: aPlayer [
 	aGame repeatLastSlotEffect
 ]
 
+{ #category : #redo }
+RepeatCard >> redoOn: aGame by: aPlayer for: anotherCard with: aRedoCard [
+	AssertionFailure signal: 'You don"t have to choose any card.'
+]
+
+{ #category : #redo }
+RepeatCard >> redoOn: aGame by: aPlayer to: anotherPlayer with: aRedoCard [
+	AssertionFailure signal: 'You don"t have to choose any player.'
+]
+
+{ #category : #redo }
+RepeatCard >> redoOn: aGame by: aPlayer with: aRedoCard [
+	self activateEffectOn: aGame to: aPlayer.
+	aGame put: aRedoCard intoGameAsInstantBy: aPlayer.
+]
+
 { #category : #action }
 RepeatCard >> thrownOn: aGame by: aPlayer [
 	self activateEffectOn: aGame to: aPlayer.

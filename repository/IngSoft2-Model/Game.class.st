@@ -104,20 +104,19 @@ Game >> board [
 	^ board
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 Game >> cardsInHand [
 	^ cardsInHand
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 Game >> cardsOf: aPlayer [
 	^(self cardsInHand at: aPlayer) .
 ]
 
 { #category : #action }
 Game >> changeLastCardPlayed: aCard [
-	aCard class = RedoCard
-		ifFalse: [ lastCardPlayed := aCard ]
+	lastCardPlayed := aCard.
 ]
 
 { #category : #update }
@@ -205,12 +204,12 @@ Game >> lapsCompletedOf: aPlayer [
 	^ (positions at: aPlayer) lapsCompleted.
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 Game >> lastCardPlayed [
 	^ lastCardPlayed.
 ]
 
-{ #category : #Accessing }
+{ #category : #accessing }
 Game >> lastSlotEffectActivated [
 	^ lastSlotEffectActivated.
 ]
@@ -258,7 +257,7 @@ Game >> nextPlayerIndex: anObject [
 	nextPlayerIndex := anObject
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 Game >> numberOfCardsOf: aPlayer [
 	^(self cardsOf: aPlayer)size.
 ]
@@ -339,13 +338,6 @@ Game >> put: aCard intoGameAsInstantBy: aPlayer [
 
 { #category : #action }
 Game >> put: aCard intoGameAsPermanentBy: aPlayer [
-	self assertIsTurnOf: aPlayer.
-	self remove: aCard from: aPlayer.
-	self changeLastCardPlayed: aCard
-]
-
-{ #category : #action }
-Game >> put: aCard intoGameBy: aPlayer [
 	self assertIsTurnOf: aPlayer.
 	self remove: aCard from: aPlayer.
 	self changeLastCardPlayed: aCard

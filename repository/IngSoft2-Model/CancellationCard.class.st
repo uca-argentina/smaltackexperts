@@ -33,6 +33,22 @@ CancellationCard >> activateEffectOn: aGame to: anotherCard [
 	aGame deactivate: anotherCard
 ]
 
+{ #category : #redo }
+CancellationCard >> redoOn: aGame by: aPlayer for: anotherCard with: aRedoCard [
+	self activateEffectOn: aGame to: anotherCard.
+	aGame put: aRedoCard intoGameAsInstantBy: aPlayer.
+]
+
+{ #category : #redo }
+CancellationCard >> redoOn: aGame by: aPlayer to: anotherPlayer with: aRedoCard [
+	AssertionFailure signal: 'You don"t have to choose any player.'
+]
+
+{ #category : #redo }
+CancellationCard >> redoOn: aGame by: aPlayer with: aRedoCard [
+	AssertionFailure signal: 'Must choose another card to throw the card.'
+]
+
 { #category : #action }
 CancellationCard >> thrownOn: aGame by: aPlayer [ 
 	AssertionFailure signal: 'Must choose another card to throw the card.'
