@@ -43,7 +43,7 @@ SpeedCard >> thrownOn: aGame by: aPlayer for: anotherCard [
 
 { #category : #action }
 SpeedCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [
-	aGame put: self intoGameBy: aPlayer.
+	aGame put: self intoGameAsPermanentBy: aPlayer.
 	aGame addToPermanentCards: self for: anotherPlayer.
 
 ]

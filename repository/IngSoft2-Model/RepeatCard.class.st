@@ -33,9 +33,8 @@ RepeatCard >> activateEffectOn: aGame to: aPlayer [
 
 { #category : #action }
 RepeatCard >> thrownOn: aGame by: aPlayer [
-	aGame remove: self from: aPlayer.
 	self activateEffectOn: aGame to: aPlayer.
-	aGame changeLastCardPlayed: self
+	aGame put: self intoGameAsInstantBy: aPlayer.
 ]
 
 { #category : #action }

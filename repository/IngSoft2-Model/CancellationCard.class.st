@@ -41,8 +41,7 @@ CancellationCard >> thrownOn: aGame by: aPlayer [
 { #category : #action }
 CancellationCard >> thrownOn: aGame by: aPlayer for: anotherCard [
 	self activateEffectOn: aGame to: anotherCard.
-	aGame remove: self from: aPlayer.
-	aGame changeLastCardPlayed: self
+	aGame put: self intoGameAsInstantBy: aPlayer.
 ]
 
 { #category : #action }
