@@ -36,6 +36,11 @@ GameEnded >> plays: aPlayer in: aGame [
 	aGame playsWhenGameIsEnded: aPlayer.
 ]
 
+{ #category : #action }
+GameEnded >> throwCard [
+	AssertionFailure signal: 'Game is over'
+]
+
 { #category : #accessing }
 GameEnded >> winnerOf: aGame [
 	^ aGame winnerWhenGameIsEnded.

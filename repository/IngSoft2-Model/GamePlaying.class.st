@@ -36,6 +36,11 @@ GamePlaying >> plays: aPlayer in: aGame [
 	aGame playsWhileGameIsBeingPlayed: aPlayer.
 ]
 
+{ #category : #action }
+GamePlaying >> throwCard [
+	
+]
+
 { #category : #accessing }
 GamePlaying >> winnerOf: aGame [
 	^ aGame winnerWhileGameIsBeingPlayed.

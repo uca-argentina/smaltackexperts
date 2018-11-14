@@ -36,6 +36,11 @@ GameState >> plays: aPlayer in: aGame [
 	self subclassResponsibility
 ]
 
+{ #category : #action }
+GameState >> throwCard [
+	self subclassResponsibility
+]
+
 { #category : #accessing }
 GameState >> winnerOf: aGame [
 	self subclassResponsibility
