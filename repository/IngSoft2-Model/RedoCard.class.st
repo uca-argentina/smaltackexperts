@@ -23,32 +23,49 @@ Internal Representation and Key Implementation Points.
 Class {
 	#name : #RedoCard,
 	#superclass : #Card,
+	#instVars : [
+		'lastCard'
+	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #action }
-RedoCard >> thrownOn: aGame by: aPlayer [ 
-	| lastCard |
+RedoCard >> activateEffectOn: aGame to: aPlayer [
+	lastCard activateEffectOn: aGame to: aPlayer
+]
+
+{ #category : #action }
+RedoCard >> thrownOn: aGame by: aPlayer [
+	| cardClasses |
 	lastCard := aGame lastCardPlayed.
-	lastCard class = AccelerationCard  
-	ifFalse: [ AssertionFailure  signal: ' You can only use this message if the last card played was an acceleration card' ].
-	lastCard thrownOn: aGame by: aPlayer.
-	aGame remove: self from: aPlayer.
+	(Card subclasses includes: aGame lastCardPlayed class)
+		ifFalse: [ AssertionFailure signal: 'No card was thrown before.' ].
+	cardClasses := OrderedCollection new.
+	cardClasses add: AccelerationCard.
+	cardClasses add: RepeatCard.
+	(cardClasses includes: lastCard class)
+		ifFalse: [ AssertionFailure
+				signal: ' You can only use this message if the last card played affected another player.' ].
+	lastCard class = AccelerationCard
+		ifTrue: [ aGame assertIsTurnOf: aPlayer.
+				aGame remove: self from: aPlayer.
+			aGame players do: [ :each | aGame addToPermanentCards: self for: each ] ]
+		ifFalse: [ lastCard activateEffectOn: aGame to: aPlayer ].
+	aGame remove: self from: aPlayer
 ]
 
 { #category : #action }
 RedoCard >> thrownOn: aGame by: aPlayer for: anotherCard [
-	| lastCard |
 	lastCard := aGame lastCardPlayed.
 	lastCard class = CancellationCard 
 	ifFalse: [ AssertionFailure  signal: ' You can only use this message if the last card played was a cancelation card' ].
-	lastCard activateEffectOn: aGame by: anotherCard .
+	lastCard activateEffectOn: aGame to: anotherCard .
 	aGame remove: self from: aPlayer.
 ]
 
 { #category : #action }
 RedoCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [
-	| lastCard cardClasses |
+	| cardClasses |
 	lastCard := aGame lastCardPlayed.
 	cardClasses := OrderedCollection new.
 	cardClasses add: SpeedCard.
@@ -56,6 +73,7 @@ RedoCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [
 	(cardClasses includes: lastCard class)
 		ifFalse: [ AssertionFailure
 				signal: ' You can only use this message if the last card played affected another player.' ].
-	lastCard activateEffectOn: aGame to: anotherPlayer.
-	aGame remove: self from: aPlayer
+	aGame assertIsTurnOf: aPlayer.
+	aGame remove: self from: aPlayer.
+	aGame addToPermanentCards: self for: anotherPlayer.
 ]

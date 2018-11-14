@@ -27,7 +27,7 @@ Class {
 }
 
 { #category : #action }
-CancellationCard >> activateEffectOn: aGame by: anotherCard [
+CancellationCard >> activateEffectOn: aGame to: anotherCard [
 	aGame assertThereAreActivePermanentCards.
 	aGame assertIsActive: anotherCard.
 	aGame deactivate: anotherCard
@@ -40,7 +40,7 @@ CancellationCard >> thrownOn: aGame by: aPlayer [
 
 { #category : #action }
 CancellationCard >> thrownOn: aGame by: aPlayer for: anotherCard [
-	self activateEffectOn: aGame by: anotherCard.
+	self activateEffectOn: aGame to: anotherCard.
 	aGame remove: self from: aPlayer.
 	aGame changeLastCardPlayed: self
 ]

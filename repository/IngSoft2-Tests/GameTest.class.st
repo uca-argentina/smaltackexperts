@@ -494,6 +494,41 @@ GameTest >> gameWith3PlayersAnd2DicesOnDeterministicDeckWithAllCards [
 	^ game
 ]
 
+{ #category : #creation }
+GameTest >> gameWith3PlayersAnd2DicesOnDeterministicDeckWithTwoRedoCards [
+	| game board juan hernan rodolfo dice1 dice2 players dices deckOfCards cards |
+	board := self boardWith20SlotsAndAllEffects.
+	juan := 'Juan'.
+	hernan := 'Hernan'.
+	rodolfo := 'Rodolfo'.
+	dice1 := DeterministicDice withFaces: 6 andValues: #(2 4 5 6 1 3).
+	dice2 := DeterministicDice withFaces: 7 andValues: #(2 1 7 3 4 5).
+	players := OrderedCollection new.
+	players
+		add: juan;
+		add: hernan;
+		add: rodolfo.
+	dices := OrderedCollection new.
+	dices
+		add: dice1;
+		add: dice2.
+	cards := OrderedCollection new.
+	cards add: RedoCard.
+	cards add: CancellationCard.
+	cards add: OverloadCard.
+	cards add: SpeedCard.
+	cards add: RedoCard.
+	cards add: RepeatCard.
+	deckOfCards := DeterministicDeck withCards: cards.
+	game := Game
+		on: board
+		beeingPlayedBy: players
+		throwing: dices
+		withLaps: 2
+		and: deckOfCards.
+	^ game
+]
+
 { #category : #tests }
 GameTest >> testAPlayerCantPlayAPermanetCardWhileIsNotHisTurn [
 	| game playerAt1 playerAt2 playerAt3 card1 card2 card3 |
@@ -1032,7 +1067,7 @@ GameTest >> testPlayerPositionWhileGameIsNotOver [
 ]
 
 { #category : #tests }
-GameTest >> testRedoCard [
+GameTest >> testRedoCardOnAccelerationCard [
 	| game playerAt1 playerAt2 playerAt3 card card2|
 	game := self gameWith3PlayersAnd2DicesOnDeterministicDeckWithAllCards.
 	playerAt1 := game players at: 1.
@@ -1055,18 +1090,269 @@ GameTest >> testRedoCard [
 	self should: [ game plays: playerAt3 throwing: card for: ((game cardsOf: playerAt1) at: 1)  ] raise: AssertionFailure.
 	self should: [ game plays: playerAt3 throwing: card to: playerAt1 ] raise: AssertionFailure.
 	game plays: playerAt2 throwing: card2.
+	game plays: playerAt2.
+	self assert: (game slotOf: playerAt1) equals: 2.
+	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
+	self assert: (game slotOf: playerAt2) equals: 7.
+	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
+	self assert: (game slotOf: playerAt3) equals: 18.
+	self assert: (game lapsCompletedOf: playerAt3) equals: -1.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 3.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 1.
+	self assert: (game numberOfCardsOf: playerAt3) equals: 2.
 	game plays: playerAt3 throwing: card.
+	game plays: playerAt3.
+	self assert: (game slotOf: playerAt1) equals: 2.
+	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
+	self assert: (game slotOf: playerAt2) equals: 7.
+	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
+	self assert: (game slotOf: playerAt3) equals: 12.
+	self assert: (game lapsCompletedOf: playerAt3) equals: 0.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 3.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 1.
+	self assert: (game numberOfCardsOf: playerAt3) equals: 1.
+	
+	
+]
+
+{ #category : #tests }
+GameTest >> testRedoCardOnCancellationCard [
+	| game playerAt1 playerAt2 playerAt3 card card2 card3 card4 |
+	game := self gameWith3PlayersAnd2DicesOnDeterministicDeckWithAllCards.
+	playerAt1 := game players at: 1.
+	playerAt2 := game players at: 2.
+	playerAt3 := game players at: 3.
+	card := (game cardsOf: playerAt3) at: 1.
+	card2 := (game cardsOf: playerAt2) at: 2.
+	card3 := (game cardsOf: playerAt2) at: 1.
+	card4 := (game cardsOf: playerAt1) at: 1.
+	self assert: card class equals: RedoCard.
+	self assert: card2 class equals: CancellationCard.
+	self assert: card3 class equals: AccelerationCard.
+	self assert: card4 class equals: OverloadCard.
+	game plays: playerAt1 throwing: card4 to: playerAt2.
+	game plays: playerAt1.
+	self assert: (game slotOf: playerAt1) equals: 5.
+	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
+	self assert: (game slotOf: playerAt2) equals: 1.
+	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
+	self assert: (game slotOf: playerAt3) equals: 1.
+	self assert: (game lapsCompletedOf: playerAt3) equals: 0.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt3) equals: 2.
+	self should: [ game plays: playerAt3 throwing: card to: playerAt1 ] raise: AssertionFailure.
+	self should: [ game plays: playerAt3 throwing: card ] raise: AssertionFailure.
+	game plays: playerAt2 throwing: card3.
+	game plays: playerAt2 throwing: card2 for: card4.
+	game plays: playerAt2.
+	self assert: (game slotOf: playerAt1) equals: 2.
+	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
+	self assert: (game slotOf: playerAt2) equals: 7.
+	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
+	self assert: (game slotOf: playerAt3) equals: 18.
+	self assert: (game lapsCompletedOf: playerAt3) equals: -1.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 0.
+	self assert: (game numberOfCardsOf: playerAt3) equals: 2.
+	game plays: playerAt3 throwing: card for: card3.
+	game plays: playerAt3.
+	self assert: (game slotOf: playerAt1) equals: 2.
+	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
+	self assert: (game slotOf: playerAt2) equals: 7.
+	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
+	self assert: (game slotOf: playerAt3) equals: 14.
+	self assert: (game lapsCompletedOf: playerAt3) equals: 0.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 0.
+	self assert: (game numberOfCardsOf: playerAt3) equals: 1.
+]
+
+{ #category : #tests }
+GameTest >> testRedoCardOnOverloadCard [
+	| game playerAt1 playerAt2 playerAt3 card card2|
+	game := self gameWith3PlayersAnd2DicesOnDeterministicDeckWithAllCards.
+	playerAt1 := game players at: 1.
+	playerAt2 := game players at: 2.
+	playerAt3 := game players at: 3.
+	card := (game cardsOf: playerAt3) at: 1.
+	card2 := (game cardsOf: playerAt1) at: 1.
+	self assert: card class equals: RedoCard.
+	self assert: card2 class equals: OverloadCard.
+	game plays: playerAt1 throwing: card2 to: playerAt2.
+	game plays: playerAt1.
+	self assert: (game slotOf: playerAt1) equals: 5.
+	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
+	self assert: (game slotOf: playerAt2) equals: 1.
+	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
+	self assert: (game slotOf: playerAt3) equals: 1.
+	self assert: (game lapsCompletedOf: playerAt3) equals: 0.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt3) equals: 2.
+	self should: [ game plays: playerAt3 throwing: card for: ((game cardsOf: playerAt1) at: 1)  ] raise: AssertionFailure.
+	self should: [ game plays: playerAt3 throwing: card ] raise: AssertionFailure.
 	game plays: playerAt2.
 	self assert: (game slotOf: playerAt1) equals: 5.
 	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
-	self assert: (game slotOf: playerAt2) equals: 6.
+	self assert: (game slotOf: playerAt2) equals: 4.
+	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
+	self assert: (game slotOf: playerAt3) equals: 1.
+	self assert: (game lapsCompletedOf: playerAt3) equals: 0.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt3) equals: 2.
+	game plays: playerAt3 throwing: card to: playerAt1.
+	game plays: playerAt3.
+	self assert: (game slotOf: playerAt1) equals: 5.
+	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
+	self assert: (game slotOf: playerAt2) equals: 4.
+	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
+	self assert: (game slotOf: playerAt3) equals: 13.
+	self assert: (game lapsCompletedOf: playerAt3) equals: 0.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt3) equals: 2.
+]
+
+{ #category : #tests }
+GameTest >> testRedoCardOnRedoCard [
+	| game playerAt1 playerAt2 playerAt3 card card2 card3 |
+	game := self gameWith3PlayersAnd2DicesOnDeterministicDeckWithTwoRedoCards.
+	playerAt1 := game players at: 1.
+	playerAt2 := game players at: 2.
+	playerAt3 := game players at: 3.
+	card := (game cardsOf: playerAt3) at: 1.
+	card2 := (game cardsOf: playerAt2) at: 1.
+	card3 := (game cardsOf: playerAt1) at: 1.
+	self assert: card class equals: RedoCard.
+	self assert: card2 class equals: RedoCard.
+	self assert: card3 class equals: OverloadCard.
+	game plays: playerAt1 throwing: card3 to: playerAt2.
+	game plays: playerAt1.
+	self assert: (game slotOf: playerAt1) equals: 5.
+	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
+	self assert: (game slotOf: playerAt2) equals: 1.
+	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
+	self assert: (game slotOf: playerAt3) equals: 1.
+	self assert: (game lapsCompletedOf: playerAt3) equals: 0.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt3) equals: 2.
+	self should: [ game plays: playerAt3 throwing: card for: ((game cardsOf: playerAt1) at: 1) ] raise: AssertionFailure.
+	self should: [ game plays: playerAt3 throwing: card ] raise: AssertionFailure.
+	game plays: playerAt2 throwing: card2 to: playerAt3.
+	game plays: playerAt2.
+	self assert: (game slotOf: playerAt1) equals: 5.
+	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
+	self assert: (game slotOf: playerAt2) equals: 4.
+	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
+	self assert: (game slotOf: playerAt3) equals: 1.
+	self assert: (game lapsCompletedOf: playerAt3) equals: 0.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 1.
+	self assert: (game numberOfCardsOf: playerAt3) equals: 2.
+	game plays: playerAt3 throwing: card to: playerAt1.
+	game plays: playerAt3.
+	self assert: (game slotOf: playerAt1) equals: 5.
+	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
+	self assert: (game slotOf: playerAt2) equals: 4.
+	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
+	self assert: (game slotOf: playerAt3) equals: 11.
+	self assert: (game lapsCompletedOf: playerAt3) equals: 0.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 1.
+	self assert: (game numberOfCardsOf: playerAt3) equals: 1.
+	game plays: playerAt1.
+	self assert: (game slotOf: playerAt1) equals: 12.
+	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
+	self assert: (game slotOf: playerAt2) equals: 4.
+	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
+	self assert: (game slotOf: playerAt3) equals: 11.
+	self assert: (game lapsCompletedOf: playerAt3) equals: 0.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 1.
+	self assert: (game numberOfCardsOf: playerAt3) equals: 1.
+]
+
+{ #category : #tests }
+GameTest >> testRedoCardOnRepeatCard [
+	| game playerAt1 playerAt2 playerAt3 card card2 |
+	game := self gameWith3PlayersAnd2DicesOnDeterministicDeckWithAllCards.
+	playerAt1 := game players at: 1.
+	playerAt2 := game players at: 2.
+	playerAt3 := game players at: 3.
+	card := (game cardsOf: playerAt3) at: 1.
+	card2 := (game cardsOf: playerAt3) at: 2.
+	self assert: card class equals: RedoCard.
+	self assert: card2 class equals: RepeatCard.
+	game plays: playerAt1.
+	self assert: (game slotOf: playerAt1) equals: 5.
+	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
+	self assert: (game slotOf: playerAt2) equals: 1.
 	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
 	self assert: (game slotOf: playerAt3) equals: 1.
 	self assert: (game lapsCompletedOf: playerAt3) equals: 0.
 	self assert: (game numberOfCardsOf: playerAt1) equals: 3.
 	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
 	self assert: (game numberOfCardsOf: playerAt3) equals: 2.
-	
+	game plays: playerAt3 throwing: card2.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 4.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt3) equals: 1.
+	self should: [ game plays: playerAt3 throwing: card to: playerAt1 ] raise: AssertionFailure.
+	self should: [ game plays: playerAt3 throwing: card for: ((game cardsOf: playerAt1) at: 1)] raise: AssertionFailure.
+	game plays: playerAt3 throwing: card.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 5.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt3) equals: 0.
+]
+
+{ #category : #tests }
+GameTest >> testRedoCardOnSpeedCard [
+	| game playerAt1 playerAt2 playerAt3 card card2|
+	game := self gameWith3PlayersAnd2DicesOnDeterministicDeckWithAllCards.
+	playerAt1 := game players at: 1.
+	playerAt2 := game players at: 2.
+	playerAt3 := game players at: 3.
+	card := (game cardsOf: playerAt3) at: 1.
+	card2 := (game cardsOf: playerAt1) at: 2.
+	self assert: card class equals: RedoCard.
+	self assert: card2 class equals: SpeedCard.
+	game plays: playerAt1 throwing: card2 to: playerAt2.
+	game plays: playerAt1.
+	self assert: (game slotOf: playerAt1) equals: 5.
+	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
+	self assert: (game slotOf: playerAt2) equals: 1.
+	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
+	self assert: (game slotOf: playerAt3) equals: 1.
+	self assert: (game lapsCompletedOf: playerAt3) equals: 0.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt3) equals: 2.
+	self should: [ game plays: playerAt3 throwing: card for: ((game cardsOf: playerAt1) at: 1)  ] raise: AssertionFailure.
+	self should: [ game plays: playerAt3 throwing: card ] raise: AssertionFailure.
+	game plays: playerAt2.
+	self assert: (game slotOf: playerAt1) equals: 2.
+	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
+	self assert: (game slotOf: playerAt2) equals: 7.
+	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
+	self assert: (game slotOf: playerAt3) equals: 18.
+	self assert: (game lapsCompletedOf: playerAt3) equals: -1.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt3) equals: 2.
+	game plays: playerAt3 throwing: card to: playerAt3.
+	game plays: playerAt3.
+	self assert: (game slotOf: playerAt1) equals: 2.
+	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
+	self assert: (game slotOf: playerAt2) equals: 7.
+	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
+	self assert: (game slotOf: playerAt3) equals: 11.
+	self assert: (game lapsCompletedOf: playerAt3) equals: 0.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt3) equals: 1.
 ]
 
 { #category : #tests }
