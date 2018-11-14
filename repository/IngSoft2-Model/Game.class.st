@@ -81,6 +81,12 @@ Game >> assertIsActive: aPermanentCard [
 		ifFalse: [ AssertionFailure signal: 'Permanent card not found.' ]
 ]
 
+{ #category : #action }
+Game >> assertIsNotTheFirstCardPLayed [
+	(Card subclasses includes: self lastCardPlayed class)
+		ifFalse: [ AssertionFailure signal: 'No card was thrown before.' ]
+]
+
 { #category : #assertions }
 Game >> assertIsTurnOf: aPlayer [
 	(self ifTurnOf: aPlayer)

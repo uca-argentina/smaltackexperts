@@ -38,23 +38,23 @@ RedoCard >> activateEffectOn: aGame to: aPlayer [
 RedoCard >> thrownOn: aGame by: aPlayer [
 	| cardClasses |
 	lastCard := aGame lastCardPlayed.
-	(Card subclasses includes: aGame lastCardPlayed class)
-		ifFalse: [ AssertionFailure signal: 'No card was thrown before.' ].
-	cardClasses := OrderedCollection new.
-	cardClasses add: AccelerationCard.
-	cardClasses add: RepeatCard.
+	aGame assertIsNotTheFirstCardPLayed.
+	cardClasses := self cardClassesWithNoTarget.
 	(cardClasses includes: lastCard class)
 		ifFalse: [ AssertionFailure
-				signal: ' You can only use this message if the last card played affected another player.' ].
+				signal:
+					' You can only use this message if the last card played affected another player.' ].
 	lastCard class = AccelerationCard
 		ifTrue: [ aGame assertIsTurnOf: aPlayer.
-			aGame players do: [ :each | aGame addToPermanentCards: self for: each ] ]
+			aGame players
+				do: [ :each | aGame addToPermanentCards: self for: each ] ]
 		ifFalse: [ lastCard activateEffectOn: aGame to: aPlayer ].
 	aGame remove: self from: aPlayer
 ]
 
 { #category : #action }
 RedoCard >> thrownOn: aGame by: aPlayer for: anotherCard [
+aGame assertIsNotTheFirstCardPLayed.
 	lastCard := aGame lastCardPlayed.
 	lastCard class = CancellationCard 
 	ifFalse: [ AssertionFailure  signal: ' You can only use this message if the last card played was a cancelation card' ].
@@ -65,14 +65,12 @@ RedoCard >> thrownOn: aGame by: aPlayer for: anotherCard [
 { #category : #action }
 RedoCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [
 	| cardClasses |
+	aGame assertIsNotTheFirstCardPLayed.
 	lastCard := aGame lastCardPlayed.
-	cardClasses := OrderedCollection new.
-	cardClasses add: SpeedCard.
-	cardClasses add: OverloadCard.
+	cardClasses := self cardsAffectingPlayers.
 	(cardClasses includes: lastCard class)
-		ifFalse: [ AssertionFailure
-				signal: ' You can only use this message if the last card played affected another player.' ].
+		ifFalse: [ AssertionFailure signal: ' You can only use this message if the last card played affected another player.' ].
 	aGame assertIsTurnOf: aPlayer.
 	aGame remove: self from: aPlayer.
-	aGame addToPermanentCards: self for: anotherPlayer.
+	aGame addToPermanentCards: self for: anotherPlayer
 ]
