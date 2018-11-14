@@ -48,7 +48,6 @@ RedoCard >> thrownOn: aGame by: aPlayer [
 				signal: ' You can only use this message if the last card played affected another player.' ].
 	lastCard class = AccelerationCard
 		ifTrue: [ aGame assertIsTurnOf: aPlayer.
-				aGame remove: self from: aPlayer.
 			aGame players do: [ :each | aGame addToPermanentCards: self for: each ] ]
 		ifFalse: [ lastCard activateEffectOn: aGame to: aPlayer ].
 	aGame remove: self from: aPlayer
