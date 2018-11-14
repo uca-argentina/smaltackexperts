@@ -27,10 +27,26 @@ Class {
 }
 
 { #category : #action }
-CancellationCard >> activateEffectOn: aGame to: anotherCard [
+CancellationCard >> activateEffectOn: aGame for: anotherCard [
 	aGame assertThereAreActivePermanentCards.
 	aGame assertIsActive: anotherCard.
 	aGame deactivate: anotherCard
+]
+
+{ #category : #redo }
+CancellationCard >> redoOn: aGame by: aPlayer for: anotherCard with: aRedoCard [
+	self activateEffectOn: aGame for: anotherCard.
+	aGame put: aRedoCard intoGameAsInstantBy: aPlayer.
+]
+
+{ #category : #redo }
+CancellationCard >> redoOn: aGame by: aPlayer to: anotherPlayer with: aRedoCard [
+	AssertionFailure signal: 'You don"t have to choose any player.'
+]
+
+{ #category : #redo }
+CancellationCard >> redoOn: aGame by: aPlayer with: aRedoCard [
+	AssertionFailure signal: 'Must choose another card to throw the card.'
 ]
 
 { #category : #action }
@@ -40,7 +56,7 @@ CancellationCard >> thrownOn: aGame by: aPlayer [
 
 { #category : #action }
 CancellationCard >> thrownOn: aGame by: aPlayer for: anotherCard [
-	self activateEffectOn: aGame to: anotherCard.
+	self activateEffectOn: aGame for: anotherCard.
 	aGame put: self intoGameAsInstantBy: aPlayer.
 ]
 

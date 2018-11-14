@@ -32,6 +32,22 @@ OverloadCard >> activateEffectOn: aGame to: aPlayer [
 	
 ]
 
+{ #category : #redo }
+OverloadCard >> redoOn: aGame by: aPlayer for: anotherCard with: aRedoCard [
+	AssertionFailure signal: 'Must choose a player to throw the card, not another card.'
+]
+
+{ #category : #redo }
+OverloadCard >> redoOn: aGame by: aPlayer to: anotherPlayer with: aRedoCard [
+	aGame put: aRedoCard intoGameAsPermanentBy: aPlayer.
+	aGame addToPermanentCards: aRedoCard for: anotherPlayer
+]
+
+{ #category : #redo }
+OverloadCard >> redoOn: aGame by: aPlayer with: aRedoCard [
+	AssertionFailure signal: 'Must choose a player to throw the card.'
+]
+
 { #category : #action }
 OverloadCard >> thrownOn: aGame by: aPlayer [ 
 	AssertionFailure signal: 'Must choose a player to throw the card.'

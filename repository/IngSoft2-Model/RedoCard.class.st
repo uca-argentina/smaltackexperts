@@ -34,33 +34,38 @@ RedoCard >> activateEffectOn: aGame to: aPlayer [
 	lastCard activateEffectOn: aGame to: aPlayer
 ]
 
+{ #category : #redo }
+RedoCard >> redoOn: aGame by: aPlayer for: anotherCard with: aRedoCard [
+	lastCard redoOn: aGame by: aPlayer for: anotherCard with: aRedoCard 
+]
+
+{ #category : #redo }
+RedoCard >> redoOn: aGame by: aPlayer to: anotherPlayer with: aRedoCard [
+	lastCard redoOn: aGame by: aPlayer to: anotherPlayer with: aRedoCard 
+]
+
+{ #category : #redo }
+RedoCard >> redoOn: aGame by: aPlayer with: aRedoCard [
+	lastCard redoOn: aGame by: aPlayer with: aRedoCard 
+]
+
 { #category : #action }
 RedoCard >> thrownOn: aGame by: aPlayer [
-	lastCard := aGame lastCardPlayed.
 	aGame assertIsNotTheFirstCardPlayed.
-	self assert: lastCard belongsTo: self cardClassesWithNoTarget.
-	lastCard class = AccelerationCard
-		ifTrue: [ aGame put: self intoGameBy: aPlayer.
-			aGame players do: [ :each | aGame addToPermanentCards: self for: each ] ]
-		ifFalse: [ lastCard activateEffectOn: aGame to: aPlayer.
-			aGame remove: self from: aPlayer
-			 ].
+	lastCard := aGame lastCardPlayed.
+	lastCard redoOn: aGame by: aPlayer with: self
 ]
 
 { #category : #action }
 RedoCard >> thrownOn: aGame by: aPlayer for: anotherCard [
-	lastCard := aGame lastCardPlayed.
 	aGame assertIsNotTheFirstCardPlayed.
-	self assert: lastCard belongsTo: self cardClassesAffectingAnotherCard.
-	lastCard activateEffectOn: aGame to: anotherCard.
-	aGame remove: self from: aPlayer
+	lastCard := aGame lastCardPlayed.
+	lastCard redoOn: aGame by: aPlayer for: anotherCard with: self
 ]
 
 { #category : #action }
 RedoCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [
 	aGame assertIsNotTheFirstCardPlayed.
 	lastCard := aGame lastCardPlayed.
-	self assert: lastCard belongsTo: self cardClassesAffectingPlayers.
-	aGame put: self intoGameBy: aPlayer.
-	aGame addToPermanentCards: self for: anotherPlayer
+	lastCard redoOn: aGame by: aPlayer to: anotherPlayer with: self 
 ]

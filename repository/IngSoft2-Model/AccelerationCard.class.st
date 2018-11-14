@@ -31,6 +31,22 @@ AccelerationCard >> activateEffectOn: aGame to: aPlayer [
 	aGame move: aPlayer forward: 1. 
 ]
 
+{ #category : #redo }
+AccelerationCard >> redoOn: aGame by: aPlayer for: anotherCard with: aRedoCard [
+	AssertionFailure signal: 'You don"t have to choose any card.'
+]
+
+{ #category : #redo }
+AccelerationCard >> redoOn: aGame by: aPlayer to: anotherPlayer with: aRedoCard [
+	AssertionFailure signal: 'You don"t have to choose any player.'
+]
+
+{ #category : #redo }
+AccelerationCard >> redoOn: aGame by: aPlayer with: aRedoCard [
+	aGame put: aRedoCard intoGameAsPermanentBy: aPlayer.
+	aGame players do: [ :each | aGame addToPermanentCards: aRedoCard for: each ]
+]
+
 { #category : #action }
 AccelerationCard >> thrownOn: aGame by: aPlayer [
 	aGame put: self intoGameAsPermanentBy: aPlayer.

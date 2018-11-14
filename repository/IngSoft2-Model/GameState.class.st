@@ -21,37 +21,27 @@ Internal Representation and Key Implementation Points.
     Implementation Points
 "
 Class {
-	#name : #Card,
+	#name : #GameState,
 	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #redo }
-Card >> redoOn: aGame by: aPlayer for: anotherCard with: aRedoCard [
+{ #category : #accessing }
+GameState >> isOver [
 	self subclassResponsibility
 ]
 
-{ #category : #redo }
-Card >> redoOn: aGame by: aPlayer to: anotherPlayer with: aRedoCard [
-	self subclassResponsibility 
-]
-
-{ #category : #redo }
-Card >> redoOn: aGame by: aPlayer with: aRedoCard [
-	self subclassResponsibility 
-]
-
-{ #category : #action }
-Card >> thrownOn: aGame by: aPlayer [ 
+{ #category : #update }
+GameState >> plays: aPlayer in: aGame [
 	self subclassResponsibility
 ]
 
 { #category : #action }
-Card >> thrownOn: aGame by: aPlayer for: anotherCard [
-	self subclassResponsibility 
+GameState >> throwCard [
+	self subclassResponsibility
 ]
 
-{ #category : #action }
-Card >> thrownOn: aGame by: aPlayer to: anotherPlayer [ 
-	self subclassResponsibility 
+{ #category : #accessing }
+GameState >> winnerOf: aGame [
+	self subclassResponsibility
 ]

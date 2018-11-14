@@ -25,15 +25,3 @@ Class {
 	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
-
-{ #category : #action }
-NoCard >> thrownOn: aGame by: aPlayer [ 
-]
-
-{ #category : #action }
-NoCard >> thrownOn: aGame by: aPlayer for: anotherCard [ 
-]
-
-{ #category : #action }
-NoCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [ 
-]

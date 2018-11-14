@@ -104,20 +104,19 @@ Game >> board [
 	^ board
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 Game >> cardsInHand [
 	^ cardsInHand
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 Game >> cardsOf: aPlayer [
-	^(self cardsInHand at: aPlayer) .
+	^ self cardsInHand at: aPlayer
 ]
 
 { #category : #action }
 Game >> changeLastCardPlayed: aCard [
-	aCard class = RedoCard
-		ifFalse: [ lastCardPlayed := aCard ]
+	lastCardPlayed := aCard.
 ]
 
 { #category : #update }
@@ -205,12 +204,12 @@ Game >> lapsCompletedOf: aPlayer [
 	^ (positions at: aPlayer) lapsCompleted.
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 Game >> lastCardPlayed [
 	^ lastCardPlayed.
 ]
 
-{ #category : #Accessing }
+{ #category : #accessing }
 Game >> lastSlotEffectActivated [
 	^ lastSlotEffectActivated.
 ]
@@ -258,7 +257,7 @@ Game >> nextPlayerIndex: anObject [
 	nextPlayerIndex := anObject
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 Game >> numberOfCardsOf: aPlayer [
 	^(self cardsOf: aPlayer)size.
 ]
@@ -293,6 +292,7 @@ Game >> plays: aPlayer [
 
 { #category : #update }
 Game >> plays: aPlayer throwing: aCard [
+	state throwCard.
 	self assert: aCard belongsTo: aPlayer.
 	aCard thrownOn: self by: aPlayer.
 ]
@@ -344,13 +344,6 @@ Game >> put: aCard intoGameAsPermanentBy: aPlayer [
 	self changeLastCardPlayed: aCard
 ]
 
-{ #category : #action }
-Game >> put: aCard intoGameBy: aPlayer [
-	self assertIsTurnOf: aPlayer.
-	self remove: aCard from: aPlayer.
-	self changeLastCardPlayed: aCard
-]
-
 { #category : #update }
 Game >> remove: aCard from: aPlayer [
 	(self cardsOf: aPlayer) remove: aCard. 
@@ -392,15 +385,6 @@ Game >> sortPlayersByPosition [
 		asSortedCollection:
 			[ :player | self lapsCompletedOf: player ] descending
 				, [ :player | self slotOf: player ] descending
-]
-
-{ #category : #action }
-Game >> thrownOn: aGame by: aPlayer [
-		| lastCard |
-	lastCard := aGame lastCardPlayed.
-	lastCard class = AccelerationCard 
-	ifFalse: [ AssertionFailure  signal: ' You can only use this message if the last card played was a acceleration card' ].
-	lastCard thrownOn: aGame by: aPlayer.
 ]
 
 { #category : #accessing }

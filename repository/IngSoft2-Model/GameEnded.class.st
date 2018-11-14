@@ -22,7 +22,7 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #GameEnded,
-	#superclass : #Object,
+	#superclass : #GameState,
 	#category : #'IngSoft2-Model'
 }
 
@@ -34,6 +34,11 @@ GameEnded >> isOver [
 { #category : #update }
 GameEnded >> plays: aPlayer in: aGame [
 	aGame playsWhenGameIsEnded: aPlayer.
+]
+
+{ #category : #action }
+GameEnded >> throwCard [
+	AssertionFailure signal: 'Game is over'
 ]
 
 { #category : #accessing }
