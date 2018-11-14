@@ -27,7 +27,7 @@ Class {
 }
 
 { #category : #action }
-CancellationCard >> activateEffectOn: aGame to: anotherCard [
+CancellationCard >> activateEffectOn: aGame for: anotherCard [
 	aGame assertThereAreActivePermanentCards.
 	aGame assertIsActive: anotherCard.
 	aGame deactivate: anotherCard
@@ -35,7 +35,7 @@ CancellationCard >> activateEffectOn: aGame to: anotherCard [
 
 { #category : #redo }
 CancellationCard >> redoOn: aGame by: aPlayer for: anotherCard with: aRedoCard [
-	self activateEffectOn: aGame to: anotherCard.
+	self activateEffectOn: aGame for: anotherCard.
 	aGame put: aRedoCard intoGameAsInstantBy: aPlayer.
 ]
 
@@ -56,7 +56,7 @@ CancellationCard >> thrownOn: aGame by: aPlayer [
 
 { #category : #action }
 CancellationCard >> thrownOn: aGame by: aPlayer for: anotherCard [
-	self activateEffectOn: aGame to: anotherCard.
+	self activateEffectOn: aGame for: anotherCard.
 	aGame put: self intoGameAsInstantBy: aPlayer.
 ]
 

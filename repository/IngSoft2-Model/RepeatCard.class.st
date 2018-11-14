@@ -27,7 +27,7 @@ Class {
 }
 
 { #category : #action }
-RepeatCard >> activateEffectOn: aGame to: aPlayer [
+RepeatCard >> activateEffectOn: aGame [
 	aGame repeatLastSlotEffect
 ]
 
@@ -43,14 +43,14 @@ RepeatCard >> redoOn: aGame by: aPlayer to: anotherPlayer with: aRedoCard [
 
 { #category : #redo }
 RepeatCard >> redoOn: aGame by: aPlayer with: aRedoCard [
-	self activateEffectOn: aGame to: aPlayer.
-	aGame put: aRedoCard intoGameAsInstantBy: aPlayer.
+	self activateEffectOn: aGame.
+	aGame put: aRedoCard intoGameAsInstantBy: aPlayer
 ]
 
 { #category : #action }
 RepeatCard >> thrownOn: aGame by: aPlayer [
-	self activateEffectOn: aGame to: aPlayer.
-	aGame put: self intoGameAsInstantBy: aPlayer.
+	self activateEffectOn: aGame.
+	aGame put: self intoGameAsInstantBy: aPlayer
 ]
 
 { #category : #action }

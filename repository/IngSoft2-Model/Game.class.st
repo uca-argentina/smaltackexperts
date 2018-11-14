@@ -111,7 +111,7 @@ Game >> cardsInHand [
 
 { #category : #accessing }
 Game >> cardsOf: aPlayer [
-	^(self cardsInHand at: aPlayer) .
+	^ self cardsInHand at: aPlayer
 ]
 
 { #category : #action }
@@ -384,15 +384,6 @@ Game >> sortPlayersByPosition [
 		asSortedCollection:
 			[ :player | self lapsCompletedOf: player ] descending
 				, [ :player | self slotOf: player ] descending
-]
-
-{ #category : #action }
-Game >> thrownOn: aGame by: aPlayer [
-		| lastCard |
-	lastCard := aGame lastCardPlayed.
-	lastCard class = AccelerationCard 
-	ifFalse: [ AssertionFailure  signal: ' You can only use this message if the last card played was a acceleration card' ].
-	lastCard thrownOn: aGame by: aPlayer.
 ]
 
 { #category : #accessing }

@@ -25,3 +25,8 @@ Class {
 	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
+
+{ #category : #action }
+SlotType >> activateEffectOn: aGame [
+	self subclassResponsibility
+]

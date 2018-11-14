@@ -21,22 +21,22 @@ Internal Representation and Key Implementation Points.
     Implementation Points
 "
 Class {
-	#name : #GameEnded,
-	#superclass : #GameState,
+	#name : #GameState,
+	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #accessing }
-GameEnded >> isOver [
-	^ true.
+GameState >> isOver [
+	self subclassResponsibility
 ]
 
 { #category : #update }
-GameEnded >> plays: aPlayer in: aGame [
-	aGame playsWhenGameIsEnded: aPlayer.
+GameState >> plays: aPlayer in: aGame [
+	self subclassResponsibility
 ]
 
 { #category : #accessing }
-GameEnded >> winnerOf: aGame [
-	^ aGame winnerWhenGameIsEnded.
+GameState >> winnerOf: aGame [
+	self subclassResponsibility
 ]

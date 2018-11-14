@@ -25,3 +25,33 @@ Class {
 	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
+
+{ #category : #redo }
+Card >> redoOn: aGame by: aPlayer for: anotherCard with: aRedoCard [
+	self subclassResponsibility
+]
+
+{ #category : #redo }
+Card >> redoOn: aGame by: aPlayer to: anotherPlayer with: aRedoCard [
+	self subclassResponsibility 
+]
+
+{ #category : #redo }
+Card >> redoOn: aGame by: aPlayer with: aRedoCard [
+	self subclassResponsibility 
+]
+
+{ #category : #action }
+Card >> thrownOn: aGame by: aPlayer [ 
+	self subclassResponsibility
+]
+
+{ #category : #action }
+Card >> thrownOn: aGame by: aPlayer for: anotherCard [
+	self subclassResponsibility 
+]
+
+{ #category : #action }
+Card >> thrownOn: aGame by: aPlayer to: anotherPlayer [ 
+	self subclassResponsibility 
+]

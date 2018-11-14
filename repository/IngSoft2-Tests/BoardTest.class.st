@@ -56,12 +56,6 @@ BoardTest >> testCreateDeterministicBoardWithValidAmountOfLockers [
 BoardTest >> testCreateRandomBoardWithValidSlots [
 	| board slotsClasses |
 	board := RandomBoard withSlots: 20.
-	slotsClasses := OrderedCollection new.
-	slotsClasses add: EmptySlot.
-	slotsClasses add: MoonWalk.
-	slotsClasses add: AtomicBomb.
-	slotsClasses add: SpeedUp.
-	slotsClasses add: WormHole.
-	slotsClasses add: CardSlot.
+	slotsClasses := SlotType subclasses.
 	self assert: (board slots allSatisfy: [ :slot | slotsClasses includes: slot class]).
 ]
