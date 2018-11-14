@@ -21,40 +21,16 @@ Internal Representation and Key Implementation Points.
     Implementation Points
 "
 Class {
-	#name : #Player,
-	#superclass : #Object,
-	#instVars : [
-		'name',
-		'cards'
-	],
+	#name : #CardSlot,
+	#superclass : #SlotType,
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #initialization }
-Player class >> withName: aName andCards: aSetOfCards [
-	aSetOfCards size = 2
-		ifTrue: [ ^ self new initializeWithName: aName andCards: aSetOfCards ]
-		ifFalse:
-			[ AssertionFailure signal: 'A player must have two cards at the beginning of the game.' ]
-]
-
-{ #category : #accessing }
-Player >> cards [
-	^ cards.
-]
-
-{ #category : #initialization }
-Player >> initializeWithName: aName andCards: aSetOfCards [
-	name := aName.
-	cards := aSetOfCards
-]
-
-{ #category : #accessing }
-Player >> name [
-	^ name.
-]
-
-{ #category : #accessing }
-Player >> numberOfCards [
-	^ cards size.
+{ #category : #action }
+CardSlot >> activateEffectOn: aGame [
+	| players nextPlayerIndex deckOfCards |
+	players := aGame players.
+	nextPlayerIndex := aGame nextPlayerIndex.
+	deckOfCards := aGame deckOfCards.
+	(aGame cardsInHand at: (players at: nextPlayerIndex)) add: deckOfCards dealOneCard.
 ]

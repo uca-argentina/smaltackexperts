@@ -27,5 +27,23 @@ Class {
 }
 
 { #category : #action }
-OverloadCard >> activateEffectOn: aGame [
+OverloadCard >> activateEffectOn: aGame to: aPlayer [ 
+	aGame move: aPlayer backward: 2. 
+	
+]
+
+{ #category : #action }
+OverloadCard >> thrownOn: aGame by: aPlayer [ 
+	AssertionFailure signal: 'Must choose a player to throw the card.'
+]
+
+{ #category : #action }
+OverloadCard >> thrownOn: aGame by: aPlayer for: anotherCard [ 
+	AssertionFailure signal: 'Must choose a player to throw the card, not another card.'
+]
+
+{ #category : #action }
+OverloadCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [
+	aGame put: self intoGameBy: aPlayer.
+	aGame addToPermanentCards: self for: anotherPlayer
 ]

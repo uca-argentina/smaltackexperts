@@ -35,3 +35,11 @@ RandomDeck >> dealCards [
 		cards add: (cardsClasses at: (Random new nextInt: 6)) new.
 	^ cards.
 ]
+
+{ #category : #update }
+RandomDeck >> dealOneCard [
+	| card cardsClasses |
+	cardsClasses := (Card subclasses) asArray.
+	card := (cardsClasses at: (Random new nextInt: 6)) new.
+	^ card.
+]

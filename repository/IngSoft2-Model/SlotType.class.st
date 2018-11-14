@@ -21,29 +21,7 @@ Internal Representation and Key Implementation Points.
     Implementation Points
 "
 Class {
-	#name : #RepeatCard,
-	#superclass : #Card,
+	#name : #SlotType,
+	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
-
-{ #category : #action }
-RepeatCard >> activateEffectOn: aGame to: aPlayer [
-	aGame repeatLastSlotEffect
-]
-
-{ #category : #action }
-RepeatCard >> thrownOn: aGame by: aPlayer [
-	aGame remove: self from: aPlayer.
-	self activateEffectOn: aGame to: aPlayer.
-	aGame changeLastCardPlayed: self
-]
-
-{ #category : #action }
-RepeatCard >> thrownOn: aGame by: aPlayer for: anotherCard [ 
-	AssertionFailure signal: 'You don"t have to choose any card.'
-]
-
-{ #category : #action }
-RepeatCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [ 
-	AssertionFailure signal: 'You don"t have to choose any player.'
-]

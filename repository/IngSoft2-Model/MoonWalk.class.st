@@ -22,7 +22,7 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #MoonWalk,
-	#superclass : #Object,
+	#superclass : #SlotType,
 	#category : #'IngSoft2-Model'
 }
 

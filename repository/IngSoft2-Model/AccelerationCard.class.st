@@ -27,5 +27,22 @@ Class {
 }
 
 { #category : #action }
-AccelerationCard >> activateEffectOn: aGame [
+AccelerationCard >> activateEffectOn: aGame to: aPlayer [ 
+	aGame move: aPlayer forward: 1. 
+]
+
+{ #category : #action }
+AccelerationCard >> thrownOn: aGame by: aPlayer [
+	aGame put: self intoGameBy: aPlayer.
+	aGame players do: [ :each | aGame addToPermanentCards: self for: each ]
+]
+
+{ #category : #action }
+AccelerationCard >> thrownOn: aGame by: aPlayer for: anotherCard [
+	AssertionFailure signal: 'You don"t have to choose any card.'
+]
+
+{ #category : #action }
+AccelerationCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [ 
+	AssertionFailure signal: 'You don"t have to choose any player.'
 ]

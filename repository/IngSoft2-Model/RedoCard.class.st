@@ -23,9 +23,51 @@ Internal Representation and Key Implementation Points.
 Class {
 	#name : #RedoCard,
 	#superclass : #Card,
+	#instVars : [
+		'lastCard'
+	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #action }
-RedoCard >> activateEffectOn: aGame [
+RedoCard >> activateEffectOn: aGame to: aPlayer [
+	lastCard activateEffectOn: aGame to: aPlayer
+]
+
+{ #category : #action }
+RedoCard >> thrownOn: aGame by: aPlayer [
+	| cardClasses |
+	lastCard := aGame lastCardPlayed.
+	aGame assertIsNotTheFirstCardPLayed.
+	cardClasses := self cardClassesWithNoTarget.
+	(cardClasses includes: lastCard class)
+		ifFalse: [ AssertionFailure signal: ' You can only use this message if the last card played affected another player.' ].
+	lastCard class = AccelerationCard
+		ifTrue: [ aGame assertIsTurnOf: aPlayer.
+			aGame players do: [ :each | aGame addToPermanentCards: self for: each ] ]
+		ifFalse: [ lastCard activateEffectOn: aGame to: aPlayer ].
+	aGame remove: self from: aPlayer
+]
+
+{ #category : #action }
+RedoCard >> thrownOn: aGame by: aPlayer for: anotherCard [
+aGame assertIsNotTheFirstCardPLayed.
+	lastCard := aGame lastCardPlayed.
+	lastCard class = CancellationCard 
+	ifFalse: [ AssertionFailure  signal: ' You can only use this message if the last card played was a cancelation card' ].
+	lastCard activateEffectOn: aGame to: anotherCard .
+	aGame remove: self from: aPlayer.
+]
+
+{ #category : #action }
+RedoCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [
+	| cardClasses |
+	aGame assertIsNotTheFirstCardPLayed.
+	lastCard := aGame lastCardPlayed.
+	cardClasses := self cardsAffectingPlayers.
+	(cardClasses includes: lastCard class)
+		ifFalse: [ AssertionFailure signal: ' You can only use this message if the last card played affected another player.' ].
+	aGame assertIsTurnOf: aPlayer.
+	aGame remove: self from: aPlayer.
+	aGame addToPermanentCards: self for: anotherPlayer
 ]

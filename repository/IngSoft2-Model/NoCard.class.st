@@ -21,31 +21,19 @@ Internal Representation and Key Implementation Points.
     Implementation Points
 "
 Class {
-	#name : #CancellationCard,
-	#superclass : #Card,
+	#name : #NoCard,
+	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #action }
-CancellationCard >> activateEffectOn: aGame to: anotherCard [
-	aGame assertThereAreActivePermanentCards.
-	aGame assertIsActive: anotherCard.
-	aGame deactivate: anotherCard
+NoCard >> thrownOn: aGame by: aPlayer [ 
 ]
 
 { #category : #action }
-CancellationCard >> thrownOn: aGame by: aPlayer [ 
-	AssertionFailure signal: 'Must choose another card to throw the card.'
+NoCard >> thrownOn: aGame by: aPlayer for: anotherCard [ 
 ]
 
 { #category : #action }
-CancellationCard >> thrownOn: aGame by: aPlayer for: anotherCard [
-	self activateEffectOn: aGame to: anotherCard.
-	aGame remove: self from: aPlayer.
-	aGame changeLastCardPlayed: self
-]
-
-{ #category : #action }
-CancellationCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [ 
-	AssertionFailure signal: 'You don"t have to choose any player.'
+NoCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [ 
 ]

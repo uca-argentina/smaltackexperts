@@ -27,5 +27,23 @@ Class {
 }
 
 { #category : #action }
-SpeedCard >> activateEffectOn: aGame [
+SpeedCard >> activateEffectOn: aGame to: aPlayer [ 
+	aGame move: aPlayer forward: 1. 
+]
+
+{ #category : #action }
+SpeedCard >> thrownOn: aGame by: aPlayer [
+	AssertionFailure signal: 'Must choose a player to throw the card.'
+]
+
+{ #category : #action }
+SpeedCard >> thrownOn: aGame by: aPlayer for: anotherCard [ 
+	AssertionFailure signal: 'Must choose a player to throw the card, not another card.'
+]
+
+{ #category : #action }
+SpeedCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [
+	aGame put: self intoGameBy: aPlayer.
+	aGame addToPermanentCards: self for: anotherPlayer.
+
 ]

@@ -22,24 +22,27 @@ BoardTest >> testCreateBoardWithValidAmountOfLockers [
 
 { #category : #tests }
 BoardTest >> testCreateDeterministicBoardWithSpecialSlots [
-	| board atomicBomb wormHole speedUp voidSlot moonWalk |
-	board := DeterministicBoard withSlots: 5.
+	| board atomicBomb wormHole speedUp voidSlot cardSlot moonWalk |
+	board := DeterministicBoard withSlots: 6.
 	atomicBomb := AtomicBomb new.
 	wormHole := WormHole new.
 	speedUp := SpeedUp new.
 	moonWalk := MoonWalk new.
 	voidSlot := EmptySlot new.
+	cardSlot := CardSlot new.
 	board addSpecial: atomicBomb at: 1.
 	board addSpecial: wormHole at: 2.
 	board addSpecial: speedUp at: 3.
 	board addSpecial: moonWalk at: 4.
 	board addSpecial: voidSlot at: 5.
+	board addSpecial: cardSlot at: 6.
 	self
 		assert: (board slots at: 1) equals: atomicBomb;
 		assert: (board slots at: 2) equals: wormHole;
 		assert: (board slots at: 3) equals: speedUp;
 		assert: (board slots at: 4) equals: moonWalk;
-		assert: (board slots at: 5) equals: voidSlot
+		assert: (board slots at: 5) equals: voidSlot;
+		assert: (board slots at: 6) equals: cardSlot
 ]
 
 { #category : #tests }
@@ -59,5 +62,6 @@ BoardTest >> testCreateRandomBoardWithValidSlots [
 	slotsClasses add: AtomicBomb.
 	slotsClasses add: SpeedUp.
 	slotsClasses add: WormHole.
+	slotsClasses add: CardSlot.
 	self assert: (board slots allSatisfy: [ :slot | slotsClasses includes: slot class]).
 ]

@@ -62,6 +62,14 @@ DeterministicDeck >> dealCards [
 	^ cards
 ]
 
+{ #category : #update }
+DeterministicDeck >> dealOneCard [
+	| card |
+	card := (cardsOrdering at: nextCardIndex) new.
+	self changeCardIndex.
+	^ card.
+]
+
 { #category : #initialization }
 DeterministicDeck >> initializeWithCards: aCardsOrdering [ 
 	cardsOrdering := aCardsOrdering.

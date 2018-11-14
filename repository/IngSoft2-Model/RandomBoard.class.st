@@ -61,9 +61,10 @@ RandomBoard >> numberOfSlots [
 
 { #category : #'as yet unclassified' }
 RandomBoard >> slotFromNumber: aNumber [
-	aNumber <= 48 ifTrue: [ ^ EmptySlot new ].
-	aNumber <= 68 ifTrue: [ ^ WormHole new ].
-	aNumber <= 88 ifTrue: [ ^ SpeedUp new ].
+	aNumber <= 38 ifTrue: [ ^ EmptySlot new ].
+	aNumber <= 58 ifTrue: [ ^ WormHole new ].
+	aNumber <= 78 ifTrue: [ ^ SpeedUp new ].
+	aNumber <= 88 ifTrue: [ ^ CardSlot new ].
 	aNumber <= 98 ifTrue: [ ^ MoonWalk new ].
 	^ AtomicBomb new.
 ]

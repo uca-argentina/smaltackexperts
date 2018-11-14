@@ -38,7 +38,11 @@ Class {
 		'state',
 		'laps',
 		'deckOfCards',
-		'players'
+		'lastCardPlayed',
+		'lastSlotEffectActivated',
+		'cardsInHand',
+		'instantCardsAffectingEachPlayer',
+		'permanentCardsAffectingEachPlayer'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -54,14 +58,65 @@ Game class >> on: aBoard beeingPlayedBy: players throwing: dices withLaps: anAmo
 ]
 
 { #category : #update }
+Game >> activatePermanentCardsFor: aPlayer [
+	(self permanentCardsAffecting: aPlayer)
+		do: [ :each | each activateEffectOn: self to: aPlayer ]
+]
+
+{ #category : #adding }
+Game >> addToPermanentCards: aCard for: aPlayer [
+	(self permanentCardsAffecting: aPlayer) add: aCard
+]
+
+{ #category : #assertions }
+Game >> assert: aCard belongsTo: aPlayer [
+	((cardsInHand at: aPlayer) includes: aCard)
+		ifFalse: [ AssertionFailure signal: 'Card doesn"t belong to the player.' ]
+]
+
+{ #category : #assertions }
+Game >> assertIsActive: aPermanentCard [
+	(self permanentCardsAffectingEachPlayer values
+		anySatisfy: [ :each | each includes: aPermanentCard ])
+		ifFalse: [ AssertionFailure signal: 'Permanent card not found.' ]
+]
+
+{ #category : #action }
+Game >> assertIsNotTheFirstCardPLayed [
+	(Card subclasses includes: self lastCardPlayed class)
+		ifFalse: [ AssertionFailure signal: 'No card was thrown before.' ]
+]
+
+{ #category : #assertions }
 Game >> assertIsTurnOf: aPlayer [
 	(self ifTurnOf: aPlayer)
 		ifFalse: [ AssertionFailure signal: 'Not this player"s turn.' ]
 ]
 
+{ #category : #assertions }
+Game >> assertThereAreActivePermanentCards [
+	(self permanentCardsAffectingEachPlayer values allSatisfy: [ :each | each isEmpty ])
+		ifTrue: [ AssertionFailure signal: 'There are not active permanent cards.' ]
+]
+
 { #category : #accessing }
 Game >> board [
 	^ board
+]
+
+{ #category : #accesing }
+Game >> cardsInHand [
+	^ cardsInHand
+]
+
+{ #category : #accesing }
+Game >> cardsOf: aPlayer [
+	^(self cardsInHand at: aPlayer) .
+]
+
+{ #category : #action }
+Game >> changeLastCardPlayed: aCard [
+	lastCardPlayed := aCard .
 ]
 
 { #category : #update }
@@ -82,6 +137,19 @@ Game >> changeTurn [
 			 ]
 ]
 
+{ #category : #action }
+Game >> deactivate: aPermanentCard [
+	self permanentCardsAffectingEachPlayer
+		valuesDo: [ :each | 
+			(each includes: aPermanentCard)
+				ifTrue: [ each remove: aPermanentCard ] ]
+]
+
+{ #category : #accessing }
+Game >> deckOfCards [
+	^ deckOfCards
+]
+
 { #category : #accessing }
 Game >> dices [
 	^ dices
@@ -100,20 +168,25 @@ Game >> ifTurnOf: aPlayer [
 
 { #category : #initialization }
 Game >> initializeOn: aBoard beeingPlayedBy: aGroupOfPlayers throwing: aGroupOfDices withLaps: anAmountOfLaps and: aDeckOfCards [
-	| player |
+
 	positions := Dictionary new.
-	players := OrderedCollection new.
+	cardsInHand := Dictionary new.
+	permanentCardsAffectingEachPlayer:= Dictionary  new.
+	instantCardsAffectingEachPlayer := Dictionary new.
 	board := aBoard.
 	deckOfCards := aDeckOfCards.
 	aGroupOfPlayers
-		do: [ :each | 
-			player := Player withName: each andCards: deckOfCards dealCards.
-			players add: player.
-			positions add: player -> (Position on: 1 andWith: 0) ].
+		do: [ :each |
+			instantCardsAffectingEachPlayer add: each -> OrderedCollection new.
+			permanentCardsAffectingEachPlayer add: each -> OrderedCollection new.  
+			cardsInHand add: each ->aDeckOfCards dealCards .
+			positions add: each -> (Position on: 1 andWith: 0) ].
 	dices := aGroupOfDices.
 	nextPlayerIndex := 1.
 	state := GamePlaying new.
-	laps := anAmountOfLaps
+	laps := anAmountOfLaps.
+	lastSlotEffectActivated := EmptySlot new.
+	lastCardPlayed := NoCard new.
 ]
 
 { #category : #accessing }
@@ -129,6 +202,16 @@ Game >> laps [
 { #category : #update }
 Game >> lapsCompletedOf: aPlayer [
 	^ (positions at: aPlayer) lapsCompleted.
+]
+
+{ #category : #accesing }
+Game >> lastCardPlayed [
+	^ lastCardPlayed.
+]
+
+{ #category : #Accessing }
+Game >> lastSlotEffectActivated [
+	^ lastSlotEffectActivated.
 ]
 
 { #category : #update }
@@ -155,7 +238,7 @@ Game >> move: aPlayer forward: aNumberOfSlots [
 	actualSlot := actualSlot + aNumberOfSlots.
 	actualSlot >= board numberOfSlots
 		ifTrue: [ 
-			actualLap := actualLap + actualSlot // board numberOfSlots.
+			actualLap := actualLap + (actualSlot // board numberOfSlots).
 			actualSlot > board numberOfSlots
 				ifTrue: [
 					actualSlot := actualSlot rem: board numberOfSlots.  
@@ -174,6 +257,21 @@ Game >> nextPlayerIndex: anObject [
 	nextPlayerIndex := anObject
 ]
 
+{ #category : #accesing }
+Game >> numberOfCardsOf: aPlayer [
+	^(self cardsOf: aPlayer)size.
+]
+
+{ #category : #adding }
+Game >> permanentCardsAffecting: aPlayer [
+	^ self permanentCardsAffectingEachPlayer at: aPlayer
+]
+
+{ #category : #accessing }
+Game >> permanentCardsAffectingEachPlayer [
+	^ permanentCardsAffectingEachPlayer
+]
+
 { #category : #accessing }
 Game >> placeOf: aPlayer [
 	| actualPositions |
@@ -183,13 +281,31 @@ Game >> placeOf: aPlayer [
 
 { #category : #accessing }
 Game >> players [
-	^ players.
+	^ positions  keysSortedSafely.
 ]
 
 { #category : #update }
 Game >> plays: aPlayer [
 	state plays: aPlayer in: self.
 
+]
+
+{ #category : #update }
+Game >> plays: aPlayer throwing: aCard [
+	self assert: aCard belongsTo: aPlayer.
+	aCard thrownOn: self by: aPlayer.
+]
+
+{ #category : #update }
+Game >> plays: aPlayer throwing: aCard for: anotherCard [ 
+	self assert: aCard belongsTo: aPlayer.
+	aCard thrownOn: self by: aPlayer for: anotherCard.
+]
+
+{ #category : #update }
+Game >> plays: aPlayer throwing: aCard to: anotherPlayer [
+	self assert: aCard belongsTo: aPlayer.
+	aCard thrownOn: self by: aPlayer to: anotherPlayer.
 ]
 
 { #category : #update }
@@ -202,14 +318,48 @@ Game >> playsWhileGameIsBeingPlayed: aPlayer [
 	| slot |
 	self assertIsTurnOf: aPlayer.
 	self rollDicesFor: aPlayer.
+	self activatePermanentCardsFor: aPlayer.
 	slot := (positions at: aPlayer) slot.
 	(board slots at: slot) activateEffectOn: self.
+	lastSlotEffectActivated := board slots at: slot.
 	self changeStateAfterTurnOf: aPlayer
 ]
 
 { #category : #accessing }
 Game >> positions [
 	^ positions
+]
+
+{ #category : #action }
+Game >> put: aCard intoGameBy: aPlayer [
+	self assertIsTurnOf: aPlayer.
+	self remove: aCard from: aPlayer.
+	self changeLastCardPlayed: aCard
+]
+
+{ #category : #update }
+Game >> remove: aCard from: aPlayer [
+	(self cardsOf: aPlayer) remove: aCard. 
+]
+
+{ #category : #action }
+Game >> repeatLastSlotEffect [
+	| lastPlayer |
+	self returnToPreviousTurn.
+	lastPlayer := self players at: nextPlayerIndex.
+	lastSlotEffectActivated activateEffectOn: self.
+	self changeStateAfterTurnOf: lastPlayer
+]
+
+{ #category : #'as yet unclassified' }
+Game >> returnToPreviousTurn [
+	self nextPlayerIndex == 1
+		ifTrue: [
+			nextPlayerIndex := self players size. 
+			 ]
+		ifFalse: [
+			nextPlayerIndex := nextPlayerIndex - 1. 
+			 ]
 ]
 
 { #category : #update }
@@ -228,6 +378,15 @@ Game >> sortPlayersByPosition [
 		asSortedCollection:
 			[ :player | self lapsCompletedOf: player ] descending
 				, [ :player | self slotOf: player ] descending
+]
+
+{ #category : #action }
+Game >> thrownOn: aGame by: aPlayer [
+		| lastCard |
+	lastCard := aGame lastCardPlayed.
+	lastCard class = AccelerationCard 
+	ifFalse: [ AssertionFailure  signal: ' You can only use this message if the last card played was a acceleration card' ].
+	lastCard thrownOn: aGame by: aPlayer.
 ]
 
 { #category : #accessing }
