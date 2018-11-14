@@ -41,13 +41,10 @@ RedoCard >> thrownOn: aGame by: aPlayer [
 	aGame assertIsNotTheFirstCardPLayed.
 	cardClasses := self cardClassesWithNoTarget.
 	(cardClasses includes: lastCard class)
-		ifFalse: [ AssertionFailure
-				signal:
-					' You can only use this message if the last card played affected another player.' ].
+		ifFalse: [ AssertionFailure signal: ' You can only use this message if the last card played affected another player.' ].
 	lastCard class = AccelerationCard
 		ifTrue: [ aGame assertIsTurnOf: aPlayer.
-			aGame players
-				do: [ :each | aGame addToPermanentCards: self for: each ] ]
+			aGame players do: [ :each | aGame addToPermanentCards: self for: each ] ]
 		ifFalse: [ lastCard activateEffectOn: aGame to: aPlayer ].
 	aGame remove: self from: aPlayer
 ]

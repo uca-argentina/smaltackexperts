@@ -330,6 +330,13 @@ Game >> positions [
 	^ positions
 ]
 
+{ #category : #action }
+Game >> put: aCard intoGameBy: aPlayer [
+	self assertIsTurnOf: aPlayer.
+	self remove: aCard from: aPlayer.
+	self changeLastCardPlayed: aCard
+]
+
 { #category : #update }
 Game >> remove: aCard from: aPlayer [
 	(self cardsOf: aPlayer) remove: aCard. 
