@@ -1199,6 +1199,23 @@ GameTest >> testRedoCardOnCancellationCard [
 ]
 
 { #category : #tests }
+GameTest >> testRedoCardOnNoCard [
+	| game playerAt1 playerAt2 playerAt3 redoCard speedCard |
+	game := self gameWith3PlayersAnd2DicesOnDeterministicDeckWithAllCards.
+	playerAt1 := game players at: 1.
+	playerAt2 := game players at: 2.
+	playerAt3 := game players at: 3.
+	redoCard := (game cardsOf: playerAt3) at: 1.
+	speedCard := (game cardsOf: playerAt1) at: 2.
+	self assert: redoCard class equals: RedoCard.
+	self assert: speedCard class equals: SpeedCard.
+	self
+		should: [ game plays: playerAt3 throwing: redoCard to: playerAt2 ]
+		raise: AssertionFailure
+		withExceptionDo: [ :singal | self assert: singal messageText equals: 'No card was thrown before.' ]
+]
+
+{ #category : #tests }
 GameTest >> testRedoCardOnOverloadCard [
 	| game playerAt1 playerAt2 playerAt3 card card2|
 	game := self gameWith3PlayersAnd2DicesOnDeterministicDeckWithAllCards.

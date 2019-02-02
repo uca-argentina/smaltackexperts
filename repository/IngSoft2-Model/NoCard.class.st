@@ -22,6 +22,21 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #NoCard,
-	#superclass : #Object,
+	#superclass : #Card,
 	#category : #'IngSoft2-Model'
 }
+
+{ #category : #action }
+NoCard >> redoOn: aGame by: aPlayer for: anotherCard with: aRedoCard [
+	AssertionFailure signal: 'No card was thrown before.'
+]
+
+{ #category : #action }
+NoCard >> redoOn: aGame by: aPlayer to: anotherPlayer with: aRedoCard [
+	AssertionFailure signal: 'No card was thrown before.'
+]
+
+{ #category : #action }
+NoCard >> redoOn: aGame by: aPlayer with: aRedoCard. [
+	AssertionFailure signal: 'No card was thrown before.'
+]
