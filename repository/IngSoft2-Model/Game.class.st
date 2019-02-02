@@ -292,13 +292,15 @@ Game >> plays: aPlayer throwing: aCard [
 ]
 
 { #category : #update }
-Game >> plays: aPlayer throwing: aCard for: anotherCard [ 
+Game >> plays: aPlayer throwing: aCard for: anotherCard [
+	state throwCard. 
 	self assert: aCard belongsTo: aPlayer.
 	aCard thrownOn: self by: aPlayer for: anotherCard.
 ]
 
 { #category : #update }
 Game >> plays: aPlayer throwing: aCard to: anotherPlayer [
+	state throwCard.
 	self assert: aCard belongsTo: aPlayer.
 	aCard thrownOn: self by: aPlayer to: anotherPlayer.
 ]

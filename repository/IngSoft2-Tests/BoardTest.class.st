@@ -6,10 +6,12 @@ Class {
 
 { #category : #tests }
 BoardTest >> testCreateABoardWithInvalidAmountOfLockers [
-|board|
-self should: [board:= RandomBoard withSlots: 1] raise: AssertionFailure. 
-
-
+	| board |
+	self
+		should: [ board := RandomBoard withSlots: 1 ]
+		raise: AssertionFailure
+		withExceptionDo:
+			[ :signal | self assert: signal messageText equals: 'Board size must be greater than 1' ]
 ]
 
 { #category : #tests }

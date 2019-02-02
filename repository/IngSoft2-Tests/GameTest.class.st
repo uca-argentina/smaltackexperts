@@ -542,7 +542,10 @@ GameTest >> testAPlayerCantPlayAPermanetCardWhileIsNotHisTurn [
 	self assert: speedCard class equals: SpeedCard.
 	accelerationCard := (game cardsOf: playerAt2) at: 1.
 	self assert: accelerationCard class equals: AccelerationCard.
-	self should: [ game plays: playerAt2 throwing: accelerationCard ] raise: AssertionFailure.
+	self
+		should: [ game plays: playerAt2 throwing: accelerationCard ]
+		raise: AssertionFailure
+		withExceptionDo: [ :signal | self assert: signal messageText equals: 'Not this player"s turn.' ].
 	game plays: playerAt1.
 	self assert: (game slotOf: playerAt1) equals: 5.
 	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
@@ -554,11 +557,15 @@ GameTest >> testAPlayerCantPlayAPermanetCardWhileIsNotHisTurn [
 	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
 	self assert: (game numberOfCardsOf: playerAt3) equals: 2.
 	self
-		should: [ game plays: playerAt1 throwing: OverloadCard to: playerAt2 ]
-		raise: AssertionFailure.
+		should: [ game plays: playerAt1 throwing: overloadCard to: playerAt2 ]
+		raise: AssertionFailure
+		withExceptionDo:
+			[ :signal | self assert: signal messageText equals: 'Not this player"s turn.' ].
 	self
-		should: [ game plays: playerAt1 throwing: SpeedCard to: playerAt2 ]
-		raise: AssertionFailure.
+		should: [ game plays: playerAt1 throwing: speedCard to: playerAt2 ]
+		raise: AssertionFailure
+		withExceptionDo:
+			[ :signal | self assert: signal messageText equals: 'Not this player"s turn.' ].
 	game plays: playerAt2
 ]
 
@@ -570,7 +577,7 @@ GameTest >> testAccelerationCard [
 	playerAt2 := game players at: 2.
 	playerAt3 := game players at: 3.
 	card := (game cardsOf: playerAt2) at: 1.
-	self assert: card class equals: AccelerationCard. 
+	self assert: card class equals: AccelerationCard.
 	game plays: playerAt1.
 	self assert: (game slotOf: playerAt1) equals: 5.
 	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
@@ -582,8 +589,16 @@ GameTest >> testAccelerationCard [
 	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
 	self assert: (game numberOfCardsOf: playerAt3) equals: 2.
 	self assert: ((game cardsOf: playerAt1) at: 3) class equals: AccelerationCard.
-	self should: [ game plays: playerAt2 throwing: card to: playerAt3 ] raise: AssertionFailure.
-	self should: [ game plays: playerAt2 throwing: card for: ((game cardsOf: playerAt3) at: 1) ] raise: AssertionFailure.
+	self
+		should: [ game plays: playerAt2 throwing: card to: playerAt3 ]
+		raise: AssertionFailure
+		withExceptionDo:
+			[ :signal | self assert: signal messageText equals: 'You don"t have to choose any player.' ].
+	self
+		should: [ game plays: playerAt2 throwing: card for: ((game cardsOf: playerAt3) at: 1) ]
+		raise: AssertionFailure
+		withExceptionDo:
+			[ :signal | self assert: signal messageText equals: 'You don"t have to choose any card.' ].
 	game plays: playerAt2 throwing: card.
 	game plays: playerAt2.
 	self assert: (game slotOf: playerAt1) equals: 2.
@@ -605,7 +620,7 @@ GameTest >> testAccelerationCard [
 	self assert: (game lapsCompletedOf: playerAt3) equals: 0.
 	self assert: (game numberOfCardsOf: playerAt1) equals: 3.
 	self assert: (game numberOfCardsOf: playerAt2) equals: 1.
-	self assert: (game numberOfCardsOf: playerAt3) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt3) equals: 2
 ]
 
 { #category : #tests }
@@ -642,8 +657,16 @@ GameTest >> testCancellationCard [
 	self assert: card class equals: CancellationCard.
 	self assert: permanentCard class equals: OverloadCard.
 	game plays: playerAt1 throwing: permanentCard to: playerAt2.
-	self should: [ game plays: playerAt2 throwing: card ] raise: AssertionFailure.
-	self should: [ game plays: playerAt2 throwing: card to: playerAt1 ] raise: AssertionFailure.
+	self
+		should: [ game plays: playerAt2 throwing: card ]
+		raise: AssertionFailure
+		withExceptionDo:
+			[ :signal | self assert: signal messageText equals: 'Must choose another card to throw the card.' ].
+	self
+		should: [ game plays: playerAt2 throwing: card to: playerAt1 ]
+		raise: AssertionFailure withExceptionDo: [ :signal |
+			self assert: signal messageText
+			equals: 'You don"t have to choose any player.' ].
 	game plays: playerAt2 throwing: card for: permanentCard.
 	game plays: playerAt1.
 	self assert: (game slotOf: playerAt1) equals: 5.
@@ -936,8 +959,18 @@ GameTest >> testOverloadCard [
 	playerAt3 := game players at: 3.
 	card := (game cardsOf: playerAt1) at: 1.
 	self assert: card class equals: OverloadCard.
-	self should: [ game plays: playerAt1 throwing: card ] raise: AssertionFailure.
-	self should: [ game plays: playerAt1 throwing: card for: ((game cardsOf: playerAt3) at: 1) ] raise: AssertionFailure.
+	self
+		should: [ game plays: playerAt1 throwing: card ]
+		raise: AssertionFailure
+		withExceptionDo:
+			[ :signal | self assert: signal messageText equals: 'Must choose a player to throw the card.' ].
+	self
+		should: [ game plays: playerAt1 throwing: card for: ((game cardsOf: playerAt3) at: 1) ]
+		raise: AssertionFailure
+		withExceptionDo: [ :signal | 
+			self
+				assert: signal messageText
+				equals: 'Must choose a player to throw the card, not another card.' ].
 	game plays: playerAt1 throwing: card to: playerAt2.
 	game plays: playerAt1.
 	self assert: (game slotOf: playerAt1) equals: 5.
@@ -959,7 +992,7 @@ GameTest >> testOverloadCard [
 	self assert: (game lapsCompletedOf: playerAt3) equals: 0.
 	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
 	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
-	self assert: (game numberOfCardsOf: playerAt3) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt3) equals: 2
 ]
 
 { #category : #tests }
@@ -973,7 +1006,39 @@ GameTest >> testPlayerCanNotPlayCancellationCardIfThereAreNotActivePermanentCard
 	card := (game cardsOf: playerAt2) at: 2.
 	self assert: card class equals: CancellationCard.
 	self assert: permanentCard class equals: OverloadCard.
-	self should: [ game plays: playerAt2 throwing: card for: permanentCard. ] raise: AssertionFailure.
+	self
+		should: [ game plays: playerAt2 throwing: card for: permanentCard ]
+		raise: AssertionFailure
+		withExceptionDo:
+			[ :signal | self assert: signal messageText equals: 'There are not active permanent cards.' ]
+]
+
+{ #category : #tests }
+GameTest >> testPlayerCanNotPlayRedoCardOnPermanentCardWhileIsNotHisTurn [
+	| game playerAt1 playerAt2 playerAt3 redoCard permanentCard |
+	game := self gameWith3PlayersAnd2DicesOnDeterministicDeckWithAllCards.
+	playerAt1 := game players at: 1.
+	playerAt2 := game players at: 2.
+	playerAt3 := game players at: 3.
+	redoCard := (game cardsOf: playerAt3) at: 1.
+	permanentCard := (game cardsOf: playerAt1) at: 1.
+	self assert: redoCard class equals: RedoCard.
+	self assert: permanentCard class equals: OverloadCard.
+	game plays: playerAt1 throwing: permanentCard to: playerAt2.
+	game plays: playerAt1.
+	self assert: (game slotOf: playerAt1) equals: 5.
+	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
+	self assert: (game slotOf: playerAt2) equals: 1.
+	self assert: (game lapsCompletedOf: playerAt2) equals: 0.
+	self assert: (game slotOf: playerAt3) equals: 1.
+	self assert: (game lapsCompletedOf: playerAt3) equals: 0.
+	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt3) equals: 2.
+	self
+		should: [ game plays: playerAt3 throwing: redoCard to: playerAt1 ]
+		raise: AssertionFailure
+		withExceptionDo: [ :signal | self assert: signal messageText equals: 'Not this player"s turn.' ]
 ]
 
 { #category : #tests }
@@ -991,7 +1056,11 @@ GameTest >> testPlayerCanNotPlayWhenGameIsOver [
 	game plays: playerAt1.
 	self assert: (game slotOf: playerAt1) equals: 1.
 	self assert: game isOver equals: true.
-	self should: [ game plays: playerAt2 ] raise: AssertionFailure.
+	self
+		should: [ game plays: playerAt2 ]
+		raise: AssertionFailure
+		withExceptionDo:
+			[ :signal | self assert: signal messageText equals: 'The game is over.' ].
 	self assert: (game slotOf: playerAt2) equals: 11
 ]
 
@@ -1005,7 +1074,11 @@ GameTest >> testPlayerCanNotPlayWhenItIsNotHisTurn [
 	game plays: playerAt1.
 	self assert: (game slotOf: playerAt1) equals: 13.
 	self assert: game isOver equals: false.
-	self should: [ game plays: playerAt3 ] raise: AssertionFailure.
+	self
+		should: [ game plays: playerAt3 ]
+		raise: AssertionFailure
+		withExceptionDo:
+			[ :signal | self assert: signal messageText equals: 'Not this player"s turn.' ].
 	game plays: playerAt2.
 	self assert: (game slotOf: playerAt2) equals: 11.
 	self assert: game isOver equals: false
@@ -1017,7 +1090,7 @@ GameTest >> testPlayerCanNotThrowCardThatIsNotInHisHand [
 	game := self gameWith2PlayersAnd1DiceOnCardSlotsAndDeterministicDeck.
 	playerAt1 := game players at: 1.
 	playerAt2 := game players at: 2.
-	repeatCard  := RepeatCard new.
+	repeatCard := RepeatCard new.
 	speedCard := SpeedCard new.
 	accelerationCard := AccelerationCard new.
 	game plays: playerAt1.
@@ -1026,9 +1099,18 @@ GameTest >> testPlayerCanNotThrowCardThatIsNotInHisHand [
 	self assert: (game numberOfCardsOf: playerAt1) equals: 3.
 	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
 	self assert: ((game cardsOf: playerAt1) at: 3) class equals: CancellationCard.
-	self should: [ game plays: playerAt1 throwing: repeatCard ] raise: AssertionFailure.
-	self should: [ game plays: playerAt1 throwing: speedCard to: playerAt2 ] raise: AssertionFailure.
-	self should: [ game plays: playerAt1 throwing: accelerationCard ] raise: AssertionFailure.
+	self
+		should: [ game plays: playerAt1 throwing: repeatCard ]
+		raise: AssertionFailure
+		withExceptionDo: [ :signal | self assert: signal messageText equals: 'Card doesn"t belong to the player.' ].
+	self
+		should: [ game plays: playerAt1 throwing: speedCard to: playerAt2 ]
+		raise: AssertionFailure
+		withExceptionDo: [ :signal | self assert: signal messageText equals: 'Card doesn"t belong to the player.' ].
+	self
+		should: [ game plays: playerAt1 throwing: accelerationCard ]
+		raise: AssertionFailure
+		withExceptionDo: [ :signal | self assert: signal messageText equals: 'Card doesn"t belong to the player.' ]
 ]
 
 { #category : #tests }
@@ -1047,7 +1129,11 @@ GameTest >> testPlayerCanNotThrowCardWhenGameIsEnded [
 	self assert: game isOver equals: true.
 	card := (game cardsOf: playerAt1) at: 1.
 	self assert: card class equals: AccelerationCard.
-	self should: [ game plays: playerAt1 throwing: card ] raise: AssertionFailure.
+	self
+		should: [ game plays: playerAt1 throwing: card ]
+		raise: AssertionFailure
+		withExceptionDo:
+			[ :signal | self assert: signal messageText equals: 'Game is over' ]
 ]
 
 { #category : #tests }
@@ -1217,7 +1303,7 @@ GameTest >> testRedoCardOnNoCard [
 
 { #category : #tests }
 GameTest >> testRedoCardOnOverloadCard [
-	| game playerAt1 playerAt2 playerAt3 card card2|
+	| game playerAt1 playerAt2 playerAt3 card card2 |
 	game := self gameWith3PlayersAnd2DicesOnDeterministicDeckWithAllCards.
 	playerAt1 := game players at: 1.
 	playerAt2 := game players at: 2.
@@ -1226,8 +1312,6 @@ GameTest >> testRedoCardOnOverloadCard [
 	card2 := (game cardsOf: playerAt1) at: 1.
 	self assert: card class equals: RedoCard.
 	self assert: card2 class equals: OverloadCard.
-	self should: [ game plays: playerAt3 throwing: card for: ((game cardsOf: playerAt1) at: 1)  ] raise: AssertionFailure.
-	self should: [ game plays: playerAt3 throwing: card ] raise: AssertionFailure.
 	game plays: playerAt1 throwing: card2 to: playerAt2.
 	game plays: playerAt1.
 	self assert: (game slotOf: playerAt1) equals: 5.
@@ -1249,6 +1333,16 @@ GameTest >> testRedoCardOnOverloadCard [
 	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
 	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
 	self assert: (game numberOfCardsOf: playerAt3) equals: 2.
+	self
+		should: [ game plays: playerAt3 throwing: card for: ((game cardsOf: playerAt1) at: 1) ]
+		raise: AssertionFailure
+		withExceptionDo:
+			[ :signal | self assert: signal messageText equals: 'Must choose a player to throw the card, not another card.' ].
+	self
+		should: [ game plays: playerAt3 throwing: card ]
+		raise: AssertionFailure
+		withExceptionDo:
+			[ :signal | self assert: signal messageText equals: 'Must choose a player to throw the card.' ].
 	game plays: playerAt3 throwing: card to: playerAt1.
 	game plays: playerAt3.
 	self assert: (game slotOf: playerAt1) equals: 5.
@@ -1259,7 +1353,7 @@ GameTest >> testRedoCardOnOverloadCard [
 	self assert: (game lapsCompletedOf: playerAt3) equals: 0.
 	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
 	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
-	self assert: (game numberOfCardsOf: playerAt3) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt3) equals: 2
 ]
 
 { #category : #tests }
@@ -1404,7 +1498,7 @@ GameTest >> testRepeatCard [
 	playerAt2 := game players at: 2.
 	playerAt3 := game players at: 3.
 	card := (game cardsOf: playerAt3) at: 2.
-	self assert: card class equals: RepeatCard. 
+	self assert: card class equals: RepeatCard.
 	game plays: playerAt1.
 	self assert: (game slotOf: playerAt1) equals: 5.
 	self assert: (game lapsCompletedOf: playerAt1) equals: 0.
@@ -1416,8 +1510,16 @@ GameTest >> testRepeatCard [
 	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
 	self assert: (game numberOfCardsOf: playerAt3) equals: 2.
 	self assert: ((game cardsOf: playerAt1) at: 3) class equals: AccelerationCard.
-	self should: [ game plays: playerAt3 throwing: card for: ((game cardsOf: playerAt1) at: 1)  ] raise: AssertionFailure.
-	self should: [ game plays: playerAt3 throwing: card to: playerAt1 ] raise: AssertionFailure.
+	self
+		should: [ game plays: playerAt3 throwing: card for: ((game cardsOf: playerAt1) at: 1) ]
+		raise: AssertionFailure
+		withExceptionDo:
+			[ :signal | self assert: signal messageText equals: 'You don"t have to choose any card.' ].
+	self
+		should: [ game plays: playerAt3 throwing: card to: playerAt1 ]
+		raise: AssertionFailure
+		withExceptionDo:
+			[ :signal | self assert: signal messageText equals: 'You don"t have to choose any player.' ].
 	game plays: playerAt3 throwing: card.
 	game plays: playerAt2.
 	self assert: (game slotOf: playerAt1) equals: 5.
@@ -1518,8 +1620,18 @@ GameTest >> testSpeedCard [
 	playerAt3 := game players at: 3.
 	card := (game cardsOf: playerAt1) at: 2.
 	self assert: card class equals: SpeedCard.
-	self should: [ game plays: playerAt1 throwing: card ] raise: AssertionFailure.
-	self should: [ game plays: playerAt1 throwing: card for: ((game cardsOf: playerAt3) at: 1) ] raise: AssertionFailure.
+	self
+		should: [ game plays: playerAt1 throwing: card ]
+		raise: AssertionFailure
+		withExceptionDo:
+			[ :signal | self assert: signal messageText equals: 'Must choose a player to throw the card.' ].
+	self
+		should: [ game plays: playerAt1 throwing: card for: ((game cardsOf: playerAt3) at: 1) ]
+		raise: AssertionFailure
+		withExceptionDo: [ :signal | 
+			self
+				assert: signal messageText
+				equals: 'Must choose a player to throw the card, not another card.' ].
 	game plays: playerAt1 throwing: card to: playerAt2.
 	game plays: playerAt1.
 	self assert: (game slotOf: playerAt1) equals: 5.
@@ -1541,7 +1653,7 @@ GameTest >> testSpeedCard [
 	self assert: (game lapsCompletedOf: playerAt3) equals: -1.
 	self assert: (game numberOfCardsOf: playerAt1) equals: 2.
 	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
-	self assert: (game numberOfCardsOf: playerAt2) equals: 2.
+	self assert: (game numberOfCardsOf: playerAt2) equals: 2
 ]
 
 { #category : #tests }
