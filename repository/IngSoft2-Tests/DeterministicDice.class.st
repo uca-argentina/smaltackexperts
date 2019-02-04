@@ -36,7 +36,7 @@ DeterministicDice class >> withFaces: anAmountOfFaces andValues: aSetOfValues [
 	anAmountOfFaces > 1
 	ifTrue: [ ^ self new initializeWithFaces: anAmountOfFaces andValues: aSetOfValues ]
 		ifFalse: [ AssertionFailure
-				signal: 'You can''t create a dice with less than 2 faces' ]
+				signal: 'you can''t create a dice with less than 2 faces' ]
 ]
 
 { #category : #initialization }

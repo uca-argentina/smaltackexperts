@@ -162,25 +162,25 @@ Game >> ifTurnOf: aPlayer [
 
 { #category : #initialization }
 Game >> initializeOn: aBoard beeingPlayedBy: aGroupOfPlayers throwing: aGroupOfDices withLaps: anAmountOfLaps and: aDeckOfCards [
-
 	positions := Dictionary new.
 	cardsInHand := Dictionary new.
-	permanentCardsAffectingEachPlayer:= Dictionary  new.
+	permanentCardsAffectingEachPlayer := Dictionary new.
 	instantCardsAffectingEachPlayer := Dictionary new.
 	board := aBoard.
 	deckOfCards := aDeckOfCards.
 	aGroupOfPlayers
-		do: [ :each |
+		do: [ :each | 
 			instantCardsAffectingEachPlayer add: each -> OrderedCollection new.
-			permanentCardsAffectingEachPlayer add: each -> OrderedCollection new.  
-			cardsInHand add: each ->aDeckOfCards dealCards .
+			permanentCardsAffectingEachPlayer
+				add: each -> OrderedCollection new.
+			cardsInHand add: each -> (aDeckOfCards dealCards: 2).
 			positions add: each -> (Position on: 1 andWith: 0) ].
 	dices := aGroupOfDices.
 	nextPlayerIndex := 1.
 	state := GamePlaying new.
 	laps := anAmountOfLaps.
 	lastSlotEffectActivated := EmptySlot new.
-	lastCardPlayed := NoCard new.
+	lastCardPlayed := NoCard new
 ]
 
 { #category : #accessing }
@@ -292,15 +292,13 @@ Game >> plays: aPlayer throwing: aCard [
 ]
 
 { #category : #update }
-Game >> plays: aPlayer throwing: aCard for: anotherCard [
-	state throwCard. 
+Game >> plays: aPlayer throwing: aCard for: anotherCard [ 
 	self assert: aCard belongsTo: aPlayer.
 	aCard thrownOn: self by: aPlayer for: anotherCard.
 ]
 
 { #category : #update }
 Game >> plays: aPlayer throwing: aCard to: anotherPlayer [
-	state throwCard.
 	self assert: aCard belongsTo: aPlayer.
 	aCard thrownOn: self by: aPlayer to: anotherPlayer.
 ]
