@@ -28,11 +28,11 @@ Class {
 
 { #category : #action }
 MoonWalk >> activateEffectOn: aGame [
-	| actualPlayer slotsToMoveBackWards playersToBeMoved |
+	| actualPlayer slotsToMoveBackWards |
 	actualPlayer := aGame players at: aGame nextPlayerIndex.
 	slotsToMoveBackWards := (aGame positions at: actualPlayer) slot // 2.
-	playersToBeMoved := aGame players select: [ :i | i ~= actualPlayer ].
-	playersToBeMoved
-		do: [ :each | aGame move: each backward: slotsToMoveBackWards ].
+	aGame players
+		do: [ :player | aGame move: player backward: slotsToMoveBackWards ]
+		without: actualPlayer.
 	^ aGame
 ]

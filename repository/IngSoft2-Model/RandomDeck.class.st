@@ -27,19 +27,11 @@ Class {
 }
 
 { #category : #update }
-RandomDeck >> dealCards [
-	| cardsClasses cards |
-	cardsClasses := (Card subclasses) asArray.
-		cards := OrderedCollection new.
-		cards add: (cardsClasses at: (Random new nextInt: 6)) new.
-		cards add: (cardsClasses at: (Random new nextInt: 6)) new.
-	^ cards.
+RandomDeck >> dealCards: anAmountOfCards [
+	^ ((1 to: anAmountOfCards) collect: [ :n | self dealOneCard ]) asOrderedCollection
 ]
 
 { #category : #update }
 RandomDeck >> dealOneCard [
-	| card cardsClasses |
-	cardsClasses := (Card subclasses) asArray.
-	card := (cardsClasses at: (Random new nextInt: 6)) new.
-	^ card.
+	^ Card subclasses atRandom new
 ]

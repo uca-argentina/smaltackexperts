@@ -52,14 +52,8 @@ DeterministicDeck >> changeCardIndex [
 ]
 
 { #category : #update }
-DeterministicDeck >> dealCards [
-	| cards |
-	cards := OrderedCollection new.
-	2 timesRepeat: [ 
-		cards add: (cardsOrdering at: nextCardIndex) new.
-		self changeCardIndex.
-		 ].
-	^ cards
+DeterministicDeck >> dealCards: anAmountOfCards [
+	^ ((1 to: anAmountOfCards) collect: [ :n | self dealOneCard ]) asOrderedCollection
 ]
 
 { #category : #update }
