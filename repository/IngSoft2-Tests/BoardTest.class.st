@@ -5,11 +5,29 @@ Class {
 }
 
 { #category : #tests }
+BoardTest >> testCreateABoardWithInvalidAmountOfLockers [
+	| board |
+	self
+		should: [ board := RandomBoard withSlots: 1 ]
+		raise: AssertionFailure
+		withExceptionDo:
+			[ :signal | self assert: signal messageText equals: 'Board size must be greater than 1' ]
+]
+
+{ #category : #tests }
 BoardTest >> testCreateABoardWithInvalidAmountOfSlots [
 |board|
 self should: [board:= RandomBoard withSlots: 1] raise: AssertionFailure. 
 
 
+]
+
+{ #category : #tests }
+BoardTest >> testCreateBoardWithValidAmountOfLockers [
+	| board |
+	board := RandomBoard withSlots: 20.
+	self assert: board numberOfSlots equals: 20.
+	
 ]
 
 { #category : #tests }
@@ -43,6 +61,13 @@ BoardTest >> testCreateDeterministicBoardWithSpecialSlots [
 		assert: (board slots at: 4) equals: moonWalk;
 		assert: (board slots at: 5) equals: voidSlot;
 		assert: (board slots at: 6) equals: cardSlot
+]
+
+{ #category : #tests }
+BoardTest >> testCreateDeterministicBoardWithValidAmountOfLockers [
+	| board |
+	board := DeterministicBoard withSlots: 20.
+	self assert: board numberOfSlots equals: 20.
 ]
 
 { #category : #tests }

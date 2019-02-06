@@ -53,8 +53,7 @@ DeterministicDeck >> changeCardIndex [
 
 { #category : #update }
 DeterministicDeck >> dealCards: anAmountOfCards [
-	^((1 to: 2) collect: [ :n | self dealOneCard  ]) asOrderedCollection 
-	
+	^ ((1 to: anAmountOfCards) collect: [ :n | self dealOneCard ]) asOrderedCollection
 ]
 
 { #category : #update }

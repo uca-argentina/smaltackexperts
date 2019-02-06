@@ -39,13 +39,15 @@ DiceTest >> testAddDeterministicValuesAndRollDice [
 { #category : #tests }
 DiceTest >> testCreateADiceWithInvalidFaces [
 	| dice |
-	self should: [ dice := DeterministicDice withFaces: 1 andValues: #(1)] raise: AssertionFailure
+	self
+		should: [ dice := DeterministicDice withFaces: 1 andValues: #(1) ]
+		raise: AssertionFailure
+		withExceptionDo: [ :signal | self assert: signal messageText equals: 'You can''t create a dice with less than 2 faces' ]
 ]
 
 { #category : #tests }
 DiceTest >> testCreateADicewithAValidNumberOfFaces [
-	| dice  |
-
+	| dice |
 	dice := DeterministicDice withFaces: 6 andValues: #(6 5 4 3 2 1).
 	self assert: dice numberOfFaces equals: 6
 ]

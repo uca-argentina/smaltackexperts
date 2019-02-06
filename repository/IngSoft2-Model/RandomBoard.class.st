@@ -59,6 +59,11 @@ RandomBoard >> numberOfSlots [
 	^ slots size . 
 ]
 
+{ #category : #accessing }
+RandomBoard >> slotAt: aSlotIndex [
+^ self slots at: aSlotIndex 
+]
+
 { #category : #'as yet unclassified' }
 RandomBoard >> slotFromNumber: aNumber [
 	aNumber <= 38 ifTrue: [ ^ EmptySlot new ].

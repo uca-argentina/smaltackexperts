@@ -28,7 +28,7 @@ Class {
 
 { #category : #update }
 RandomDeck >> dealCards: anAmountOfCards [
-	^ ((1 to: anAmountOfCards) collect: [ :n | self dealOneCard ])asOrderedCollection 
+	^ ((1 to: anAmountOfCards) collect: [ :n | self dealOneCard ]) asOrderedCollection
 ]
 
 { #category : #update }
