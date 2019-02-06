@@ -43,13 +43,13 @@ AccelerationCard >> redoOn: aGame by: aPlayer to: anotherPlayer with: aRedoCard 
 
 { #category : #redo }
 AccelerationCard >> redoOn: aGame by: aPlayer with: aRedoCard [
-	aGame put: aRedoCard intoGameAsPermanentBy: aPlayer.
+	aGame playPermanentCard: aRedoCard of: aPlayer.
 	aGame players do: [ :each | aGame addToPermanentCards: aRedoCard for: each ]
 ]
 
 { #category : #action }
 AccelerationCard >> thrownOn: aGame by: aPlayer [
-	aGame put: self intoGameAsPermanentBy: aPlayer.
+	aGame playPermanentCard: self of: aPlayer.
 	aGame players do: [ :each | aGame addToPermanentCards: self for: each ]
 ]
 

@@ -36,7 +36,7 @@ CancellationCard >> activateEffectOn: aGame for: anotherCard [
 { #category : #redo }
 CancellationCard >> redoOn: aGame by: aPlayer for: anotherCard with: aRedoCard [
 	self activateEffectOn: aGame for: anotherCard.
-	aGame put: aRedoCard intoGameAsInstantBy: aPlayer.
+	aGame playInstantCard: aRedoCard of: aPlayer.
 ]
 
 { #category : #redo }
@@ -57,7 +57,7 @@ CancellationCard >> thrownOn: aGame by: aPlayer [
 { #category : #action }
 CancellationCard >> thrownOn: aGame by: aPlayer for: anotherCard [
 	self activateEffectOn: aGame for: anotherCard.
-	aGame put: self intoGameAsInstantBy: aPlayer.
+	aGame playInstantCard: self of: aPlayer.
 ]
 
 { #category : #action }

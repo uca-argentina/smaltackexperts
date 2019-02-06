@@ -261,19 +261,9 @@ Game >> nextPlayerIndex: anObject [
 	nextPlayerIndex := anObject
 ]
 
-{ #category : #accessing }
-Game >> numberOfCardsOf: aPlayer [
-	^(self cardsOf: aPlayer)size.
-]
-
 { #category : #adding }
 Game >> permanentCardsAffecting: aPlayer [
 	^  permanentCardsAffectingEachPlayer at: aPlayer
-]
-
-{ #category : #accessing }
-Game >> permanentCardsAffectingEachPlayer [
-	^ permanentCardsAffectingEachPlayer
 ]
 
 { #category : #accessing }
@@ -281,6 +271,19 @@ Game >> placeOf: aPlayer [
 	| actualPositions |
 	actualPositions := self sortPlayersByPosition.
 	^ actualPositions detectIndex: [ :each | each = aPlayer ]
+]
+
+{ #category : #action }
+Game >> playInstantCard: aCard of: aPlayer [
+	self remove: aCard from: aPlayer.
+	self changeLastCardPlayed: aCard
+]
+
+{ #category : #action }
+Game >> playPermanentCard: aCard of: aPlayer [
+	self assertIsTurnOf: aPlayer.
+	self remove: aCard from: aPlayer.
+	self changeLastCardPlayed: aCard
 ]
 
 { #category : #accessing }
@@ -335,19 +338,6 @@ Game >> playsWhileGameIsBeingPlayed: aPlayer [
 { #category : #accessing }
 Game >> positions [
 	^ positions
-]
-
-{ #category : #action }
-Game >> put: aCard intoGameAsInstantBy: aPlayer [
-	self remove: aCard from: aPlayer.
-	self changeLastCardPlayed: aCard
-]
-
-{ #category : #action }
-Game >> put: aCard intoGameAsPermanentBy: aPlayer [
-	self assertIsTurnOf: aPlayer.
-	self remove: aCard from: aPlayer.
-	self changeLastCardPlayed: aCard
 ]
 
 { #category : #update }

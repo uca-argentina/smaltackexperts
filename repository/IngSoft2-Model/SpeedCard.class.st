@@ -38,7 +38,7 @@ SpeedCard >> redoOn: aGame by: aPlayer for: anotherCard with: aRedoCard [
 
 { #category : #redo }
 SpeedCard >> redoOn: aGame by: aPlayer to: anotherPlayer with: aRedoCard [
-	aGame put: aRedoCard intoGameAsPermanentBy: aPlayer.
+	aGame playPermanentCard: aRedoCard of: aPlayer.
 	aGame addToPermanentCards: aRedoCard for: anotherPlayer.
 ]
 
@@ -59,7 +59,7 @@ SpeedCard >> thrownOn: aGame by: aPlayer for: anotherCard [
 
 { #category : #action }
 SpeedCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [
-	aGame put: self intoGameAsPermanentBy: aPlayer.
+	aGame playPermanentCard: self of: aPlayer.
 	aGame addToPermanentCards: self for: anotherPlayer.
 
 ]
