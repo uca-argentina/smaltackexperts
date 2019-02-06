@@ -272,6 +272,11 @@ Game >> permanentCardsAffecting: aPlayer [
 ]
 
 { #category : #accessing }
+Game >> permanentCardsAffectingEachPlayer [
+	^ permanentCardsAffectingEachPlayer
+]
+
+{ #category : #accessing }
 Game >> placeOf: aPlayer [
 	| actualPositions |
 	actualPositions := self sortPlayersByPosition.
