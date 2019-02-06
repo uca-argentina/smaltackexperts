@@ -15,7 +15,23 @@ BoardTest >> testCreateABoardWithInvalidAmountOfLockers [
 ]
 
 { #category : #tests }
+BoardTest >> testCreateABoardWithInvalidAmountOfSlots [
+|board|
+self should: [board:= RandomBoard withSlots: 1] raise: AssertionFailure. 
+
+
+]
+
+{ #category : #tests }
 BoardTest >> testCreateBoardWithValidAmountOfLockers [
+	| board |
+	board := RandomBoard withSlots: 20.
+	self assert: board numberOfSlots equals: 20.
+	
+]
+
+{ #category : #tests }
+BoardTest >> testCreateBoardWithValidAmountOfSlots [
 	| board |
 	board := RandomBoard withSlots: 20.
 	self assert: board numberOfSlots equals: 20.
@@ -49,6 +65,13 @@ BoardTest >> testCreateDeterministicBoardWithSpecialSlots [
 
 { #category : #tests }
 BoardTest >> testCreateDeterministicBoardWithValidAmountOfLockers [
+	| board |
+	board := DeterministicBoard withSlots: 20.
+	self assert: board numberOfSlots equals: 20.
+]
+
+{ #category : #tests }
+BoardTest >> testCreateDeterministicBoardWithValidAmountOfSlots [
 	| board |
 	board := DeterministicBoard withSlots: 20.
 	self assert: board numberOfSlots equals: 20.

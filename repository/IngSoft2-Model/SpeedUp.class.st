@@ -30,7 +30,7 @@ Class {
 SpeedUp >> activateEffectOn: aGame [
 	| slotsToMove actualPlayer |
 	slotsToMove := 4.
-	actualPlayer := aGame players at: aGame nextPlayerIndex.
+	actualPlayer := aGame currentPlayer .
 	aGame move: actualPlayer forward: slotsToMove.
 	^ aGame
 ]

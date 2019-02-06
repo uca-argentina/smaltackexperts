@@ -76,7 +76,7 @@ Game >> assert: aCard belongsTo: aPlayer [
 
 { #category : #assertions }
 Game >> assertIsActive: aPermanentCard [
-	(self permanentCardsAffectingEachPlayer values
+	( permanentCardsAffectingEachPlayer values
 		anySatisfy: [ :each | each includes: aPermanentCard ])
 		ifFalse: [ AssertionFailure signal: 'Permanent card not found.' ]
 ]
@@ -89,7 +89,7 @@ Game >> assertIsTurnOf: aPlayer [
 
 { #category : #assertions }
 Game >> assertThereAreActivePermanentCards [
-	(self permanentCardsAffectingEachPlayer values allSatisfy: [ :each | each isEmpty ])
+	( permanentCardsAffectingEachPlayer values allSatisfy: [ :each | each isEmpty ])
 		ifTrue: [ AssertionFailure signal: 'There are not active permanent cards.' ]
 ]
 
@@ -131,12 +131,22 @@ Game >> changeTurn [
 			 ]
 ]
 
+{ #category : #accessing }
+Game >> currentPlayer [
+^(self players at: nextPlayerIndex) 
+]
+
 { #category : #action }
 Game >> deactivate: aPermanentCard [
-	self permanentCardsAffectingEachPlayer
+	 permanentCardsAffectingEachPlayer
 		valuesDo: [ :each | 
 			(each includes: aPermanentCard)
 				ifTrue: [ each remove: aPermanentCard ] ]
+]
+
+{ #category : #adding }
+Game >> dealCardTo: aPlayer [
+(self cardsOf: aPlayer) add: deckOfCards dealOneCard 
 ]
 
 { #category : #accessing }
@@ -157,7 +167,7 @@ Game >> endGame [
 
 { #category : #update }
 Game >> ifTurnOf: aPlayer [
-	^ (self players at: self nextPlayerIndex) == aPlayer
+	^ (self currentPlayer ) == aPlayer
 ]
 
 { #category : #initialization }
@@ -258,12 +268,7 @@ Game >> numberOfCardsOf: aPlayer [
 
 { #category : #adding }
 Game >> permanentCardsAffecting: aPlayer [
-	^ self permanentCardsAffectingEachPlayer at: aPlayer
-]
-
-{ #category : #accessing }
-Game >> permanentCardsAffectingEachPlayer [
-	^ permanentCardsAffectingEachPlayer
+	^  permanentCardsAffectingEachPlayer at: aPlayer
 ]
 
 { #category : #accessing }
@@ -312,13 +317,13 @@ Game >> playsWhenGameIsEnded: aPlayer [
 
 { #category : #update }
 Game >> playsWhileGameIsBeingPlayed: aPlayer [
-	| slot |
+	| slotIndex |
 	self assertIsTurnOf: aPlayer.
 	self rollDicesFor: aPlayer.
 	self activatePermanentCardsFor: aPlayer.
-	slot := (positions at: aPlayer) slot.
-	(board slots at: slot) activateEffectOn: self.
-	lastSlotEffectActivated := board slots at: slot.
+	slotIndex  := (positions at: aPlayer) slot.
+	(board slotAt: slotIndex ) activateEffectOn: self.
+	lastSlotEffectActivated := board slotAt: slotIndex. 
 	self changeStateAfterTurnOf: aPlayer
 ]
 
@@ -349,7 +354,7 @@ Game >> remove: aCard from: aPlayer [
 Game >> repeatLastSlotEffect [
 	| lastPlayer |
 	self returnToPreviousTurn.
-	lastPlayer := self players at: nextPlayerIndex.
+	lastPlayer := self currentPlayer. 
 	lastSlotEffectActivated activateEffectOn: self.
 	self changeStateAfterTurnOf: lastPlayer
 ]
