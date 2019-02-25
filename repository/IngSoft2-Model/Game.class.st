@@ -65,7 +65,10 @@ Game >> activatePermanentCardsFor: aPlayer [
 
 { #category : #adding }
 Game >> addToPermanentCards: aCard for: aPlayer [
-	(self permanentCardsAffecting: aPlayer) add: aCard
+	| newHand |
+	newHand := self permanentCardsAffecting: aPlayer.
+	newHand add: aCard.
+	 permanentCardsAffectingEachPlayer at: aPlayer put: newHand
 ]
 
 { #category : #assertions }
@@ -146,7 +149,10 @@ Game >> deactivate: aPermanentCard [
 
 { #category : #adding }
 Game >> dealCardTo: aPlayer [
-(self cardsOf: aPlayer) add: deckOfCards dealOneCard 
+	| newCards |
+	newCards := self cardsOf: aPlayer.
+	newCards add: deckOfCards dealOneCard.
+	cardsInHand at: aPlayer   put: newCards
 ]
 
 { #category : #accessing }
@@ -180,11 +186,11 @@ Game >> initializeOn: aBoard beeingPlayedBy: aGroupOfPlayers throwing: aGroupOfD
 	deckOfCards := aDeckOfCards.
 	aGroupOfPlayers
 		do: [ :each | 
-			instantCardsAffectingEachPlayer add: each -> OrderedCollection new.
+			instantCardsAffectingEachPlayer at: each  put: OrderedCollection new.
 			permanentCardsAffectingEachPlayer
-				add: each -> OrderedCollection new.
-			cardsInHand add: each -> (aDeckOfCards dealCards: 2).
-			positions add: each -> (Position on: 1 andWith: 0) ].
+				at: each put: OrderedCollection new.
+			cardsInHand at: each put: (aDeckOfCards dealCards: 2).
+			positions at: each put: (Position on: 1 andWith: 0) ].
 	dices := aGroupOfDices.
 	nextPlayerIndex := 1.
 	state := GamePlaying new.
