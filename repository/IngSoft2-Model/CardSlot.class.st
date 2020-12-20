@@ -28,5 +28,8 @@ Class {
 
 { #category : #action }
 CardSlot >> activateEffectOn: aGame [
-	aGame  dealCardTo: aGame currentPlayer.
+	aGame discardDeck isNotEmpty
+		ifTrue: [ aGame dealCardTo: aGame currentPlayer ]
+
+	
 ]

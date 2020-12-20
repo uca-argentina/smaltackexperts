@@ -42,7 +42,8 @@ Class {
 		'lastSlotEffectActivated',
 		'cardsInHand',
 		'instantCardsAffectingEachPlayer',
-		'permanentCardsAffectingEachPlayer'
+		'permanentCardsAffectingEachPlayer',
+		'discardDeck'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -61,6 +62,11 @@ Game class >> on: aBoard beeingPlayedBy: players throwing: dices withLaps: anAmo
 Game >> activatePermanentCardsFor: aPlayer [
 	(self permanentCardsAffecting: aPlayer)
 		do: [ :each | each activateEffectOn: self to: aPlayer ]
+]
+
+{ #category : #adding }
+Game >> addToDiscardDeck: aCard [
+	discardDeck addToDiscardDeck: aCard
 ]
 
 { #category : #adding }
@@ -141,28 +147,44 @@ Game >> currentPlayer [
 
 { #category : #action }
 Game >> deactivate: aPermanentCard [
-	 permanentCardsAffectingEachPlayer
+	permanentCardsAffectingEachPlayer
 		valuesDo: [ :each | 
 			(each includes: aPermanentCard)
-				ifTrue: [ each remove: aPermanentCard ] ]
+				ifTrue: [ each remove: aPermanentCard ] ].
+	self addToDiscardDeck: aPermanentCard
+			
+	
 ]
 
 { #category : #adding }
 Game >> dealCardTo: aPlayer [
 	| newCards |
 	newCards := self cardsOf: aPlayer.
+	deckOfCards deckOfCards isEmpty
+		ifTrue: [ deckOfCards addFromDiscarDeck: discardDeck shuffleDiscardDeck.
+			self emptyDiscardDeck  ].
 	newCards add: deckOfCards dealOneCard.
-	cardsInHand at: aPlayer   put: newCards
+	cardsInHand at: aPlayer put: newCards
 ]
 
 { #category : #accessing }
 Game >> deckOfCards [
-	^ deckOfCards
+	^ deckOfCards deckOfCards .
 ]
 
 { #category : #accessing }
 Game >> dices [
 	^ dices
+]
+
+{ #category : #accesing }
+Game >> discardDeck [
+	^discardDeck discardDeck.
+]
+
+{ #category : #action }
+Game >> emptyDiscardDeck [ 
+discardDeck emptyDiscardDeck .
 ]
 
 { #category : #update }
@@ -196,7 +218,8 @@ Game >> initializeOn: aBoard beeingPlayedBy: aGroupOfPlayers throwing: aGroupOfD
 	state := GamePlaying new.
 	laps := anAmountOfLaps.
 	lastSlotEffectActivated := EmptySlot new.
-	lastCardPlayed := NoCard new
+	lastCardPlayed := NoCard new.
+	discardDeck := DiscardDeck  new
 ]
 
 { #category : #accessing }
@@ -282,7 +305,8 @@ Game >> placeOf: aPlayer [
 { #category : #action }
 Game >> playInstantCard: aCard of: aPlayer [
 	self remove: aCard from: aPlayer.
-	self changeLastCardPlayed: aCard
+	self changeLastCardPlayed: aCard.
+	self addToDiscardDeck: aCard
 ]
 
 { #category : #action }
