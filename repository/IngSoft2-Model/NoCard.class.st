@@ -37,6 +37,6 @@ NoCard >> redoOn: aGame by: aPlayer to: anotherPlayer with: aRedoCard [
 ]
 
 { #category : #action }
-NoCard >> redoOn: aGame by: aPlayer with: aRedoCard. [
+NoCard >> redoOn: aGame by: aPlayer with: aRedoCard [.
 	AssertionFailure signal: 'No card was thrown before.'
 ]
