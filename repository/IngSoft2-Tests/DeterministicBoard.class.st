@@ -56,6 +56,11 @@ DeterministicBoard >> numberOfSlots [
 ]
 
 { #category : #accessing }
+DeterministicBoard >> slotAt: aSlotIndex [
+^ self slots at: aSlotIndex 
+]
+
+{ #category : #accessing }
 DeterministicBoard >> slots [
 	^ slots
 ]

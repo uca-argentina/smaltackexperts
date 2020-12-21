@@ -28,9 +28,8 @@ Class {
 
 { #category : #action }
 CardSlot >> activateEffectOn: aGame [
-	| players nextPlayerIndex deckOfCards |
-	players := aGame players.
-	nextPlayerIndex := aGame nextPlayerIndex.
-	deckOfCards := aGame deckOfCards.
-	(aGame cardsInHand at: (players at: nextPlayerIndex)) add: deckOfCards dealOneCard.
+	aGame discardDeck isNotEmpty
+		ifTrue: [ aGame dealCardTo: aGame currentPlayer ]
+
+	
 ]

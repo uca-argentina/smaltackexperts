@@ -39,7 +39,7 @@ OverloadCard >> redoOn: aGame by: aPlayer for: anotherCard with: aRedoCard [
 
 { #category : #redo }
 OverloadCard >> redoOn: aGame by: aPlayer to: anotherPlayer with: aRedoCard [
-	aGame put: aRedoCard intoGameAsPermanentBy: aPlayer.
+	aGame playPermanentCard: aRedoCard of: aPlayer.
 	aGame addToPermanentCards: aRedoCard for: anotherPlayer
 ]
 
@@ -60,6 +60,6 @@ OverloadCard >> thrownOn: aGame by: aPlayer for: anotherCard [
 
 { #category : #action }
 OverloadCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [
-	aGame put: self intoGameAsPermanentBy: aPlayer.
+	aGame playPermanentCard: self of: aPlayer.
 	aGame addToPermanentCards: self for: anotherPlayer
 ]

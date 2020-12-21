@@ -30,7 +30,7 @@ Class {
 WormHole >> activateEffectOn: aGame [
 	| slotsToMove actualPlayer |
 	slotsToMove := 4.
-	actualPlayer := aGame players at: aGame nextPlayerIndex.
+	actualPlayer := aGame currentPlayer.
 	aGame move: actualPlayer backward: slotsToMove.
 	^ aGame
 ]

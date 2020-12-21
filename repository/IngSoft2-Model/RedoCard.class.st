@@ -51,21 +51,22 @@ RedoCard >> redoOn: aGame by: aPlayer with: aRedoCard [
 
 { #category : #action }
 RedoCard >> thrownOn: aGame by: aPlayer [
-	aGame assertIsNotTheFirstCardPlayed.
 	lastCard := aGame lastCardPlayed.
 	lastCard redoOn: aGame by: aPlayer with: self
 ]
 
 { #category : #action }
 RedoCard >> thrownOn: aGame by: aPlayer for: anotherCard [
-	aGame assertIsNotTheFirstCardPlayed.
 	lastCard := aGame lastCardPlayed.
-	lastCard redoOn: aGame by: aPlayer for: anotherCard with: self
+	lastCard
+		redoOn: aGame
+		by: aPlayer
+		for: anotherCard
+		with: self
 ]
 
 { #category : #action }
 RedoCard >> thrownOn: aGame by: aPlayer to: anotherPlayer [
-	aGame assertIsNotTheFirstCardPlayed.
 	lastCard := aGame lastCardPlayed.
 	lastCard redoOn: aGame by: aPlayer to: anotherPlayer with: self 
 ]
