@@ -44,13 +44,13 @@ RepeatCard >> redoOn: aGame by: aPlayer to: anotherPlayer with: aRedoCard [
 { #category : #redo }
 RepeatCard >> redoOn: aGame by: aPlayer with: aRedoCard [
 	self activateEffectOn: aGame.
-	aGame put: aRedoCard intoGameAsInstantBy: aPlayer
+	aGame playInstantCard: aRedoCard of: aPlayer
 ]
 
 { #category : #action }
 RepeatCard >> thrownOn: aGame by: aPlayer [
 	self activateEffectOn: aGame.
-	aGame put: self intoGameAsInstantBy: aPlayer
+	aGame playInstantCard: self of: aPlayer
 ]
 
 { #category : #action }
